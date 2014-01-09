@@ -153,6 +153,146 @@ namespace Jwc.Funz
             Assert.Equal(stringValue, actual.StringArg);
         }
 
+        [Spec]
+        public void ResolveServiceOnChildReturnsCorrectInstance(
+            Container sut)
+        {
+            // Fixture setup
+            sut.Register(c => new Foo());
+            var child = sut.CreateChild();
+
+            // Exercise system
+            var actual = child.Resolve<Foo>();
+
+            // Verify outcome
+            Assert.NotNull(actual);
+        }
+
+        [Spec]
+        public void ResolveServiceReusedWithinNoneReturnsNonSharedInstanceOnContainerLevel(
+            Container sut)
+        {
+            // Fixture setup
+            sut.Register(c => new Foo()).ReusedWithinNone();
+            var expected = sut.Resolve<Foo>();
+
+            // Exercise system
+            var actual = sut.Resolve<Foo>();
+
+            // Verify outcome
+            Assert.NotEqual(expected, actual);
+        }
+
+        [Spec]
+        public void ResolveServiceReusedWithinNoneReturnsNonSharedInstanceOnChildLevel(
+            Container sut)
+        {
+            // Fixture setup
+            sut.Register(c => new Foo()).ReusedWithinNone();
+            var child = sut.CreateChild();
+            var expected = child.Resolve<Foo>();
+
+            // Exercise system
+            var actual = child.Resolve<Foo>();
+
+            // Verify outcome
+            Assert.NotEqual(expected, actual);
+        }
+
+        [Spec]
+        public void ResolveServiceReusedWithinNoneReturnsNonSharedInstanceBetweenChildAndContainer(
+            Container sut)
+        {
+            // Fixture setup
+            sut.Register(c => new Foo()).ReusedWithinNone();
+            var child = sut.CreateChild();
+            var expected = child.Resolve<Foo>();
+
+            // Exercise system
+            var actual = sut.Resolve<Foo>();
+
+            // Verify outcome
+            Assert.NotEqual(expected, actual);
+        }
+
+        [Spec]
+        public void ResolveServiceReusedWithinContainerReturnsSharedInstanceOnContainerLevel(
+            Container sut)
+        {
+            // Fixture setup
+            sut.Register(c => new Foo()).ReusedWithinContainer();
+            var expected = sut.Resolve<Foo>();
+
+            // Exercise system
+            var actual = sut.Resolve<Foo>();
+
+            // Verify outcome
+            Assert.Equal(expected, actual);
+        }
+
+        [Spec]
+        public void ResolveServiceReusedWithinContainerReturnsSharedInstanceOnChildLevel(
+            Container sut)
+        {
+            // Fixture setup
+            sut.Register(c => new Foo()).ReusedWithinContainer();
+            var child = sut.CreateChild();
+            var expected = child.Resolve<Foo>();
+
+            // Exercise system
+            var actual = child.Resolve<Foo>();
+
+            // Verify outcome
+            Assert.Equal(expected, actual);
+        }
+
+        [Spec]
+        public void ResolveServiceReusedWithinContainerReturnsNotSharedInstanceBetweenChildAndContainer(
+            Container sut)
+        {
+            // Fixture setup
+            sut.Register(c => new Foo()).ReusedWithinContainer();
+            var child = sut.CreateChild();
+            var expected = child.Resolve<Foo>();
+
+            // Exercise system
+            var actual = sut.Resolve<Foo>();
+
+            // Verify outcome
+            Assert.NotEqual(expected, actual);
+        }
+
+        [Spec]
+        public void ResolveServiceReusedWithinHierarchyReturnsSharedInstanceOnContainerLevel(
+            Container sut)
+        {
+            // Fixture setup
+            sut.Register(c => new Foo()).ReusedWithinHierarchy();
+            var expected = sut.Resolve<Foo>();
+
+            // Exercise system
+            var actual = sut.Resolve<Foo>();
+
+            // Verify outcome
+            Assert.Equal(expected, actual);
+        }
+
+        [Spec]
+        public void ResolveServiceReusedWithinContainerReturnsSharedInstanceBetweenChildAndContainer(
+            Container sut)
+        {
+            // Fixture setup
+            sut.Register(c => new Foo()).ReusedWithinHierarchy();
+            var child = sut.CreateChild();
+            var expected = child.Resolve<Foo>();
+
+            // Exercise system
+            var actual = sut.Resolve<Foo>();
+
+            // Verify outcome
+            Assert.Equal(expected, actual);
+        }
+        
         public class Foo
         {
             private readonly string _stringArg;
