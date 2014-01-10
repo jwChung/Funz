@@ -1,4 +1,5 @@
-﻿using Jwc.AutoFixture.Xunit;
+﻿using System;
+using Jwc.AutoFixture.Xunit;
 using Xunit;
 
 namespace Jwc.Funz
@@ -6,15 +7,17 @@ namespace Jwc.Funz
     public class ContainerTest : IdiomaticTestBase<Container>
     {
         [Spec]
-        public void SutIsDisposable()
+        public void SutIsDisposable(
+            Container sut)
         {
             // Fixture setup
             // Exercise system
             // Verify outcome
+            Assert.IsAssignableFrom<IDisposable>(sut);
         }
 
         [Spec]
-        public void RegisterServiceWithSameKeyManytimeDoesNotThrow(
+        public void RegisterServiceWithSameKeyManyTimeDoesNotThrow(
              Container sut)
         {
             // Fixture setup
@@ -318,6 +321,29 @@ namespace Jwc.Funz
             Assert.Equal(expected, actual);
         }
 
+        [Spec(Skip = "As this test is slow, run explictly.")]
+        public void ResolveServiceReusedWithinContainerDoesNotThrowOutOfMemoryException(
+            Container sut)
+        {
+            // Fixture setup
+            sut.Register(c => new Dummy()).ReusedWithinContainer();
+
+            // Exercise system
+            // Verify outcome
+            Assert.DoesNotThrow(() =>
+            {
+                const int iteration = 1000;
+                for (int i = 0; i < iteration; i++)
+                {
+                    using (var child = sut.CreateChild())
+                    {
+                        var d = child.Resolve<Dummy>();
+                        d.Generate(iteration);
+                    }
+                }
+            });
+        }
+
         [Spec]
         public void ResolveServiceReusedWithinCustomOnNonScopedContainerReturnsNonSharedInstance(
             Container sut,
@@ -433,6 +459,61 @@ namespace Jwc.Funz
             Assert.Equal(scope, actual.Scope);
         }
 
+        [Spec]
+        public void DisposeDisposesDisposableServices(
+            Container sut)
+        {
+            // Fixture setup
+            sut.Register(c => new Disposable());
+            var disposable1 = sut.Resolve<Disposable>();
+            var disposable2 = sut.Resolve<Disposable>();
+
+            // Exercise system
+            sut.Dispose();
+
+            // Verify outcome
+            Assert.Equal(1, disposable1.Count);
+            Assert.Equal(1, disposable2.Count);
+        }
+
+        [Spec]
+        public void DisposeManyTimeDisposesOnlyOnce(
+            Container sut)
+        {
+            // Fixture setup
+            sut.Register(c => new Disposable());
+            var disposable = sut.Resolve<Disposable>();
+
+            // Exercise system
+            sut.Dispose();
+            sut.Dispose();
+
+            // Verify outcome
+            Assert.Equal(1, disposable.Count);
+        }
+
+        [Spec]
+        public void DisposeDisposesServicesOfChild(
+            Container sut)
+        {
+            // Fixture setup
+            sut.Register(c => new Disposable()).ReusedWithinContainer();
+            var child = sut.CreateChild();
+            var grandChild = child.CreateChild();
+
+            var disposable1 = sut.Resolve<Disposable>();
+            var disposable2 = child.Resolve<Disposable>();
+            var disposable3 = grandChild.Resolve<Disposable>();
+
+            // Exercise system
+            sut.Dispose();
+
+            // Verify outcome
+            Assert.Equal(1, disposable1.Count);
+            Assert.Equal(1, disposable2.Count);
+            Assert.Equal(1, disposable3.Count);
+        }
+        
         public class Foo
         {
             private readonly string _stringArg;
@@ -452,6 +533,31 @@ namespace Jwc.Funz
                 {
                     return _stringArg;
                 }
+            }
+        }
+
+        public class Disposable : IDisposable
+        {
+            public int Count
+            {
+                get;
+                set;
+            }
+
+            public void Dispose()
+            {
+                Count++;
+            }
+        }
+
+        private class Dummy
+        {
+#pragma warning disable once UnusedAutoPropertyAccessor.Local
+            public string Content { get; set; }
+
+            public void Generate(int size)
+            {
+                Content = new string('X', size * 3000);
             }
         }
     }

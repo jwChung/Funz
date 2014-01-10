@@ -1,14 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Jwc.Funz
 {
-    public class Container
+    public class Container : IDisposable
     {
-        private readonly Container _parent;
-        private readonly object _scope;
         private static readonly object _noKey = new object();
+
+        private readonly Container _parent;
+        private readonly ICollection<Container> _children;
+        private readonly object _scope;
         private readonly IDictionary<ServiceKey, Registration> _registry;
+
+        private bool _disposed;
 
         public Container()
             : this(new object())
@@ -26,10 +31,13 @@ namespace Jwc.Funz
             {
                 throw new ArgumentNullException("scope");
             }
-
-            _registry = new Dictionary<ServiceKey, Registration>();
+            
             _parent = parent;
             _scope = scope;
+
+            _children = new List<Container>();
+            _registry = new Dictionary<ServiceKey, Registration>();
+            _disposed = false;
         }
 
         public object Scope
@@ -95,7 +103,57 @@ namespace Jwc.Funz
 
         public Container CreateChild(object scope)
         {
-            return new Container(this, scope);
+            var container = new Container(this, scope);
+            _children.Add(container);
+            return container;
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (_disposed)
+            {
+                return;
+            }
+
+            if (!disposing)
+            {
+                return;
+            }
+
+            DisposeServices();
+            DisposeChildren();
+            RemoveFromParent();
+
+            _disposed = true;
+        }
+
+        private void DisposeServices()
+        {
+            foreach (var registration in _registry.Values)
+            {
+                registration.Dispose();
+            }
+        }
+
+        private void DisposeChildren()
+        {
+            foreach (var child in _children.ToArray())
+            {
+                child.Dispose();
+            }
+        }
+
+        private void RemoveFromParent()
+        {
+            if (Parent != null)
+            {
+                Parent._children.Remove(this);
+            }
         }
 
         private IRegistration RegisterImpl<TFunc, TService>(object key, TFunc factory) where TFunc : class
@@ -199,7 +257,7 @@ namespace Jwc.Funz
             }
         }
 
-        private abstract class Registration : IRegistration
+        private abstract class Registration : IRegistration, IDisposable
         {
             private ReusedScope _reusedScope;
 
@@ -239,6 +297,15 @@ namespace Jwc.Funz
             public Registration<TFunc, TService> Clone<TFunc, TService>(Container container, ServiceKey serviceKey)
             {
                 return ReusedScope.Clone<TFunc, TService>(container, serviceKey);
+            }
+
+            public void Dispose()
+            {
+                Dispose(true);
+            }
+
+            protected virtual void Dispose(bool disposing)
+            {
             }
         }
 
@@ -298,6 +365,27 @@ namespace Jwc.Funz
                 get
                 {
                     return _container;
+                }
+            }
+
+            protected override void Dispose(bool disposing)
+            {
+                base.Dispose(disposing);
+
+                if (!disposing)
+                {
+                    return;
+                }
+
+                if (!HasService)
+                {
+                    return;
+                }
+
+                var disposable = Service as IDisposable;
+                if (disposable != null)
+                {
+                    disposable.Dispose();
                 }
             }
         }
