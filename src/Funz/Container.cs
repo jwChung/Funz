@@ -48,14 +48,6 @@ namespace Jwc.Funz
             }
         }
 
-        internal Container Parent
-        {
-            get
-            {
-                return _parent;
-            }
-        }
-
         public IRegistration Register<TService>(Func<Container, TService> factory)
         {
             return RegisterImpl<Func<Container, TService>, TService>(_noKey, factory);
@@ -150,9 +142,9 @@ namespace Jwc.Funz
 
         private void RemoveFromParent()
         {
-            if (Parent != null)
+            if (_parent != null)
             {
-                Parent._children.Remove(this);
+                _parent._children.Remove(this);
             }
         }
 
@@ -189,7 +181,7 @@ namespace Jwc.Funz
             Registration registration = null;
             while (current != null && !current._registry.TryGetValue(serviceKey, out registration))
             {
-                current = current.Parent;
+                current = current._parent;
             }
 
             if (registration == null)
@@ -398,8 +390,6 @@ namespace Jwc.Funz
 
             protected override void Dispose(bool disposing)
             {
-                base.Dispose(disposing);
-
                 if (!disposing)
                 {
                     return;
@@ -558,7 +548,7 @@ namespace Jwc.Funz
                         scoped = current;
                     }
 
-                    current = current.Parent;
+                    current = current._parent;
                 }
 
                 return scoped;
