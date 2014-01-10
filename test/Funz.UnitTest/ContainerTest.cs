@@ -464,7 +464,7 @@ namespace Jwc.Funz
             Container sut)
         {
             // Fixture setup
-            sut.Register(c => new Disposable());
+            sut.Register(c => new Disposable()).ReusedWithinContainer();
             var disposable1 = sut.Resolve<Disposable>();
             var disposable2 = sut.Resolve<Disposable>();
 
@@ -493,7 +493,7 @@ namespace Jwc.Funz
         }
 
         [Spec]
-        public void DisposeDisposesServicesOfChild(
+        public void DisposeDisposesServicesOnChild(
             Container sut)
         {
             // Fixture setup
@@ -512,6 +512,73 @@ namespace Jwc.Funz
             Assert.Equal(1, disposable1.Count);
             Assert.Equal(1, disposable2.Count);
             Assert.Equal(1, disposable3.Count);
+        }
+
+        [Spec]
+        public void DisposeDoesNotDisposeServicesOwnedByExternal(
+            Container sut)
+        {
+            // Fixture setup
+            sut.Register(c => new Disposable()).ReusedWithinContainer().OwnedByExternal();
+            var disposable1 = sut.Resolve<Disposable>();
+            var disposable2 = sut.Resolve<Disposable>();
+
+            // Exercise system
+            sut.Dispose();
+
+            // Verify outcome
+            Assert.Equal(0, disposable1.Count);
+            Assert.Equal(0, disposable2.Count);
+        }
+
+        [Spec]
+        public void DisposeDisposesServicesOwnedByContainer(
+            Container sut)
+        {
+            // Fixture setup
+            sut.Register(c => new Disposable()).ReusedWithinContainer().OwnedByContainer();
+            var disposable1 = sut.Resolve<Disposable>();
+            var disposable2 = sut.Resolve<Disposable>();
+
+            // Exercise system
+            sut.Dispose();
+
+            // Verify outcome
+            Assert.Equal(1, disposable1.Count);
+            Assert.Equal(1, disposable2.Count);
+        }
+
+        [Spec]
+        public void DisposeDoesNotDisposeServicesOwnedByExternalOnChild(
+            Container sut)
+        {
+            // Fixture setup
+            sut.Register(c => new Disposable()).ReusedWithinContainer().OwnedByExternal();
+            var child = sut.CreateChild();
+            var disposable = child.Resolve<Disposable>();
+
+            // Exercise system
+            sut.Dispose();
+
+            // Verify outcome
+            Assert.Equal(0, disposable.Count);
+        }
+
+        [Spec]
+        public void DisposeDoesNotDisposeServicesOwnedByExternalOnScopedChild(
+            object scope,
+            Container sut)
+        {
+            // Fixture setup
+            sut.Register(c => new Disposable()).ReusedWithin(scope).OwnedByExternal();
+            var child = sut.CreateChild(scope);
+            var disposable = child.Resolve<Disposable>();
+
+            // Exercise system
+            sut.Dispose();
+
+            // Verify outcome
+            Assert.Equal(0, disposable.Count);
         }
         
         public class Foo

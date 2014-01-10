@@ -260,10 +260,12 @@ namespace Jwc.Funz
         private abstract class Registration : IRegistration, IDisposable
         {
             private ReusedScope _reusedScope;
+            private bool _canDispose;
 
-            protected Registration(ReusedScope reusedScope)
+            protected Registration(ReusedScope reusedScope, bool canDispose)
             {
                 _reusedScope = reusedScope;
+                _canDispose = canDispose;
             }
 
             protected ReusedScope ReusedScope
@@ -274,24 +276,46 @@ namespace Jwc.Funz
                 }
             }
 
-            public void ReusedWithinNone()
+            public bool CanDispose
+            {
+                get
+                {
+                    return _canDispose;
+                }
+            }
+
+            public IOwned ReusedWithinNone()
             {
                 _reusedScope = new NoneScope { Registration = this };
+                return this;
             }
 
-            public void ReusedWithinContainer()
+            public IOwned ReusedWithinContainer()
             {
                 _reusedScope = new ContainerScope { Registration = this };
+                return this;
             }
 
-            public void ReusedWithinHierarchy()
+            public IOwned ReusedWithinHierarchy()
             {
                 _reusedScope = new HierarchyScope { Registration = this };
+                return this;
             }
 
-            public void ReusedWithin(object scope)
+            public IOwned ReusedWithin(object scope)
             {
                 _reusedScope = new CustomScope(scope) { Registration = this };
+                return this;
+            }
+
+            public void OwnedByContainer()
+            {
+                _canDispose = true;
+            }
+
+            public void OwnedByExternal()
+            {
+                _canDispose = false;
             }
 
             public Registration<TFunc, TService> Clone<TFunc, TService>(Container container, ServiceKey serviceKey)
@@ -316,8 +340,12 @@ namespace Jwc.Funz
             private TService _service;
             private bool _hasService;
 
-            public Registration(Container container, TFunc factory, ReusedScope reusedScope)
-                : base(reusedScope)
+            public Registration(
+                Container container,
+                TFunc factory,
+                ReusedScope reusedScope,
+                bool canDispose = true)
+                : base(reusedScope, canDispose)
             {
                 _factory = factory;
                 _container = container;
@@ -377,7 +405,7 @@ namespace Jwc.Funz
                     return;
                 }
 
-                if (!HasService)
+                if (!CanDispose)
                 {
                     return;
                 }
@@ -444,7 +472,12 @@ namespace Jwc.Funz
                     return registration;
                 }
 
-                var clone = new Registration<TFunc, TService>(container, registration.Factory, new ContainerScope());
+                var clone = new Registration<TFunc, TService>(
+                    container,
+                    registration.Factory,
+                    new ContainerScope(),
+                    registration.CanDispose);
+
                 container._registry[serviceKey] = clone;
                 return clone;
             }
@@ -472,10 +505,10 @@ namespace Jwc.Funz
             private readonly object _scope;
             private bool _canSave;
 
-            public CustomScope(object scope)
+            public CustomScope(object scope, bool canSave = false)
             {
                 _scope = scope;
-                _canSave = false;
+                _canSave = canSave;
             }
 
             public override bool CanSave
@@ -507,7 +540,8 @@ namespace Jwc.Funz
                 var clone = new Registration<TFunc, TService>(
                     scoped,
                     registration.Factory,
-                    new CustomScope(_scope) { _canSave = true });
+                    new CustomScope(_scope, _canSave),
+                    registration.CanDispose);
 
                 scoped._registry[serviceKey] = clone;
                 return clone;

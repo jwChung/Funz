@@ -1,10 +1,16 @@
 ﻿namespace Jwc.Funz
 {
-    public interface IRegistration
+    public interface IRegistration : IOwned
     {
-        void ReusedWithinNone();
-        void ReusedWithinContainer();
-        void ReusedWithinHierarchy();
-        void ReusedWithin(object scope);
+        IOwned ReusedWithinNone();
+        IOwned ReusedWithinContainer();
+        IOwned ReusedWithinHierarchy();
+        IOwned ReusedWithin(object scope);
+    }
+
+    public interface IOwned
+    {
+        void OwnedByContainer();
+        void OwnedByExternal();
     }
 }
