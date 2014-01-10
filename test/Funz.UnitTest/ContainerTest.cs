@@ -77,7 +77,7 @@ namespace Jwc.Funz
         }
 
         [Spec]
-        public void ResolveServiceReturnsNewInstanceEverytime(
+        public void ResolveServiceReturnsSharedInstanceOnContainer(
             Container sut)
         {
             // Fixture setup
@@ -88,7 +88,23 @@ namespace Jwc.Funz
             var actual = sut.Resolve<Foo>();
 
             // Verify outcome
-            Assert.NotEqual(expected, actual);
+            Assert.Equal(expected, actual);
+        }
+
+        [Spec]
+        public void ResolveServiceReturnsSharedInstanceOnContainerAndChild(
+            Container sut)
+        {
+            // Fixture setup
+            sut.Register(c => new Foo());
+            var child = sut.CreateChild();
+            var expected = sut.Resolve<Foo>();
+
+            // Exercise system
+            var actual = child.Resolve<Foo>();
+
+            // Verify outcome
+            Assert.Equal(expected, actual);
         }
 
         [Spec]

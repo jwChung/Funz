@@ -105,7 +105,7 @@ namespace Jwc.Funz
                 throw new ArgumentNullException("factory");
             }
 
-            var registration = new Registration<TFunc, TService>(this, factory, new NoneScope());
+            var registration = new Registration<TFunc, TService>(this, factory, new HierarchyScope());
             _registry[new ServiceKey(typeof(TService), key)] = registration;
             return registration;
         }
@@ -218,6 +218,7 @@ namespace Jwc.Funz
 
             public void ReusedWithinNone()
             {
+                _reusedScope = new NoneScope { Registration = this };
             }
 
             public void ReusedWithinContainer()
