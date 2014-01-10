@@ -61,19 +61,19 @@ namespace Jwc.Funz
             return RegisterImpl<Func<Container, TService>, TService>(_noKey, factory);
         }
 
-        public void Register<TService, TArg>(Func<Container, TArg, TService> factory)
+        public IRegistration Register<TService, TArg>(Func<Container, TArg, TService> factory)
         {
-            RegisterImpl<Func<Container, TArg, TService>, TService>(_noKey, factory);
+            return RegisterImpl<Func<Container, TArg, TService>, TService>(_noKey, factory);
         }
 
-        public void Register<TService>(object key, Func<Container, TService> factory)
+        public IRegistration Register<TService>(object key, Func<Container, TService> factory)
         {
-            RegisterImpl<Func<Container, TService>, TService>(key, factory);
+            return RegisterImpl<Func<Container, TService>, TService>(key, factory);
         }
 
-        public void Register<TService, TArg>(object key, Func<Container, TArg, TService> factory)
+        public IRegistration Register<TService, TArg>(object key, Func<Container, TArg, TService> factory)
         {
-            RegisterImpl<Func<Container, TArg, TService>, TService>(key, factory);
+            return RegisterImpl<Func<Container, TArg, TService>, TService>(key, factory);
         }
 
         public TService Resolve<TService>()

@@ -430,6 +430,55 @@ namespace Jwc.Funz
         }
 
         [Spec]
+        public void ResolveServiceWithArgumentReusedWithinNoneReturnsNonSharedInstance(
+            Container sut,
+            string argument)
+        {
+            // Fixture setup
+            sut.Register<Foo, string>((c, s) => new Foo()).ReusedWithinNone();
+            var expected = sut.Resolve<Foo, string>(argument);
+
+            // Exercise system
+            var actual = sut.Resolve<Foo, string>(argument);
+
+            // Verify outcome
+            Assert.NotEqual(expected, actual);
+        }
+
+        [Spec]
+        public void ResolveKeyedServiceReusedWithinNoneReturnsNonSharedInstance(
+            Container sut,
+            object key)
+        {
+            // Fixture setup
+            sut.Register(key, c => new Foo()).ReusedWithinNone();
+            var expected = sut.ResolveKeyed<Foo>(key);
+
+            // Exercise system
+            var actual = sut.ResolveKeyed<Foo>(key);
+
+            // Verify outcome
+            Assert.NotEqual(expected, actual);
+        }
+
+        [Spec]
+        public void ResolveKeyedServiceWithArgumentReusedWithinNoneReturnsNonSharedInstance(
+            Container sut,
+            object key,
+            string argument)
+        {
+            // Fixture setup
+            sut.Register<Foo, string>(key, (c, s) => new Foo(s)).ReusedWithinNone();
+            var expected = sut.ResolveKeyed<Foo, string>(key, argument);
+
+            // Exercise system
+            var actual = sut.ResolveKeyed<Foo, string>(key, argument);
+
+            // Verify outcome
+            Assert.NotEqual(expected, actual);
+        }
+
+        [Spec]
         public void CreateChildReturnsCorrectContainer(
             Container sut)
         {
