@@ -7,10 +7,4 @@
         IOwned ReusedWithinHierarchy();
         IOwned ReusedWithin(object scope);
     }
-
-    public interface IOwned
-    {
-        void OwnedByContainer();
-        void OwnedByExternal();
-    }
 }
