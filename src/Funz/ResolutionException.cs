@@ -6,9 +6,17 @@ namespace Jwc.Funz
     /// Exception thrown by the container when a service cannot be resolved.
     /// </summary>
     [Serializable]
+    [System.Diagnostics.CodeAnalysis.SuppressMessage(
+        "Microsoft.Design",
+        "CA1032:ImplementStandardExceptionConstructors",
+        Justification = "Without the constructors but with a service type and a key, " +
+                        "this class can represent a standard exception message")]
     public class ResolutionException : Exception
     {
+        [NonSerializedAttribute]
         private readonly Type _serviceType;
+
+        [NonSerializedAttribute]
         private readonly object _key;
 
         /// <summary>
