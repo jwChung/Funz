@@ -6,18 +6,46 @@ namespace Jwc.Funz
     public class Container
     {
         private readonly Container _parent;
+        private readonly object _scope;
         private static readonly object _noKey = new object();
         private readonly IDictionary<ServiceKey, Registration> _registry;
 
         public Container()
-            : this(null)
+            : this(new object())
         {
         }
 
-        private Container(Container parent)
+        public Container(object scope)
+            : this(null, scope)
         {
+        }
+
+        private Container(Container parent, object scope)
+        {
+            if (scope == null)
+            {
+                throw new ArgumentNullException("scope");
+            }
+
             _registry = new Dictionary<ServiceKey, Registration>();
             _parent = parent;
+            _scope = scope;
+        }
+
+        public object Scope
+        {
+            get
+            {
+                return _scope;
+            }
+        }
+
+        internal Container Parent
+        {
+            get
+            {
+                return _parent;
+            }
         }
 
         public IRegistration Register<TService>(Func<Container, TService> factory)
@@ -62,17 +90,22 @@ namespace Jwc.Funz
 
         public Container CreateChild()
         {
-            return new Container(this);
+            return CreateChild(new object());
         }
 
-        private IRegistration RegisterImpl<TFunc, TService>(object key, TFunc factory)
+        public Container CreateChild(object scope)
+        {
+            return new Container(this, scope);
+        }
+
+        private IRegistration RegisterImpl<TFunc, TService>(object key, TFunc factory) where TFunc : class
         {
             if (factory == null)
             {
                 throw new ArgumentNullException("factory");
             }
 
-            var registration = new Registration<TFunc, TService>(factory, this);
+            var registration = new Registration<TFunc, TService>(this, factory, new NoneScope());
             _registry[new ServiceKey(typeof(TService), key)] = registration;
             return registration;
         }
@@ -95,27 +128,18 @@ namespace Jwc.Funz
             var serviceKey = new ServiceKey(typeof(TService), key);
 
             Container current = this;
-            Registration value = null;
-            while (current != null && !current._registry.TryGetValue(serviceKey, out value))
+            Registration registration = null;
+            while (current != null && !current._registry.TryGetValue(serviceKey, out registration))
             {
-                current = current._parent;
+                current = current.Parent;
             }
 
-            if (value == null)
+            if (registration == null)
             {
                 throw new ResolutionException(typeof(TService), serviceKey.Key);
             }
 
-            var registration = (Registration<TFunc, TService>)value;
-
-            if (registration.Reused == ReusedScope.Container && current != this)
-            {
-                var clone = new Registration<TFunc, TService>(registration.Factory, this, ReusedScope.Container);
-                _registry[serviceKey] = clone;
-                return clone;
-            }
-
-            return registration;
+            return registration.Clone<TFunc, TService>(this, serviceKey);
         }
 
         private sealed class ServiceKey
@@ -170,25 +194,25 @@ namespace Jwc.Funz
             {
                 unchecked
                 {
-                    return (_servideType.GetHashCode()*397) ^ Key.GetHashCode();
+                    return (_servideType.GetHashCode() * 397) ^ Key.GetHashCode();
                 }
             }
         }
 
         private abstract class Registration : IRegistration
         {
-            private ReusedScope _reused;
+            private ReusedScope _reusedScope;
 
-            protected Registration(ReusedScope reused)
+            protected Registration(ReusedScope reusedScope)
             {
-                _reused = reused;
+                _reusedScope = reusedScope;
             }
-            
-            public ReusedScope Reused
+
+            protected ReusedScope ReusedScope
             {
                 get
                 {
-                    return _reused;
+                    return _reusedScope;
                 }
             }
 
@@ -198,28 +222,40 @@ namespace Jwc.Funz
 
             public void ReusedWithinContainer()
             {
-                _reused = ReusedScope.Container;
+                _reusedScope = new ContainerScope { Registration = this };
             }
 
             public void ReusedWithinHierarchy()
             {
-                _reused = ReusedScope.Hierarchy;
+                _reusedScope = new HierarchyScope { Registration = this };
+            }
+
+            public void ReusedWithin(object scope)
+            {
+                _reusedScope = new CustomScope(scope) { Registration = this };
+            }
+
+            public Registration<TFunc, TService> Clone<TFunc, TService>(Container container, ServiceKey serviceKey)
+            {
+                return ReusedScope.Clone<TFunc, TService>(container, serviceKey);
             }
         }
 
-        private class Registration<TFunc, TService> : Registration
+        private sealed class Registration<TFunc, TService> : Registration
         {
             private readonly TFunc _factory;
             private readonly Container _container;
             private TService _service;
             private bool _hasService;
 
-            public Registration(TFunc factory, Container container, ReusedScope reused = ReusedScope.None)
-                : base(reused)
+            public Registration(Container container, TFunc factory, ReusedScope reusedScope)
+                : base(reusedScope)
             {
                 _factory = factory;
                 _container = container;
                 _hasService = false;
+
+                reusedScope.Registration = this;
             }
 
             public TFunc Factory
@@ -238,7 +274,7 @@ namespace Jwc.Funz
                 }
                 set
                 {
-                    if (Reused == ReusedScope.None)
+                    if (!ReusedScope.CanSave)
                     {
                         return;
                     }
@@ -255,13 +291,155 @@ namespace Jwc.Funz
                     return _hasService;
                 }
             }
+
+            public Container Container
+            {
+                get
+                {
+                    return _container;
+                }
+            }
         }
 
-        private enum ReusedScope
+        private abstract class ReusedScope
         {
-            None,
-            Container,
-            Hierarchy
+            public abstract bool CanSave
+            {
+                get;
+            }
+
+            public Registration Registration
+            {
+                protected get;
+                set;
+            }
+
+            public abstract Registration<TFunc, TService> Clone<TFunc, TService>(
+                Container container, ServiceKey serviceKey);
+        }
+
+        private class NoneScope : ReusedScope
+        {
+            public override bool CanSave
+            {
+                get
+                {
+                    return false;
+                }
+            }
+
+            public override Registration<TFunc, TService> Clone<TFunc, TService>(
+                Container container, ServiceKey serviceKey)
+            {
+                return (Registration<TFunc, TService>)Registration;
+            }
+        }
+
+        private class ContainerScope : ReusedScope
+        {
+            public override bool CanSave
+            {
+                get
+                {
+                    return true;
+                }
+            }
+
+            public override Registration<TFunc, TService> Clone<TFunc, TService>(
+                Container container, ServiceKey serviceKey)
+            {
+                var registration = (Registration<TFunc, TService>)Registration;
+
+                if (registration.Container == container)
+                {
+                    return registration;
+                }
+
+                var clone = new Registration<TFunc, TService>(container, registration.Factory, new ContainerScope());
+                container._registry[serviceKey] = clone;
+                return clone;
+            }
+        }
+
+        private class HierarchyScope : ReusedScope
+        {
+            public override bool CanSave
+            {
+                get
+                {
+                    return true;
+                }
+            }
+
+            public override Registration<TFunc, TService> Clone<TFunc, TService>(
+                Container container, ServiceKey serviceKey)
+            {
+                return (Registration<TFunc, TService>)Registration;
+            }
+        }
+
+        private class CustomScope : ReusedScope
+        {
+            private readonly object _scope;
+            private bool _canSave;
+
+            public CustomScope(object scope)
+            {
+                _scope = scope;
+                _canSave = false;
+            }
+
+            public override bool CanSave
+            {
+                get
+                {
+                    return _canSave;
+                }
+            }
+
+            public override Registration<TFunc, TService> Clone<TFunc, TService>(
+                Container container, ServiceKey serviceKey)
+            {
+                var registration = (Registration<TFunc, TService>)Registration;
+
+                var scoped = GetScopedContainer(container);
+                if (scoped == null)
+                {
+                    return registration;
+                }
+
+                _canSave = true;
+
+                if (registration.Container == scoped)
+                {
+                    return registration;
+                }
+
+                var clone = new Registration<TFunc, TService>(
+                    scoped,
+                    registration.Factory,
+                    new CustomScope(_scope) { _canSave = true });
+
+                scoped._registry[serviceKey] = clone;
+                return clone;
+            }
+
+            private Container GetScopedContainer(Container container)
+            {
+                Container scoped = null;
+                Container current = container;
+                while (current != null)
+                {
+                    if (current.Scope == _scope)
+                    {
+                        scoped = current;
+                    }
+
+                    current = current.Parent;
+                }
+
+                return scoped;
+            }
         }
     }
 }

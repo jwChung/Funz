@@ -5,5 +5,6 @@
         void ReusedWithinNone();
         void ReusedWithinContainer();
         void ReusedWithinHierarchy();
+        void ReusedWithin(object scope);
     }
 }
