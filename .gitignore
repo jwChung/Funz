@@ -158,3 +158,6 @@ $RECYCLE.BIN/
 packages/*
 !packages/repositories.config
 .nuget/NuGet.exe
+
+# Build
+build/PublishToLocal.cmd

@@ -1,0 +1,179 @@
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0" DefaultTargets="Verify">
+
+  <Target Name="Verify" DependsOnTargets="
+          Build;
+          UnitTest;
+          " />
+
+  <Target Name="PublishToLocal" DependsOnTargets="
+          MakePrivateKeyFile;
+          Build;
+          DeleteKeyFiles;
+          UnitTest;
+          NuGetVersioning;
+          NuGetPack;
+          RestoreNuGetVersion;
+          NuGetPushToLocal;
+          DeleteNupkgFiles;
+          " />
+  
+  <Target Name="Publish" DependsOnTargets="
+          MakePrivateKeyFile;
+          Build;
+          DeleteKeyFiles;
+          UnitTest;
+          NuGetVersioning;
+          NuGetPack;
+          RestoreNuGetVersion;
+          NuGetPush;
+          DeleteNupkgFiles;
+          " />
+
+  <Target Name="MakePrivateKeyFile">
+    <PropertyGroup>
+      <SignAssembly>true</SignAssembly>
+    </PropertyGroup>
+    <MakePrivateKeyFile PrivateKey="$(PrivateKey)"/>
+  </Target>
+
+  <Target Name="Build">
+    <ItemGroup>
+      <Projects Include="..\src\**\*.csproj" />
+      <TestProjects Include="..\test\**\*.csproj" />
+    </ItemGroup>
+    <MSBuild Projects="@(Projects)"
+             Targets="Rebuild;"
+             Properties="Configuration=Release;
+                         RunCodeAnalysis=true;
+                         CodeAnalysisTreatWarningsAsErrors=true;
+                         SignAssembly=$(SignAssembly);
+                         AssemblyOriginatorKeyFile=..\..\build\PrivateKey.snk;
+                         ">
+    </MSBuild>
+    <MSBuild Projects="@(TestProjects)"
+             Targets="Build;"
+             Properties="Configuration=Release;
+                         SignAssembly=$(SignAssembly);
+                         AssemblyOriginatorKeyFile=..\..\build\PrivateKey.snk;
+                         ">
+      <Output TaskParameter="TargetOutputs" ItemName="TestAssemblies" />
+    </MSBuild>
+    <OnError ExecuteTargets="DeleteKeyFiles" />
+  </Target>
+
+  <Target Name="DeleteKeyFiles">
+    <ItemGroup>
+      <KeyFiles Include="*.snk" />
+    </ItemGroup>
+    <Delete Files="@(KeyFiles)" />
+  </Target>
+
+  <Target Name="UnitTest">
+    <xunit Assembly="%(TestAssemblies.Identity)" />
+  </Target>
+
+  <Target Name="NuGetVersioning">
+    <ItemGroup>
+      <NuGetFiles Include="*.nuspec" />
+    </ItemGroup>
+    <PropertyGroup>
+      <Assembly>%(TestAssemblies.Identity)</Assembly>
+    </PropertyGroup>
+    <GetSemanticVersion Assembly="$(Assembly)">
+      <Output TaskParameter="SemanticVersion" PropertyName="SemanticVersion" />
+    </GetSemanticVersion>
+    <XmlPoke XmlInputPath="%(NuGetFiles.FullPath)" Query="//metadata/version" Value="$(SemanticVersion)" />
+  </Target>
+
+  <Target Name="NuGetPack">
+    <PropertyGroup>
+      <NuGetPath>..\.nuget\NuGet.exe</NuGetPath>
+    </PropertyGroup>
+    <Exec Command="$(NuGetPath) pack %(NuGetFiles.Identity) -Symbols" />
+  </Target>
+
+  <Target Name="RestoreNuGetVersion">
+    <XmlPoke XmlInputPath="%(NuGetFiles.FullPath)" Query="//metadata/version" Value="0.0.0" />
+  </Target>
+
+  <Target Name="NuGetPush">
+    <ItemGroup>
+      <NugetPackages Include="@(NuGetFiles->'%(RelativeDir)%(Filename).$(SemanticVersion).nupkg')" />
+    </ItemGroup>
+    <Exec Command="$(NuGetPath) push %(NugetPackages.Identity) $(SetApiKey)" />
+    <OnError ExecuteTargets="DeleteNupkgFiles" />
+  </Target>
+
+  <Target Name="NuGetPushToLocal">
+    <PropertyGroup>
+      <LocalNugetFeed>D:\LocalNugetFeed</LocalNugetFeed>
+    </PropertyGroup>
+    <ItemGroup>
+      <NugetPackages Include="@(NuGetFiles->'%(RelativeDir)%(Filename).$(SemanticVersion).nupkg')" />
+    </ItemGroup>
+    <Copy SourceFiles="@(NugetPackages)" DestinationFolder="$(LocalNugetFeed)" />
+  </Target>
+
+  <Target Name="DeleteNupkgFiles">
+    <ItemGroup>
+      <NupkgFiles Include="*.nupkg" />
+    </ItemGroup>
+    <Delete Files="@(NupkgFiles)" />
+  </Target>
+
+  <UsingTask TaskName="MakePrivateKeyFile"
+             TaskFactory="CodeTaskFactory"
+             AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.v4.0.dll" >
+    <ParameterGroup>
+      <PrivateKey ParameterType="System.String" Required="true" />
+    </ParameterGroup>
+    <Task>
+      <Using Namespace="System" />
+      <Using Namespace="System.IO" />
+      <Using Namespace="Microsoft.Build.Framework" />
+      <Using Namespace="Microsoft.Build.Utilities" />
+      <Code Type="Fragment" Language="cs">
+        <![CDATA[
+        try
+        {
+            File.WriteAllBytes(
+              "PrivateKey.snk",
+              Convert.FromBase64String(PrivateKey));
+        }
+        catch (Exception ex)
+        {
+            Log.LogErrorFromException(ex);
+        }
+      ]]>
+      </Code>
+    </Task>
+  </UsingTask>
+
+  <UsingTask AssemblyFile="..\packages\xunit.1.9.2\lib\net20\xunit.runner.msbuild.dll"
+             TaskName="Xunit.Runner.MSBuild.xunit" />
+
+  <UsingTask TaskName="GetSemanticVersion"
+             TaskFactory="CodeTaskFactory"
+             AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.v4.0.dll" >
+    <ParameterGroup>
+      <Assembly ParameterType="System.String" Required="true" />
+      <SemanticVersion ParameterType="System.String" Output="true" />
+    </ParameterGroup>
+    <Task>
+      <Using Namespace=" System.Diagnostics" />
+      <Code Type="Fragment" Language="cs">
+        <![CDATA[
+        try
+        {
+            SemanticVersion = FileVersionInfo.GetVersionInfo(Assembly).ProductVersion;
+        }
+        catch (Exception ex)
+        {
+            Log.LogErrorFromException(ex);
+        }
+      ]]>
+      </Code>
+    </Task>
+  </UsingTask>
+
+</Project>
