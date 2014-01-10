@@ -307,7 +307,7 @@ namespace Jwc.Funz
         [System.Diagnostics.CodeAnalysis.SuppressMessage(
             "Microsoft.Reliability",
             "CA2000:Dispose objects before losing scope",
-            Justification = "The disposing process of the registraion will be performed on a container.")]
+            Justification = "The disposing process of the registration will be performed on a container.")]
         private IRegistration RegisterImpl<TFunc, TService>(object key, TFunc factory) where TFunc : class
         {
             if (factory == null)
@@ -613,7 +613,7 @@ namespace Jwc.Funz
             [System.Diagnostics.CodeAnalysis.SuppressMessage(
                 "Microsoft.Reliability",
                 "CA2000:Dispose objects before losing scope",
-                Justification = "The disposing process of the registraion will be performed on a container.")]
+                Justification = "The disposing process of the registration will be performed on a container.")]
             public override Registration<TFunc, TService> Clone<TFunc, TService>(
                 Container container, ServiceKey serviceKey)
             {
@@ -674,7 +674,7 @@ namespace Jwc.Funz
             [System.Diagnostics.CodeAnalysis.SuppressMessage(
                 "Microsoft.Reliability",
                 "CA2000:Dispose objects before losing scope",
-                Justification = "The disposing process of the registraion will be performed on a container.")]
+                Justification = "The disposing process of the registration will be performed on a container.")]
             public override Registration<TFunc, TService> Clone<TFunc, TService>(
                 Container container, ServiceKey serviceKey)
             {
