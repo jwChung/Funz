@@ -4,6 +4,10 @@ using System.Linq;
 
 namespace Jwc.Funz
 {
+    /// <summary>
+    /// Main container class for components, supporting container hierarchies and
+    /// lifetime management of <see cref="IDisposable"/> instances.
+    /// </summary>
     public class Container : IDisposable
     {
         private static readonly object _noKey = new object();
@@ -15,11 +19,17 @@ namespace Jwc.Funz
 
         private bool _disposed;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Container"/> class.
+        /// </summary>
         public Container()
             : this(new object())
         {
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Container"/> class with container scope.
+        /// </summary>
         public Container(object scope)
             : this(null, scope)
         {
@@ -40,6 +50,9 @@ namespace Jwc.Funz
             _disposed = false;
         }
 
+        /// <summary>
+        /// Gets a value indicating the container scope.
+        /// </summary>
         public object Scope
         {
             get
@@ -48,51 +61,182 @@ namespace Jwc.Funz
             }
         }
 
+        /// <summary>
+        /// Registers the given service by providing a factory delegate to instantiate it.
+        /// </summary>
+        /// <param name="factory">
+        /// The factory delegate to initialize new instances of the service when needed.
+        /// </param>
+        /// <typeparam name="TService">
+        /// The service type to register.
+        /// </typeparam>
+        /// <returns>
+        /// The registration object to perform further configuration via its fluent interface.
+        /// </returns>
         public IRegistration Register<TService>(Func<Container, TService> factory)
         {
             return RegisterImpl<Func<Container, TService>, TService>(_noKey, factory);
         }
 
+        /// <summary>
+        /// Registers the given service by providing a factory delegate to instantiate it.
+        /// </summary>
+        /// <param name="factory">
+        /// The factory delegate to initialize new instances of the service when needed.
+        /// </param>
+        /// <typeparam name="TService">
+        /// The service type to register.
+        /// </typeparam>
+        /// <typeparam name="TArg">
+        /// First argument that should be passed to the factory delegate to create the instace.
+        /// </typeparam>
+        /// <returns>
+        /// The registration object to perform further configuration via its fluent interface.
+        /// </returns>
         public IRegistration Register<TService, TArg>(Func<Container, TArg, TService> factory)
         {
             return RegisterImpl<Func<Container, TArg, TService>, TService>(_noKey, factory);
         }
 
+        /// <summary>
+        /// Registers the given service by providing a factory delegate to instantiate it.
+        /// </summary>
+        /// <param name="key">
+        /// A key used to differenciate this service registration.
+        /// </param>
+        /// <param name="factory">
+        /// The factory delegate to initialize new instances of the service when needed.
+        /// </param>
+        /// <typeparam name="TService">
+        /// The service type to register.
+        /// </typeparam>
+        /// <returns>
+        /// The registration object to perform further configuration via its fluent interface.
+        /// </returns>
         public IRegistration Register<TService>(object key, Func<Container, TService> factory)
         {
             return RegisterImpl<Func<Container, TService>, TService>(key, factory);
         }
 
+        /// <summary>
+        /// Registers the given service by providing a factory delegate to instantiate it.
+        /// </summary>
+        /// <param name="key">
+        /// A key used to differenciate this service registration.
+        /// </param>
+        /// <param name="factory">
+        /// The factory delegate to initialize new instances of the service when needed.
+        /// </param>
+        /// <typeparam name="TService">
+        /// The service type to register.
+        /// </typeparam>
+        /// <typeparam name="TArg">
+        /// First argument that should be passed to the factory delegate to create the instace.
+        /// </typeparam>
+        /// <returns>
+        /// The registration object to perform further configuration via its fluent interface.
+        /// </returns>
         public IRegistration Register<TService, TArg>(object key, Func<Container, TArg, TService> factory)
         {
             return RegisterImpl<Func<Container, TArg, TService>, TService>(key, factory);
         }
 
+        /// <summary>
+        /// Resolves the given service by type, without passing any arguments for its construction.
+        /// </summary>
+        /// <typeparam name="TService">
+        /// Type of the service to retrieve.
+        /// </typeparam>
+        /// <returns>
+        /// The resolved service instance.
+        /// </returns>
         public TService Resolve<TService>()
         {
             return ResolveImpl<TService>();
         }
 
+        /// <summary>
+        /// Resolves the given service by type, without passing any arguments for its construction.
+        /// </summary>
+        /// <param name="arg">
+        /// The first argument to pass to the factory delegate that may create the instace.
+        /// </param>
+        /// <typeparam name="TService">
+        /// Type of the service to retrieve.
+        /// </typeparam>
+        /// <typeparam name="TArg">
+        /// Type of the first argument.
+        /// </typeparam>
+        /// <returns>
+        /// The resolved service instance.
+        /// </returns>
         public TService Resolve<TService, TArg>(TArg arg)
         {
             return GetRegistration<Func<Container, TArg, TService>, TService>(_noKey).Factory.Invoke(this, arg);
         }
 
+        /// <summary>
+        /// Resolves the given service by type and key, without passing arguments for its initialization.
+        /// </summary>
+        /// <param name="key">
+        /// The key of the service to retrieve.
+        /// </param>
+        /// <typeparam name="TService">
+        /// Type of the service to retrieve.
+        /// </typeparam>
+        /// <returns>
+        /// The resolved service instance.
+        /// </returns>
         public TService ResolveKeyed<TService>(object key)
         {
             return GetRegistration<Func<Container, TService>, TService>(key).Factory.Invoke(this);
         }
 
+        /// <summary>
+        /// Resolves the given service by type and key, without passing arguments for its initialization.
+        /// </summary>
+        /// <typeparam name="TService">
+        /// Type of the service to retrieve.
+        /// </typeparam>
+        /// <typeparam name="TArg">
+        /// Type of the first argument.
+        /// </typeparam>
+        /// <param name="key">
+        /// The key of the service to retrieve.
+        /// </param>
+        /// <param name="arg">
+        /// The first argument to pass to the factory delegate that may create the instace.
+        /// </param>
+        /// <returns>
+        /// The resolved service instance.
+        /// </returns>
         public TService ResolveKeyed<TService, TArg>(object key, TArg arg)
         {
             return GetRegistration<Func<Container, TArg, TService>, TService>(key).Factory.Invoke(this, arg);
         }
 
+        /// <summary>
+        /// Creates a child container of the current one, which exposes its
+        /// current service registration to the new child container.
+        /// </summary>
+        /// <returns>
+        /// The new child container.
+        /// </returns>
         public Container CreateChild()
         {
             return CreateChild(new object());
         }
 
+        /// <summary>
+        /// Creates a child container of the current one with custom scope, which exposes its
+        /// current service registration to the new child container.
+        /// </summary>
+        /// <param name="scope">
+        /// The scope to represent custom lifetime.
+        /// </param>
+        /// <returns>
+        /// The new child container.
+        /// </returns>
         public Container CreateChild(object scope)
         {
             var container = new Container(this, scope);
@@ -100,11 +244,22 @@ namespace Jwc.Funz
             return container;
         }
 
+        /// <summary>
+        /// Disposes the container and all instances owned by it, as well as all child containers
+        ///	created through <see cref="CreateChild()"/>.
+        /// </summary>
         public void Dispose()
         {
             Dispose(true);
         }
 
+        /// <summary>
+        /// Disposes the container and all instances owned by it, as well as all child containers
+        ///	created through <see cref="CreateChild()"/>.
+        /// </summary>
+        /// <param name="disposing">
+        /// Indicates whether managed resources are included to be disposed.
+        /// </param>
         protected virtual void Dispose(bool disposing)
         {
             if (_disposed)

@@ -1,10 +1,12 @@
-﻿namespace Jwc.Funz
+﻿using System.ComponentModel;
+
+namespace Jwc.Funz
 {
-    public interface IRegistration : IOwned
+    /// <summary>
+    /// Fluent API for customizing the registration of a service.
+    /// </summary>
+    [EditorBrowsable(EditorBrowsableState.Never)]
+    public interface IRegistration : IReused, IOwned
     {
-        IOwned ReusedWithinNone();
-        IOwned ReusedWithinContainer();
-        IOwned ReusedWithinHierarchy();
-        IOwned ReusedWithin(object scope);
     }
 }
