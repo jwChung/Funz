@@ -56,16 +56,23 @@ namespace Jwc.Funz
         {
             public bool Equals(IReflectionElement x, IReflectionElement y)
             {
+                return EqualsName(x, y) && EqualsType(x, y);
+            }
+
+            private static bool EqualsName(IReflectionElement x, IReflectionElement y)
+            {
                 var getNameVisitor = new GetNameVisitor();
                 var xName = x.Accept(getNameVisitor).Value;
                 var yName = y.Accept(getNameVisitor).Value;
+                return xName.Equals(yName, StringComparison.OrdinalIgnoreCase);
+            }
 
+            private static bool EqualsType(IReflectionElement x, IReflectionElement y)
+            {
                 var getTypeVisitor = new GetTypeVisitor();
                 var xType = x.Accept(getTypeVisitor).Value;
                 var yType = y.Accept(getTypeVisitor).Value;
-
-                return xName.Equals(yName, StringComparison.OrdinalIgnoreCase) 
-                    && (xType.IsAssignableFrom(yType) || yType.IsAssignableFrom(xType));
+                return xType.IsAssignableFrom(yType) || yType.IsAssignableFrom(xType);
             }
 
             public int GetHashCode(IReflectionElement obj)
