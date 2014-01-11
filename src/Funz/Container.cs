@@ -718,20 +718,13 @@ namespace Jwc.Funz
 
             private Container GetScopedContainer(Container container)
             {
-                Container scoped = null;
                 Container current = container;
-                while (current != null)
+                while (current != null && current.Scope != _scope)
                 {
-                    if (current.Scope == _scope)
-                    {
-                        scoped = current;
-                        break;
-                    }
-
                     current = current._parent;
                 }
 
-                return scoped;
+                return current;
             }
         }
     }
