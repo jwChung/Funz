@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Jwc.Funz
 {
@@ -108,7 +109,7 @@ namespace Jwc.Funz
         /// <summary>
         /// Gets a value inicating the argument types to be used to construct a service instance.
         /// </summary>
-        public Type[] ArgumentTypes
+        public IList<Type> ArgumentTypes
         {
             get
             {
