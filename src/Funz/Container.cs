@@ -316,7 +316,7 @@ namespace Jwc.Funz
             }
 
             var registration = new Registration<TFunc, TService>(this, factory, new HierarchyScope());
-            _registry[new ServiceKey(typeof(TService), key)] = registration;
+            _registry[new ServiceKey(typeof(TFunc), key)] = registration;
             return registration;
         }
 
@@ -335,7 +335,7 @@ namespace Jwc.Funz
 
         private Registration<TFunc, TService> GetRegistration<TFunc, TService>(object key)
         {
-            var serviceKey = new ServiceKey(typeof(TService), key);
+            var serviceKey = new ServiceKey(typeof(TFunc), key);
 
             Container current = this;
             Registration registration = null;
@@ -367,17 +367,17 @@ namespace Jwc.Funz
 
         private sealed class ServiceKey
         {
-            private readonly Type _servideType;
+            private readonly Type _factoryType;
             private readonly object _key;
 
-            public ServiceKey(Type servideType, object key)
+            public ServiceKey(Type factoryType, object key)
             {
                 if (key == null)
                 {
                     throw new ArgumentNullException("key");
                 }
 
-                _servideType = servideType;
+                _factoryType = factoryType;
                 _key = key;
             }
 
@@ -391,7 +391,7 @@ namespace Jwc.Funz
 
             private bool Equals(ServiceKey other)
             {
-                return _servideType == other._servideType && Key.Equals(other.Key);
+                return _factoryType == other._factoryType && Key.Equals(other.Key);
             }
 
             public override bool Equals(object obj)
@@ -417,7 +417,7 @@ namespace Jwc.Funz
             {
                 unchecked
                 {
-                    return (_servideType.GetHashCode() * 397) ^ Key.GetHashCode();
+                    return (_factoryType.GetHashCode() * 397) ^ Key.GetHashCode();
                 }
             }
         }

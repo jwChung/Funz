@@ -120,6 +120,24 @@ namespace Jwc.Funz
         }
 
         [Spec]
+        public void ResolveManySameTypedServicesReturnsCorrectInstances(
+            Container sut,
+            string stringValue)
+        {
+            // Fixture setup
+            sut.Register(c => new Foo());
+            sut.Register<Foo, string>((c, s) => new Foo(s));
+
+            // Exercise system
+            var actual1 = sut.Resolve<Foo>();
+            var actual2 = sut.Resolve<Foo, string>(stringValue);
+
+            // Verify outcome
+            Assert.NotNull(actual1);
+            Assert.Equal(stringValue, actual2.StringArg);
+        }
+
+        [Spec]
         public void ResolveServiceOnContainerReturnsSharedInstance(
             Container sut)
         {
