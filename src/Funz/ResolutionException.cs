@@ -13,7 +13,7 @@ namespace Jwc.Funz
         "Microsoft.Design",
         "CA1032:ImplementStandardExceptionConstructors",
         Justification = "Without the constructors but with a service type and a key, " +
-                        "this class can represent a standard exception message")]
+                        "this class can represent the standard exception messages.")]
     public class ResolutionException : Exception
     {
         [NonSerializedAttribute]
