@@ -346,7 +346,7 @@ namespace Jwc.Funz
 
             if (registration == null)
             {
-                throw new ResolutionException(typeof(TService), serviceKey.Key);
+                throw new ResolutionException(typeof(TService), serviceKey.Key, new Type[0]);
             }
 
             return registration.Clone<TFunc, TService>(this, serviceKey);

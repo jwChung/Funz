@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Jwc.Funz
 {
@@ -17,6 +18,9 @@ namespace Jwc.Funz
         private readonly Type _serviceType;
 
         [NonSerializedAttribute]
+        private readonly Type[] _argumentTypes;
+
+        [NonSerializedAttribute]
         private readonly object _key;
 
         /// <summary>
@@ -25,14 +29,23 @@ namespace Jwc.Funz
         /// <param name="serviceType">
         /// The service type failed to resolve.
         /// </param>
-        public ResolutionException(Type serviceType)
+        /// <param name="argumentTypes">
+        /// The argument types to be used to construct a service instance.
+        /// </param>
+        public ResolutionException(Type serviceType, Type[] argumentTypes)
         {
             if (serviceType == null)
             {
                 throw new ArgumentNullException("serviceType");
             }
 
+            if (argumentTypes == null)
+            {
+                throw new ArgumentNullException("argumentTypes");
+            }
+
             _serviceType = serviceType;
+            _argumentTypes = argumentTypes;
         }
 
         /// <summary>
@@ -44,7 +57,10 @@ namespace Jwc.Funz
         /// <param name="key">
         /// The key failed to resolve an service instance.
         /// </param>
-        public ResolutionException(Type serviceType, object key)
+        /// <param name="argumentTypes">
+        /// The argument types to be used to construct a service instance.
+        /// </param>
+        public ResolutionException(Type serviceType, object key, Type[] argumentTypes)
         {
             if (serviceType == null)
             {
@@ -56,8 +72,14 @@ namespace Jwc.Funz
                 throw new ArgumentNullException("key");
             }
 
+            if (argumentTypes == null)
+            {
+                throw new ArgumentNullException("argumentTypes");
+            }
+
             _serviceType = serviceType;
             _key = key;
+            _argumentTypes = argumentTypes;
         }
 
         /// <summary>
@@ -81,6 +103,17 @@ namespace Jwc.Funz
             get
             {
                 return _key;
+            }
+        }
+
+        /// <summary>
+        /// Gets a value inicating the argument types to be used to construct a service instance.
+        /// </summary>
+        public Type[] ArgumentTypes
+        {
+            get
+            {
+                return _argumentTypes;
             }
         }
     }
