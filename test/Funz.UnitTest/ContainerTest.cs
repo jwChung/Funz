@@ -604,6 +604,92 @@ namespace Jwc.Funz
         }
 
         [Spec]
+        public void TryResolveNotRegisteredServiceWithArgumentReturnsDefaultValue(
+            Container sut,
+            string stringValue)
+        {
+            // Fixture setup
+            // Exercise system
+            var actual = sut.TryResolve<Foo, string>(stringValue);
+
+            // Verify outcome
+            Assert.Null(actual);
+        }
+
+        [Spec]
+        public void TryResolveRegisteredServiceWithArgumentReturnsCorrectInstance(
+            Container sut,
+            string stringValue)
+        {
+            // Fixture setup
+            sut.Register<Foo, string>((c, s) => new Foo(s));
+
+            // Exercise system
+            var actual = sut.TryResolve<Foo, string>(stringValue);
+
+            // Verify outcome
+            Assert.Equal(stringValue, actual.StringArg);
+        }
+
+        [Spec]
+        public void TryResolveNotRegisteredKeyedServiceReturnsDefaultValue(
+            Container sut,
+            object key)
+        {
+            // Fixture setup
+            // Exercise system
+            var actual = sut.TryResolveKeyed<Foo>(key);
+
+            // Verify outcome
+            Assert.Null(actual);
+        }
+
+        [Spec]
+        public void TryResolveRegisteredKeyedServiceReturnsCorrectInstance(
+            Container sut,
+            object key)
+        {
+            // Fixture setup
+            sut.Register(key, c => new Foo());
+
+            // Exercise system
+            var actual = sut.TryResolveKeyed<Foo>(key);
+
+            // Verify outcome
+            Assert.NotNull(actual);
+        }
+
+        [Spec]
+        public void TryResolveNotRegisteredKeyedServiceWithArgumentReturnsDefaultValue(
+            Container sut,
+            object key,
+            string stringValue)
+        {
+            // Fixture setup
+            // Exercise system
+            var actual = sut.TryResolveKeyed<Foo, string>(key, stringValue);
+
+            // Verify outcome
+            Assert.Null(actual);
+        }
+
+        [Spec]
+        public void TryResolveRegisteredKeyedServiceWithArgumentReturnsCorrectInstance(
+            Container sut,
+            object key,
+            string stringValue)
+        {
+            // Fixture setup
+            sut.Register<Foo, string>(key, (c, s) => new Foo(s));
+
+            // Exercise system
+            var actual = sut.TryResolveKeyed<Foo, string>(key, stringValue);
+
+            // Verify outcome
+            Assert.Equal(stringValue, actual.StringArg);
+        }
+
+        [Spec]
         public void CreateChildReturnsCorrectContainer(
             Container sut)
         {

@@ -217,7 +217,7 @@ namespace Jwc.Funz
 
         /// <summary>
         /// Tries to resolve the given service by type, without passing any arguments for its construction.
-        /// If the type is not registered, it will return a default value of the type.
+        /// If the service is not registered, it will return a default value of the type.
         /// </summary>
         /// <typeparam name="TService">
         /// Type of the service to retrieve.
@@ -228,6 +228,69 @@ namespace Jwc.Funz
         public TService TryResolve<TService>()
         {
             return ResolveImpl<TService>(_noKey, false);
+        }
+
+        /// <summary>
+        /// Tries to resolve the given service by type, without passing any arguments for its construction.
+        /// If the service is not registered, it will return a default value of the type.
+        /// </summary>
+        /// <param name="arg">
+        /// The first argument to pass to the factory delegate that may create the instace.
+        /// </param>
+        /// <typeparam name="TService">
+        /// Type of the service to retrieve.
+        /// </typeparam>
+        /// <typeparam name="TArg">
+        /// Type of the first argument.
+        /// </typeparam>
+        /// <returns>
+        /// The resolved service instance.
+        /// </returns>
+        public TService TryResolve<TService, TArg>(TArg arg)
+        {
+            return ResolveImpl<TService, TArg>(_noKey, false, arg);
+        }
+
+        /// <summary>
+        /// Tries to resolve the given service by type and key, without passing arguments for its initialization.
+        /// If the service is not registered, it will return a default value of the type.
+        /// </summary>
+        /// <param name="key">
+        /// The key of the service to retrieve.
+        /// </param>
+        /// <typeparam name="TService">
+        /// Type of the service to retrieve.
+        /// </typeparam>
+        /// <returns>
+        /// The resolved service instance.
+        /// </returns>
+        public TService TryResolveKeyed<TService>(object key)
+        {
+            return ResolveImpl<TService>(key, false);
+        }
+
+        /// <summary>
+        /// Tries to resolve the given service by type and key, without passing arguments for its initialization.
+        /// If the service is not registered, it will return a default value of the type.
+        /// </summary>
+        /// <typeparam name="TService">
+        /// Type of the service to retrieve.
+        /// </typeparam>
+        /// <typeparam name="TArg">
+        /// Type of the first argument.
+        /// </typeparam>
+        /// <param name="key">
+        /// The key of the service to retrieve.
+        /// </param>
+        /// <param name="arg">
+        /// The first argument to pass to the factory delegate that may create the instace.
+        /// </param>
+        /// <returns>
+        /// The resolved service instance.
+        /// </returns>
+        public TService TryResolveKeyed<TService, TArg>(object key, TArg arg)
+        {
+            return ResolveImpl<TService, TArg>(key, false, arg);
         }
 
         /// <summary>
@@ -293,30 +356,6 @@ namespace Jwc.Funz
             RemoveFromParent();
 
             _disposed = true;
-        }
-
-        private void DisposeServices()
-        {
-            foreach (var registration in _registry.Values)
-            {
-                registration.Dispose();
-            }
-        }
-
-        private void DisposeChildren()
-        {
-            foreach (var child in _children.ToArray())
-            {
-                child.Dispose();
-            }
-        }
-
-        private void RemoveFromParent()
-        {
-            if (_parent != null)
-            {
-                _parent._children.Remove(this);
-            }
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage(
@@ -406,6 +445,30 @@ namespace Jwc.Funz
         {
             var genericArguments = factoryType.GetGenericArguments();
             return genericArguments.Skip(1).Take(genericArguments.Length - 2).ToArray();
+        }
+
+        private void DisposeServices()
+        {
+            foreach (var registration in _registry.Values)
+            {
+                registration.Dispose();
+            }
+        }
+
+        private void DisposeChildren()
+        {
+            foreach (var child in _children.ToArray())
+            {
+                child.Dispose();
+            }
+        }
+
+        private void RemoveFromParent()
+        {
+            if (_parent != null)
+            {
+                _parent._children.Remove(this);
+            }
         }
 
         private sealed class ServiceKey
