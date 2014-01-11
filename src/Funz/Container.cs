@@ -152,7 +152,7 @@ namespace Jwc.Funz
         /// </returns>
         public TService Resolve<TService>()
         {
-            return ResolveImpl<TService>();
+            return ResolveImpl<TService>(true);
         }
 
         /// <summary>
@@ -172,7 +172,7 @@ namespace Jwc.Funz
         /// </returns>
         public TService Resolve<TService, TArg>(TArg arg)
         {
-            return GetRegistration<Func<Container, TArg, TService>, TService>(_noKey).Factory.Invoke(this, arg);
+            return GetRegistration<Func<Container, TArg, TService>, TService>(_noKey, true).Factory.Invoke(this, arg);
         }
 
         /// <summary>
@@ -189,7 +189,7 @@ namespace Jwc.Funz
         /// </returns>
         public TService ResolveKeyed<TService>(object key)
         {
-            return GetRegistration<Func<Container, TService>, TService>(key).Factory.Invoke(this);
+            return GetRegistration<Func<Container, TService>, TService>(key, true).Factory.Invoke(this);
         }
 
         /// <summary>
@@ -212,7 +212,22 @@ namespace Jwc.Funz
         /// </returns>
         public TService ResolveKeyed<TService, TArg>(object key, TArg arg)
         {
-            return GetRegistration<Func<Container, TArg, TService>, TService>(key).Factory.Invoke(this, arg);
+            return GetRegistration<Func<Container, TArg, TService>, TService>(key, true).Factory.Invoke(this, arg);
+        }
+
+        /// <summary>
+        /// Tries to resolve the given service by type, without passing any arguments for its construction.
+        /// If the type is not registered, it will return a default value of the type.
+        /// </summary>
+        /// <typeparam name="TService">
+        /// Type of the service to retrieve.
+        /// </typeparam>
+        /// <returns>
+        /// The resolved service instance.
+        /// </returns>
+        public TService TryResolve<TService>()
+        {
+            return ResolveImpl<TService>(false);
         }
 
         /// <summary>
@@ -320,9 +335,14 @@ namespace Jwc.Funz
             return registration;
         }
 
-        private TService ResolveImpl<TService>()
+        private TService ResolveImpl<TService>(bool throws)
         {
-            var registration = GetRegistration<Func<Container, TService>, TService>(_noKey);
+            var registration = GetRegistration<Func<Container, TService>, TService>(_noKey, throws);
+            if (registration == null)
+            {
+                return default(TService);
+            }
+
             if (registration.HasService)
             {
                 return registration.Service;
@@ -333,7 +353,7 @@ namespace Jwc.Funz
             return service;
         }
 
-        private Registration<TFunc, TService> GetRegistration<TFunc, TService>(object key)
+        private Registration<TFunc, TService> GetRegistration<TFunc, TService>(object key, bool throws)
         {
             var serviceKey = new ServiceKey(typeof(TFunc), key);
 
@@ -347,6 +367,11 @@ namespace Jwc.Funz
             if (registration != null)
             {
                 return registration.Clone<TFunc, TService>(this, serviceKey);
+            }
+
+            if (!throws)
+            {
+                return null;
             }
 
             var argumentTypes = GetArgumentTypes(typeof(TFunc));

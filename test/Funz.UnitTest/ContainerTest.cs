@@ -679,6 +679,32 @@ namespace Jwc.Funz
             // Verify outcome
             Assert.Equal(0, disposable.Count);
         }
+
+        [Spec]
+        public void TryResolveNotRegisteredServiceReturnsDefaultValue(
+            Container sut)
+        {
+            // Fixture setup
+            // Exercise system
+            var actual = sut.TryResolve<Foo>();
+
+            // Verify outcome
+            Assert.Null(actual);
+        }
+
+        [Spec]
+        public void TryResolveRegisteredServiceReturnsCorrectInstance(
+            Container sut)
+        {
+            // Fixture setup
+            sut.Register(c => new Foo());
+
+            // Exercise system
+            var actual = sut.TryResolve<Foo>();
+
+            // Verify outcome
+            Assert.NotNull(actual);
+        }
         
         public class Foo
         {
