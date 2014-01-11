@@ -1,6 +1,4 @@
-﻿using System.Diagnostics.CodeAnalysis;
-
-// This file is used by Code Analysis to maintain SuppressMessage 
+﻿// This file is used by Code Analysis to maintain SuppressMessage 
 // attributes that are applied to this project.
 // Project-level suppressions either have no target or are given 
 // a specific target and scoped to a namespace, type, member, etc.
@@ -8,11 +6,12 @@
 // Code Analysis results, point to "Suppress Message", and click 
 // "In Suppression File".
 // You do not need to add suppressions to this file manually.
-[assembly: SuppressMessage(
+
+[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage(
     "Microsoft.Design",
     "CA2210:AssembliesShouldHaveValidStrongNames",
     Justification = "It is allowed to support sementic versioning.")]
-[assembly: SuppressMessage(
+[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage(
     "Microsoft.Usage",
     "CA2243:AttributeStringLiteralsShouldParseCorrectly",
     Justification = "It is allowed to support sementic versioning.")]
