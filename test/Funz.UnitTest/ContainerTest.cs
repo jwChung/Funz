@@ -529,6 +529,81 @@ namespace Jwc.Funz
         }
 
         [Spec]
+        public void ResolveServiceWithArgumentReusedWithinContainerReturnsSharedInstance(
+            Container sut,
+            string argument)
+        {
+            // Fixture setup
+            sut.Register<Foo, string>((c, s) => new Foo()).OwnedByContainer();
+            var expected = sut.Resolve<Foo, string>(argument);
+
+            // Exercise system
+            var actual = sut.Resolve<Foo, string>(argument);
+
+            // Verify outcome
+            Assert.Equal(expected, actual);
+        }
+
+        [Spec]
+        public void ResolveKeyedServiceReusedWithinContainerReturnsSharedInstance(
+            Container sut,
+            object key)
+        {
+            // Fixture setup
+            sut.Register(key, c => new Foo()).OwnedByContainer();
+            var expected = sut.ResolveKeyed<Foo>(key);
+
+            // Exercise system
+            var actual = sut.ResolveKeyed<Foo>(key);
+
+            // Verify outcome
+            Assert.Equal(expected, actual);
+        }
+
+        [Spec]
+        public void ResolveKeyedServiceWithArgumentReusedWithinContainerReturnsSharedInstance(
+            Container sut,
+            object key,
+            string stringValue)
+        {
+            // Fixture setup
+            sut.Register<Foo, string>(key, (c, s) => new Foo(s)).OwnedByContainer();
+            var expected = sut.ResolveKeyed<Foo, string>(key, stringValue);
+
+            // Exercise system
+            var actual = sut.ResolveKeyed<Foo, string>(key, stringValue);
+
+            // Verify outcome
+            Assert.Equal(expected, actual);
+        }
+
+        [Spec]
+        public void TryResolveNotRegisteredServiceReturnsDefaultValue(
+            Container sut)
+        {
+            // Fixture setup
+            // Exercise system
+            var actual = sut.TryResolve<Foo>();
+
+            // Verify outcome
+            Assert.Null(actual);
+        }
+
+        [Spec]
+        public void TryResolveRegisteredServiceReturnsCorrectInstance(
+            Container sut)
+        {
+            // Fixture setup
+            sut.Register(c => new Foo());
+
+            // Exercise system
+            var actual = sut.TryResolve<Foo>();
+
+            // Verify outcome
+            Assert.NotNull(actual);
+        }
+
+        [Spec]
         public void CreateChildReturnsCorrectContainer(
             Container sut)
         {
@@ -680,32 +755,6 @@ namespace Jwc.Funz
             Assert.Equal(0, disposable.Count);
         }
 
-        [Spec]
-        public void TryResolveNotRegisteredServiceReturnsDefaultValue(
-            Container sut)
-        {
-            // Fixture setup
-            // Exercise system
-            var actual = sut.TryResolve<Foo>();
-
-            // Verify outcome
-            Assert.Null(actual);
-        }
-
-        [Spec]
-        public void TryResolveRegisteredServiceReturnsCorrectInstance(
-            Container sut)
-        {
-            // Fixture setup
-            sut.Register(c => new Foo());
-
-            // Exercise system
-            var actual = sut.TryResolve<Foo>();
-
-            // Verify outcome
-            Assert.NotNull(actual);
-        }
-        
         public class Foo
         {
             private readonly string _stringArg;

@@ -152,7 +152,7 @@ namespace Jwc.Funz
         /// </returns>
         public TService Resolve<TService>()
         {
-            return ResolveImpl<TService>(true);
+            return ResolveImpl<TService>(_noKey, true);
         }
 
         /// <summary>
@@ -172,7 +172,7 @@ namespace Jwc.Funz
         /// </returns>
         public TService Resolve<TService, TArg>(TArg arg)
         {
-            return GetRegistration<Func<Container, TArg, TService>, TService>(_noKey, true).Factory.Invoke(this, arg);
+            return ResolveImpl<TService, TArg>(_noKey, true, arg);
         }
 
         /// <summary>
@@ -189,7 +189,7 @@ namespace Jwc.Funz
         /// </returns>
         public TService ResolveKeyed<TService>(object key)
         {
-            return GetRegistration<Func<Container, TService>, TService>(key, true).Factory.Invoke(this);
+            return ResolveImpl<TService>(key, true);
         }
 
         /// <summary>
@@ -212,7 +212,7 @@ namespace Jwc.Funz
         /// </returns>
         public TService ResolveKeyed<TService, TArg>(object key, TArg arg)
         {
-            return GetRegistration<Func<Container, TArg, TService>, TService>(key, true).Factory.Invoke(this, arg);
+            return ResolveImpl<TService, TArg>(key, true, arg);
         }
 
         /// <summary>
@@ -227,7 +227,7 @@ namespace Jwc.Funz
         /// </returns>
         public TService TryResolve<TService>()
         {
-            return ResolveImpl<TService>(false);
+            return ResolveImpl<TService>(_noKey, false);
         }
 
         /// <summary>
@@ -335,9 +335,9 @@ namespace Jwc.Funz
             return registration;
         }
 
-        private TService ResolveImpl<TService>(bool throws)
+        private TService ResolveImpl<TService>(object key, bool throws)
         {
-            var registration = GetRegistration<Func<Container, TService>, TService>(_noKey, throws);
+            var registration = GetRegistration<Func<Container, TService>, TService>(key, throws);
             if (registration == null)
             {
                 return default(TService);
@@ -349,6 +349,24 @@ namespace Jwc.Funz
             }
 
             var service = registration.Factory.Invoke(this);
+            registration.Service = service;
+            return service;
+        }
+
+        private TService ResolveImpl<TService, TArg>(object key, bool throws, TArg arg)
+        {
+            var registration = GetRegistration<Func<Container, TArg, TService>, TService>(key, throws);
+            if (registration == null)
+            {
+                return default(TService);
+            }
+
+            if (registration.HasService)
+            {
+                return registration.Service;
+            }
+
+            var service = registration.Factory.Invoke(this, arg);
             registration.Service = service;
             return service;
         }
