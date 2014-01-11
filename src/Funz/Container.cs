@@ -344,12 +344,25 @@ namespace Jwc.Funz
                 current = current._parent;
             }
 
-            if (registration == null)
+            if (registration != null)
             {
-                throw new ResolutionException(typeof(TService), serviceKey.Key, new Type[0]);
+                return registration.Clone<TFunc, TService>(this, serviceKey);
             }
 
-            return registration.Clone<TFunc, TService>(this, serviceKey);
+            var argumentTypes = GetArgumentTypes(typeof(TFunc));
+
+            if (key == _noKey)
+            {
+                throw new ResolutionException(typeof(TService), argumentTypes);
+            }
+
+            throw new ResolutionException(typeof(TService), serviceKey.Key, argumentTypes);
+        }
+
+        private static Type[] GetArgumentTypes(Type factoryType)
+        {
+            var genericArguments = factoryType.GetGenericArguments();
+            return genericArguments.Skip(1).Take(genericArguments.Length - 2).ToArray();
         }
 
         private sealed class ServiceKey

@@ -37,6 +37,22 @@ namespace Jwc.Funz
             // Verify outcome
             var e = Assert.Throws<ResolutionException>(() => sut.Resolve<Foo>());
             Assert.Equal(typeof(Foo), e.ServiceType);
+            Assert.Null(e.Key);
+            Assert.Empty(e.ArgumentTypes);
+        }
+
+        [Spec]
+        public void ResolveUnregisteredServiceWithArgumentThrows(
+            Container sut,
+            string stringArg)
+        {
+            // Fixture setup
+            // Exercise system
+            // Verify outcome
+            var e = Assert.Throws<ResolutionException>(() => sut.Resolve<Foo, string>(stringArg));
+            Assert.Equal(typeof(Foo), e.ServiceType);
+            Assert.Null(e.Key);
+            Assert.Equal(new[] { typeof(string) }, e.ArgumentTypes);
         }
 
         [Spec]
@@ -52,6 +68,22 @@ namespace Jwc.Funz
             var e = Assert.Throws<ResolutionException>(() => sut.ResolveKeyed<Foo>(key));
             Assert.Equal(typeof(Foo), e.ServiceType);
             Assert.Equal(key, e.Key);
+            Assert.Empty(e.ArgumentTypes);
+        }
+
+        [Spec]
+        public void ResolveUnregisteredKeyedServiceWithArgumentThrows(
+            Container sut,
+            object key,
+            string stringArg)
+        {
+            // Fixture setup
+            // Exercise system
+            // Verify outcome
+            var e = Assert.Throws<ResolutionException>(() => sut.ResolveKeyed<Foo, string>(key, stringArg));
+            Assert.Equal(typeof(Foo), e.ServiceType);
+            Assert.Equal(key, e.Key);
+            Assert.Equal(new[] { typeof(string) }, e.ArgumentTypes);
         }
 
         [Spec]
@@ -633,7 +665,7 @@ namespace Jwc.Funz
         public class Foo
         {
             private readonly string _stringArg;
-
+            
             public Foo()
             {
             }
