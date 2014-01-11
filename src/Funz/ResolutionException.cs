@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
+using System.Linq;
 
 namespace Jwc.Funz
 {
@@ -32,7 +34,8 @@ namespace Jwc.Funz
         /// <param name="argumentTypes">
         /// The argument types to be used to construct a service instance.
         /// </param>
-        public ResolutionException(Type serviceType, Type[] argumentTypes)
+        public ResolutionException(Type serviceType, params Type[] argumentTypes)
+            : base(BuildMessage(serviceType, argumentTypes))
         {
             if (serviceType == null)
             {
@@ -60,7 +63,8 @@ namespace Jwc.Funz
         /// <param name="argumentTypes">
         /// The argument types to be used to construct a service instance.
         /// </param>
-        public ResolutionException(Type serviceType, object key, Type[] argumentTypes)
+        public ResolutionException(Type serviceType, object key, params Type[] argumentTypes)
+            : base(BuildMessage(serviceType, key, argumentTypes))
         {
             if (serviceType == null)
             {
@@ -115,6 +119,42 @@ namespace Jwc.Funz
             {
                 return _argumentTypes;
             }
+        }
+
+        private static string BuildMessage(Type serviceType, Type[] argumentTypes)
+        {
+            if (argumentTypes.Any())
+            {
+                return string.Format(
+                    CultureInfo.CurrentCulture,
+                    "The service of type '{0}' with arguments '{1}' is not registered.",
+                    serviceType,
+                    string.Join(", ", argumentTypes.Select(x => x.Name)));
+            }
+
+            return string.Format(
+                CultureInfo.CurrentCulture,
+                "The service of type '{0}' is not registered.",
+                serviceType);
+        }
+
+        private static string BuildMessage(Type serviceType, object key, Type[] argumentTypes)
+        {
+            if (argumentTypes.Any())
+            {
+                return string.Format(
+                    CultureInfo.CurrentCulture,
+                    "The service of type '{0}' and key '{1}' with arguments '{2}' is not registered.",
+                    serviceType,
+                    key,
+                    string.Join(", ", argumentTypes.Select(x => x.Name)));
+            }
+
+            return string.Format(
+                CultureInfo.CurrentCulture,
+                "The service of type '{0}' and key '{1}' is not registered.",
+                serviceType,
+                key);
         }
     }
 }
