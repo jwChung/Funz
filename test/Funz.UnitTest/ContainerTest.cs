@@ -426,7 +426,7 @@ namespace Jwc.Funz
             var actual = grandChild.Resolve<Foo>();
 
             // Verify outcome
-            Assert.Equal(expected, actual);
+            Assert.NotEqual(expected, actual);
         }
 
         [Spec]

@@ -712,6 +712,7 @@ namespace Jwc.Funz
                     if (current.Scope == _scope)
                     {
                         scoped = current;
+                        break;
                     }
 
                     current = current._parent;
