@@ -346,6 +346,8 @@ namespace Jwc.Funz
                 return;
             }
 
+            _disposed = true;
+
             if (!disposing)
             {
                 return;
@@ -354,8 +356,6 @@ namespace Jwc.Funz
             DisposeServices();
             DisposeChildren();
             RemoveFromParent();
-
-            _disposed = true;
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage(
