@@ -7,7 +7,7 @@ namespace Jwc.Funz
     /// created from a registration.
     /// </summary>
     [EditorBrowsable(EditorBrowsableState.Never)]
-    public interface IOwned
+    public interface IOwned : IFluentInterface
     {
         /// <summary>
         /// Specifies that container should dispose provided instances when it is disposed. (default)

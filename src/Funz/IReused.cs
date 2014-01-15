@@ -6,7 +6,7 @@ namespace Jwc.Funz
     /// Fluent API that allows specifying the reuse instances.
     /// </summary>
     [EditorBrowsable(EditorBrowsableState.Never)]
-    public interface IReused
+    public interface IReused : IFluentInterface
     {
         /// <summary>
         /// Specifies each request to resolve the dependency will result in a new 
