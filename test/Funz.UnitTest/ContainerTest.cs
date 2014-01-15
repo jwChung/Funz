@@ -1,6 +1,5 @@
 ﻿using System;
 using Jwc.AutoFixture.Xunit;
-using Ploeh.AutoFixture;
 using Xunit;
 
 namespace Jwc.Funz
@@ -135,7 +134,7 @@ namespace Jwc.Funz
 
             // Verify outcome
             Assert.NotNull(actual1);
-            Assert.Equal(stringValue, actual2.StringArg);
+            Assert.Equal(stringValue, actual2.Arg);
         }
 
         [Spec]
@@ -182,7 +181,7 @@ namespace Jwc.Funz
             var actual = sut.Resolve<Foo>();
 
             // Verify outcome
-            Assert.Equal(stringValue, actual.StringArg);
+            Assert.Equal(stringValue, actual.Arg);
         }
 
         [Spec]
@@ -212,7 +211,7 @@ namespace Jwc.Funz
             var actual = sut.Resolve<Foo, string>(stringValue);
 
             // Verify outcome
-            Assert.Equal(stringValue, actual.StringArg);
+            Assert.Equal(stringValue, actual.Arg);
         }
 
         [Spec]
@@ -228,7 +227,7 @@ namespace Jwc.Funz
             var actual = sut.ResolveKeyed<Foo, string>(key, stringValue);
 
             // Verify outcome
-            Assert.Equal(stringValue, actual.StringArg);
+            Assert.Equal(stringValue, actual.Arg);
         }
 
         [Spec]
@@ -653,7 +652,7 @@ namespace Jwc.Funz
             var actual = sut.TryResolve<Foo, string>(stringValue);
 
             // Verify outcome
-            Assert.Equal(stringValue, actual.StringArg);
+            Assert.Equal(stringValue, actual.Arg);
         }
 
         [Spec]
@@ -711,7 +710,7 @@ namespace Jwc.Funz
             var actual = sut.TryResolveKeyed<Foo, string>(key, stringValue);
 
             // Verify outcome
-            Assert.Equal(stringValue, actual.StringArg);
+            Assert.Equal(stringValue, actual.Arg);
         }
 
         [Spec]
@@ -772,7 +771,7 @@ namespace Jwc.Funz
             // Verify outcome
             Assert.NotNull(actual);
             Assert.NotSame(expected, actual);
-            Assert.Equal(argument, actual.StringArg);
+            Assert.Equal(argument, actual.Arg);
         }
 
         [Spec]
@@ -837,7 +836,7 @@ namespace Jwc.Funz
             // Verify outcome
             Assert.NotNull(actual);
             Assert.NotSame(expected, actual);
-            Assert.Equal(argument, actual.StringArg);
+            Assert.Equal(argument, actual.Arg);
         }
 
         [Spec]
@@ -994,22 +993,22 @@ namespace Jwc.Funz
 
         public class Foo
         {
-            private readonly string _stringArg;
-            
+            private readonly string _arg;
+
             public Foo()
             {
             }
 
-            public Foo(string stringArg)
+            public Foo(string arg)
             {
-                _stringArg = stringArg;
+                _arg = arg;
             }
 
-            public string StringArg
+            public string Arg
             {
                 get
                 {
-                    return _stringArg;
+                    return _arg;
                 }
             }
         }
@@ -1027,7 +1026,7 @@ namespace Jwc.Funz
                 Count++;
             }
         }
-
+        
         private class Dummy
         {
 #pragma warning disable once UnusedAutoPropertyAccessor.Local

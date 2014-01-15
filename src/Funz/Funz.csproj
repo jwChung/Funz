@@ -43,6 +43,31 @@
       <Link>Properties\CommonAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="Container.cs" />
+    <Compile Include="Container.Register.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Container.Register.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Container.LazyResolve.cs">
+      <DependentUpon>Container.LazyResolve.tt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Container.TryResolve.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Container.TryResolve.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Container.Resolve.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Container.Resolve.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Container.ResolveImpl.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Container.ResolveImpl.tt</DependentUpon>
+    </Compile>
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="IOwned.cs" />
     <Compile Include="IReused.cs" />
@@ -54,6 +79,34 @@
     <CodeAnalysisDictionary Include="..\..\build\CodeAnalysisDictionary.xml">
       <Link>Properties\CodeAnalysisDictionary.xml</Link>
     </CodeAnalysisDictionary>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Container.Register.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>Container.Register.cs</LastGenOutput>
+    </None>
+    <None Include="Container.LazyResolve.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>Container.LazyResolve.cs</LastGenOutput>
+    </None>
+    <None Include="Container.TryResolve.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>Container.TryResolve.cs</LastGenOutput>
+    </None>
+    <None Include="Container.Resolve.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>Container.Resolve.cs</LastGenOutput>
+    </None>
+    <None Include="Container.ResolveImpl.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>Container.ResolveImpl.cs</LastGenOutput>
+    </None>
+    <None Include="Helpers.tt">
+      <LastGenOutput>Helpers.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

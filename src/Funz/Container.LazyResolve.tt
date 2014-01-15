@@ -1,0 +1,52 @@
+﻿<#@ Template Debug="false" HostSpecific="false" Language="C#" #>
+<#@ Output Extension=".cs" #>
+<#@ Assembly Name="System.Core" #>
+<#@ Import Namespace="System.Linq" #>
+using System;
+using System.Diagnostics;
+
+namespace Jwc.Funz
+{
+	public partial class Container
+	{
+		/* Contain just the typed overloads that are just pass-through to the real implementations.
+		 * They all have DebuggerStepThrough to ease debugging. */
+
+<#
+for (var typeCount = 2; typeCount <= GenericTypeMax - 2; typeCount++)
+{
+    var typeList = GetGenericList(typeCount, "TArg{0}");
+    var argumentList = GetGenericList(typeCount, "TArg{0} arg{0}");
+    var valueList = GetGenericList(typeCount, "arg{0}");
+#>
+		/// <summary>
+        /// Resolves the given factory by type, with passing arguments for its construction.
+        /// </summary>
+        /// <returns>
+        /// The resolved service factory.
+        /// </returns>
+		[DebuggerStepThrough]
+		public Func<<#=typeList#>, TService> LazyResolve<TService, <#=typeList#>>()
+		{
+			return LazyResolveKeyed<TService, <#=typeList#>>(_noKey);
+		}
+
+		/// <summary>
+        /// Resolves the given factory by type and key, with passing arguments for its construction.
+        /// </summary>
+        /// <returns>
+        /// The resolved service factory.
+        /// </returns>
+		[DebuggerStepThrough]
+		public Func<<#=typeList#>, TService> LazyResolveKeyed<TService, <#=typeList#>>(object key)
+		{
+			GetRegistration<Func<Container, <#=typeList#>, TService>, TService>(key, true);
+            return (<#=valueList#>) => ResolveImpl<TService, <#=typeList#>>(key, true, <#=valueList#>);
+		}
+
+<#
+}
+#>
+	}
+}
+<#@ Include File="Helpers.tt" #>

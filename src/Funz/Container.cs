@@ -11,7 +11,7 @@ namespace Jwc.Funz
     /// Main container class for components, supporting container hierarchies and
     /// lifetime management of <see cref="IDisposable"/> instances.
     /// </summary>
-    public class Container : IDisposable
+    public partial class Container : IDisposable
     {
         private static readonly object _noKey = new object();
 
@@ -312,8 +312,7 @@ namespace Jwc.Funz
         /// </returns>
         public Func<TService> LazyResolve<TService>()
         {
-            GetRegistration<Func<Container, TService>, TService>(_noKey, true);
-            return () => ResolveImpl<TService>(_noKey, true);
+            return LazyResolveKeyed<TService>(_noKey);
         }
 
         /// <summary>
@@ -330,8 +329,7 @@ namespace Jwc.Funz
         /// </returns>
         public Func<TArg, TService> LazyResolve<TService, TArg>()
         {
-            GetRegistration<Func<Container, TArg, TService>, TService>(_noKey, true);
-            return a => ResolveImpl<TService, TArg>(_noKey, true, a);
+            return LazyResolveKeyed<TService, TArg>(_noKey);
         }
 
         /// <summary>
@@ -370,7 +368,7 @@ namespace Jwc.Funz
         public Func<TArg, TService> LazyResolveKeyed<TService, TArg>(object key)
         {
             GetRegistration<Func<Container, TArg, TService>, TService>(key, true);
-            return a => ResolveImpl<TService, TArg>(key, true, a);
+            return arg => ResolveImpl<TService, TArg>(key, true, arg);
         }
 
         /// <summary>
