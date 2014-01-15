@@ -1,6 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
 using Jwc.AutoFixture.Xunit;
 using Xunit;
+using Xunit.Extensions;
 
 namespace Jwc.Funz
 {
@@ -989,6 +993,58 @@ namespace Jwc.Funz
 
             // Verify outcome
             Assert.Equal(0, disposable.Count);
+        }
+
+        [Spec]
+        [CallMethodData]
+        public void CallMethodAfterDisposedThrowsDisposedException(
+            Action<Container> exercise,
+            Container sut)
+        {
+            // Fixture setup
+            sut.Register(c => new Foo());
+            sut.Register<Foo, string>((c, s) => new Foo());
+            sut.Register("key", c => new Foo());
+            sut.Register<Foo, string>("key", (c, s) => new Foo());
+
+            sut.Dispose();
+
+            // Exercise system
+            // Verify outcome
+            Assert.Throws<ObjectDisposedException>(() => exercise(sut));
+        }
+
+        private class CallMethodDataAttribute : DataAttribute
+        {
+            public override IEnumerable<object[]> GetData(MethodInfo methodUnderTest, Type[] parameterTypes)
+            {
+                return new Action<Container>[]
+                {
+                    sut => sut.Register(c => new Foo()),
+                    sut => sut.Register<Foo, string>((c, s) => new Foo(s)),
+                    sut => sut.Register("key", c => new object()),
+                    sut => sut.Register<Foo, string>("key", (c, s) => new Foo(s)),
+
+                    sut => sut.Resolve<Foo>(),
+                    sut => sut.Resolve<Foo, string>("arg"),
+                    sut => sut.ResolveKeyed<Foo>("key"),
+                    sut => sut.ResolveKeyed<Foo, string>("key", "arg"),
+
+                    sut => sut.TryResolve<Foo>(),
+                    sut => sut.TryResolve<Foo, string>("arg"),
+                    sut => sut.TryResolveKeyed<Foo>("key"),
+                    sut => sut.TryResolveKeyed<Foo, string>("key", "arg"),
+
+                    sut => sut.LazyResolve<Foo>().Invoke(),
+                    sut => sut.LazyResolve<Foo, string>().Invoke("arg"),
+                    sut => sut.LazyResolveKeyed<Foo>("key").Invoke(),
+                    sut => sut.LazyResolveKeyed<Foo, string>("key").Invoke("arg"),
+
+                    sut => sut.CreateChild(),
+                    sut => sut.CreateChild(scope: new object())
+                }
+                .Select(m => new object[] { m });
+            }
         }
 
         public class Foo

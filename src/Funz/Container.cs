@@ -395,6 +395,8 @@ namespace Jwc.Funz
         /// </returns>
         public Container CreateChild(object scope)
         {
+            ThrowsExceptionIfDisposed();
+
             var container = new Container(this, scope);
             _children.Add(container);    
             return container;
@@ -447,6 +449,8 @@ namespace Jwc.Funz
                 throw new ArgumentNullException("factory");
             }
 
+            ThrowsExceptionIfDisposed();
+
             var registration = new Registration<TFunc, TService>(this, factory, new HierarchyScope());
             _registry[new ServiceKey(typeof(TFunc), key)] = registration;
             return registration;
@@ -490,6 +494,8 @@ namespace Jwc.Funz
 
         private Registration<TFunc, TService> GetRegistration<TFunc, TService>(object key, bool throws)
         {
+            ThrowsExceptionIfDisposed();
+
             var serviceKey = new ServiceKey(typeof(TFunc), key);
 
             Container current = this;
@@ -549,6 +555,14 @@ namespace Jwc.Funz
             }
 
             _parent._children.Remove(this);
+        }
+
+        private void ThrowsExceptionIfDisposed()
+        {
+            if (_disposed)
+            {
+                throw new ObjectDisposedException(ToString());
+            }
         }
 
         private class ContainerCollection : Collection<Container>, IEnumerable<Container>
