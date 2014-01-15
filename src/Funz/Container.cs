@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -48,7 +49,7 @@ namespace Jwc.Funz
             _scope = scope;
 
             _children = new ContainerCollection();
-            _registry = new Dictionary<ServiceKey, Registration>();
+            _registry = new ConcurrentDictionary<ServiceKey, Registration>();
             _disposed = false;
         }
 
