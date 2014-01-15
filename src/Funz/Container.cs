@@ -33,6 +33,9 @@ namespace Jwc.Funz
         /// <summary>
         /// Initializes a new instance of the <see cref="Container"/> class with container scope.
         /// </summary>
+        /// <param name="scope">
+        /// The scope to represent custom lifetime.
+        /// </param>
         public Container(object scope)
             : this(null, scope)
         {
