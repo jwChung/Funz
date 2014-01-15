@@ -82,26 +82,32 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Container.Register.tt">
+      <DependentUpon>Container.cs</DependentUpon>
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>Container.Register.cs</LastGenOutput>
     </None>
     <None Include="Container.LazyResolve.tt">
+      <DependentUpon>Container.cs</DependentUpon>
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>Container.LazyResolve.cs</LastGenOutput>
     </None>
     <None Include="Container.TryResolve.tt">
+      <DependentUpon>Container.cs</DependentUpon>
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>Container.TryResolve.cs</LastGenOutput>
     </None>
     <None Include="Container.Resolve.tt">
+      <DependentUpon>Container.cs</DependentUpon>
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>Container.Resolve.cs</LastGenOutput>
     </None>
     <None Include="Container.ResolveImpl.tt">
+      <DependentUpon>Container.cs</DependentUpon>
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>Container.ResolveImpl.cs</LastGenOutput>
     </None>
     <None Include="Helpers.tt">
+      <DependentUpon>Container.cs</DependentUpon>
       <LastGenOutput>Helpers.cs</LastGenOutput>
     </None>
   </ItemGroup>
