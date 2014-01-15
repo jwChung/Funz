@@ -6,10 +6,10 @@ using System.Diagnostics;
 
 namespace Jwc.Funz
 {
-	public partial class Container
-	{
-		/* Contain just the typed overloads that are just pass-through to the real implementations.
-		 * They all have DebuggerStepThrough to ease debugging. */
+    public partial class Container
+    {
+        /* Contain just the typed overloads that are just pass-through to the real implementations.
+         * They all have DebuggerStepThrough to ease debugging. */
 
 <#
 for (var typeCount = 2; typeCount <= GenericTypeMax - 2; typeCount++)
@@ -18,33 +18,33 @@ for (var typeCount = 2; typeCount <= GenericTypeMax - 2; typeCount++)
     var argumentList = GetGenericList(typeCount, "TArg{0} arg{0}");
     var valueList = GetGenericList(typeCount, "arg{0}");
 #>
-		/// <summary>
+        /// <summary>
         /// Tries to resolve the given service by type, with passing arguments for its construction.
         /// </summary>
         /// <returns>
         /// The resolved service instance.
         /// </returns>
-		[DebuggerStepThrough]
-		public TService TryResolve<TService, <#=typeList#>>(<#=argumentList #>)
-		{
-			return ResolveImpl<TService, <#=typeList#>>(_noKey, false, <#=valueList#>);
-		}
+        [DebuggerStepThrough]
+        public TService TryResolve<TService, <#=typeList#>>(<#=argumentList #>)
+        {
+            return ResolveImpl<TService, <#=typeList#>>(_noKey, false, <#=valueList#>);
+        }
 
-		/// <summary>
+        /// <summary>
         /// Tries to resolve the given service by type and key, with passing arguments for its construction.
         /// </summary>
         /// <returns>
         /// The resolved service instance.
         /// </returns>
-		[DebuggerStepThrough]
-		public TService TryResolveKeyed<TService, <#=typeList#>>(object key, <#=argumentList #>)
-		{
-			return ResolveImpl<TService, <#=typeList#>>(key, false, <#=valueList#>);
-		}
+        [DebuggerStepThrough]
+        public TService TryResolveKeyed<TService, <#=typeList#>>(object key, <#=argumentList #>)
+        {
+            return ResolveImpl<TService, <#=typeList#>>(key, false, <#=valueList#>);
+        }
 
 <#
 }
 #>
-	}
+    }
 }
 <#@ Include File="Helpers.tt" #>

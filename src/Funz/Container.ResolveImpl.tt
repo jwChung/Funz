@@ -6,13 +6,13 @@ using System;
 
 namespace Jwc.Funz
 {
-	public partial class Container
-	{
-		/* All ResolveImpl are essentially equal, except for the type of the factory 
-		 * which is "hardcoded" in each implementation. This slight repetition of 
-		 * code gives us a bit more of perf. gain by avoiding an intermediate 
-		 * func/lambda to call in a generic way as we did before.
-		 */
+    public partial class Container
+    {
+        /* All ResolveImpl are essentially equal, except for the type of the factory 
+         * which is "hardcoded" in each implementation. This slight repetition of 
+         * code gives us a bit more of perf. gain by avoiding an intermediate 
+         * func/lambda to call in a generic way as we did before.
+         */
 
 <#
 for (var typeCount = 2; typeCount <= GenericTypeMax - 2; typeCount++)
@@ -21,7 +21,7 @@ for (var typeCount = 2; typeCount <= GenericTypeMax - 2; typeCount++)
     var argumentList = GetGenericList(typeCount, "TArg{0} arg{0}");
     var valueList = GetGenericList(typeCount, "arg{0}");
 #>
-		private TService ResolveImpl<TService, <#=typeList#>>(object key, bool throws, <#=argumentList#>)
+        private TService ResolveImpl<TService, <#=typeList#>>(object key, bool throws, <#=argumentList#>)
         {
             var registration = GetRegistration<Func<Container, <#=typeList#>, TService>, TService>(key, throws);
             if (registration == null)
@@ -42,6 +42,6 @@ for (var typeCount = 2; typeCount <= GenericTypeMax - 2; typeCount++)
 <#
 }
 #>
-	}
+    }
 }
 <#@ Include File="Helpers.tt" #>

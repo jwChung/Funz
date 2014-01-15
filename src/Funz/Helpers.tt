@@ -1,4 +1,4 @@
-﻿<#
+﻿<#+
 private const int GenericTypeMax = 16;
 private const int GenericTypeMin = 5;
 private static readonly string[] ordinalNumbers = new[] { "first", "second", "third", "fourth", "fifth", "sixth", "seventh", "eighth", "ninth", "tenth", "eleventh", "twelfth", "thirteenth", "fourteenth", "fifteenth", "sixteenth" };

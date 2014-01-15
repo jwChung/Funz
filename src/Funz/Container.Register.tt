@@ -7,17 +7,17 @@ using System.Diagnostics;
 
 namespace Jwc.Funz
 {
-	public partial class Container
-	{
-		/* Contain just the typed overloads that are just pass-through to the real implementations.
-		 * They all have DebuggerStepThrough to ease debugging. */
+    public partial class Container
+    {
+        /* Contain just the typed overloads that are just pass-through to the real implementations.
+         * They all have DebuggerStepThrough to ease debugging. */
 
 <#
 for (var typeCount = 2; typeCount <= GenericTypeMax - 2; typeCount++)
 {
     var typeList = GetGenericList(typeCount, "TArg{0}");
 #>
-		/// <summary>
+        /// <summary>
         /// Registers the given service by providing a factory delegate to instantiate it.
         /// </summary>
         /// <param name="factory">
@@ -26,13 +26,13 @@ for (var typeCount = 2; typeCount <= GenericTypeMax - 2; typeCount++)
         /// <returns>
         /// The registration object to perform further configuration via its fluent interface.
         /// </returns>
-		[DebuggerStepThrough]
-		public IRegistration Register<TService, <#=typeList #>>(Func<Container, <#=typeList #>, TService> factory)
-		{
-			return RegisterImpl<Func<Container, <#=typeList #>, TService>, TService>(_noKey, factory);
-		}
+        [DebuggerStepThrough]
+        public IRegistration Register<TService, <#=typeList #>>(Func<Container, <#=typeList #>, TService> factory)
+        {
+            return RegisterImpl<Func<Container, <#=typeList #>, TService>, TService>(_noKey, factory);
+        }
 
-		/// <summary>
+        /// <summary>
         /// Registers the given service by providing a factory delegate to instantiate it.
         /// </summary>
         /// <param name="key">
@@ -44,15 +44,15 @@ for (var typeCount = 2; typeCount <= GenericTypeMax - 2; typeCount++)
         /// <returns>
         /// The registration object to perform further configuration via its fluent interface.
         /// </returns>
-		[DebuggerStepThrough]
-		public IRegistration Register<TService, <#=typeList #>>(object key, Func<Container, <#=typeList #>, TService> factory)
-		{
-			return RegisterImpl<Func<Container, <#=typeList #>, TService>, TService>(key, factory);
-		}
+        [DebuggerStepThrough]
+        public IRegistration Register<TService, <#=typeList #>>(object key, Func<Container, <#=typeList #>, TService> factory)
+        {
+            return RegisterImpl<Func<Container, <#=typeList #>, TService>, TService>(key, factory);
+        }
 
 <#
 }
 #>
-	}
+    }
 }
 <#@ Include File="Helpers.tt" #>
