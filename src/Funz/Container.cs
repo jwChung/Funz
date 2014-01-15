@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 
 namespace Jwc.Funz
@@ -45,7 +47,7 @@ namespace Jwc.Funz
             _parent = parent;
             _scope = scope;
 
-            _children = new List<Container>();
+            _children = new ContainerCollection();
             _registry = new Dictionary<ServiceKey, Registration>();
             _disposed = false;
         }
@@ -318,7 +320,7 @@ namespace Jwc.Funz
         public Container CreateChild(object scope)
         {
             var container = new Container(this, scope);
-            _children.Add(container);
+            _children.Add(container);    
             return container;
         }
 
@@ -457,7 +459,7 @@ namespace Jwc.Funz
 
         private void DisposeChildren()
         {
-            foreach (var child in _children.ToArray())
+            foreach (var child in _children)
             {
                 child.Dispose();
             }
@@ -465,9 +467,55 @@ namespace Jwc.Funz
 
         private void RemoveFromParent()
         {
-            if (_parent != null)
+            if (_parent == null)
             {
-                _parent._children.Remove(this);
+                return;
+            }
+
+            _parent._children.Remove(this);
+        }
+
+        private class ContainerCollection : Collection<Container>, IEnumerable<Container>
+        {
+            private readonly object _syncRoot;
+
+            public ContainerCollection()
+            {
+                _syncRoot = ((ICollection)this).SyncRoot;
+            }
+
+            protected override void InsertItem(int index, Container item)
+            {
+                lock (_syncRoot)
+                {
+                    base.InsertItem(index, item);    
+                }
+            }
+
+            protected override void RemoveItem(int index)
+            {
+                lock (_syncRoot)
+                {
+                    base.RemoveItem(index);
+                }
+            }
+
+            IEnumerator<Container> IEnumerable<Container>.GetEnumerator()
+            {
+                return GetEnumerator();
+            }
+
+            IEnumerator IEnumerable.GetEnumerator()
+            {
+                return GetEnumerator();
+            }
+
+            private new IEnumerator<Container> GetEnumerator()
+            {
+                lock (_syncRoot)
+                {
+                    return ((IEnumerable<Container>)this.ToArray()).GetEnumerator();
+                }
             }
         }
 
