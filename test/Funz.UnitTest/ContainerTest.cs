@@ -579,6 +579,30 @@ namespace Jwc.Funz
         }
 
         [Spec]
+        public void ResolveContainerServiceReturnsSutItself(Container sut)
+        {
+            // Fixture setup
+            // Exercise system
+            var actual = sut.Resolve<Container>();
+
+            // Verify outcome
+            Assert.Equal(sut, actual);
+        }
+
+        [Spec]
+        public void ResolveContainerServiceOnChildReturnsChildItself(Container sut)
+        {
+            // Fixture setup
+            var child = sut.CreateChild();
+
+            // Exercise system
+            var actual = child.Resolve<Container>();
+
+            // Verify outcome
+            Assert.Equal(child, actual);
+        }
+
+        [Spec]
         public void TryResolveNotRegisteredServiceReturnsDefaultValue(
             Container sut)
         {

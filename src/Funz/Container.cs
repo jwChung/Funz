@@ -54,6 +54,8 @@ namespace Jwc.Funz
             _children = new ContainerCollection();
             _registry = new ConcurrentDictionary<ServiceKey, Registration>();
             _disposed = false;
+
+            Register(c => this).ReusedWithinContainer().OwnedByExternal();
         }
 
         /// <summary>
