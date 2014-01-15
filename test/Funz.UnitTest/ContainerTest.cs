@@ -1,5 +1,6 @@
 ﻿using System;
 using Jwc.AutoFixture.Xunit;
+using Ploeh.AutoFixture;
 using Xunit;
 
 namespace Jwc.Funz
@@ -687,6 +688,132 @@ namespace Jwc.Funz
 
             // Verify outcome
             Assert.Equal(stringValue, actual.StringArg);
+        }
+
+        [Spec]
+        public void LazyResolveNotRegisteredServiceThrows(
+            Container sut)
+        {
+            // Fixture setup
+            // Exercise system
+            // Verify outcome
+            var e = Assert.Throws<ResolutionException>(() => sut.LazyResolve<Foo>());
+            Assert.Equal(typeof(Foo), e.ServiceType);
+            Assert.Null(e.Key);
+            Assert.Empty(e.ArgumentTypes);
+        }
+
+        [Spec]
+        public void LazyResolveRegisteredServiceReturnsCorrectFactory(
+            Container sut)
+        {
+            // Fixture setup
+            sut.Register(c => new Foo()).ReusedWithinNone();
+            var expected = sut.LazyResolve<Foo>().Invoke();
+
+            // Exercise system
+            var actual = sut.LazyResolve<Foo>().Invoke();
+
+            // Verify outcome
+            Assert.NotNull(actual);
+            Assert.NotSame(expected, actual);
+        }
+
+        [Spec]
+        public void LazyResolveNotRegisteredServiceWithArgumentThrows(
+            Container sut,
+            string argument)
+        {
+            // Fixture setup
+            // Exercise system
+            // Verify outcome
+            var e = Assert.Throws<ResolutionException>(() => sut.LazyResolve<Foo, string>());
+            Assert.Equal(typeof(Foo), e.ServiceType);
+            Assert.Null(e.Key);
+            Assert.Equal(new[] { typeof(string) }, e.ArgumentTypes);
+        }
+
+        [Spec]
+        public void LazyResolveRegisteredServiceWithArgumentReturnsCorrectFactory(
+            Container sut,
+            string argument)
+        {
+            // Fixture setup
+            sut.Register<Foo, string>((c, s) => new Foo(s)).ReusedWithinNone();
+            var expected = sut.LazyResolve<Foo, string>().Invoke(argument);
+
+            // Exercise system
+            var actual = sut.LazyResolve<Foo, string>().Invoke(argument);
+
+            // Verify outcome
+            Assert.NotNull(actual);
+            Assert.NotSame(expected, actual);
+            Assert.Equal(argument, actual.StringArg);
+        }
+
+        [Spec]
+        public void LazyResolveNotRegisteredKeyedServiceThrows(
+            Container sut,
+            object key)
+        {
+            // Fixture setup
+            // Exercise system
+            // Verify outcome
+            var e = Assert.Throws<ResolutionException>(() => sut.LazyResolveKeyed<Foo>(key));
+            Assert.Equal(typeof(Foo), e.ServiceType);
+            Assert.Equal(key, e.Key);
+            Assert.Empty(e.ArgumentTypes);
+        }
+
+        [Spec]
+        public void LazyResolveRegisteredKeyedServiceReturnsCorrectFactory(
+            Container sut,
+            object key)
+        {
+            // Fixture setup
+            sut.Register(key, c => new Foo()).ReusedWithinNone();
+            var expected = sut.LazyResolveKeyed<Foo>(key).Invoke();
+
+            // Exercise system
+            var actual = sut.LazyResolveKeyed<Foo>(key).Invoke();
+
+            // Verify outcome
+            Assert.NotNull(actual);
+            Assert.NotSame(expected, actual);
+        }
+
+        [Spec]
+        public void LazyResolveNotRegisteredKeyedServiceWithArgumentThrows(
+            Container sut,
+            object key,
+            string argument)
+        {
+            // Fixture setup
+            // Exercise system
+            // Verify outcome
+            var e = Assert.Throws<ResolutionException>(() => sut.LazyResolveKeyed<Foo, string>(key));
+            Assert.Equal(typeof(Foo), e.ServiceType);
+            Assert.Equal(key, e.Key);
+            Assert.Equal(new[] { typeof(string) }, e.ArgumentTypes);
+        }
+
+        [Spec]
+        public void LazyResolveRegisteredKeyedServiceWithArgumentReturnsCorrectFactory(
+            Container sut,
+            object key,
+            string argument)
+        {
+            // Fixture setup
+            sut.Register<Foo, string>(key, (c, s) => new Foo(s)).ReusedWithinNone();
+            var expected = sut.LazyResolveKeyed<Foo, string>(key).Invoke(argument);
+
+            // Exercise system
+            var actual = sut.LazyResolveKeyed<Foo, string>(key).Invoke(argument);
+
+            // Verify outcome
+            Assert.NotNull(actual);
+            Assert.NotSame(expected, actual);
+            Assert.Equal(argument, actual.StringArg);
         }
 
         [Spec]

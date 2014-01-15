@@ -201,18 +201,18 @@ namespace Jwc.Funz
         /// <summary>
         /// Resolves the given service by type and key, without passing arguments for its initialization.
         /// </summary>
-        /// <typeparam name="TService">
-        /// Type of the service to retrieve.
-        /// </typeparam>
-        /// <typeparam name="TArg">
-        /// Type of the first argument.
-        /// </typeparam>
         /// <param name="key">
         /// The key of the service to retrieve.
         /// </param>
         /// <param name="arg">
         /// The first argument to pass to the factory delegate that may create the instace.
         /// </param>
+        /// <typeparam name="TService">
+        /// Type of the service to retrieve.
+        /// </typeparam>
+        /// <typeparam name="TArg">
+        /// Type of the first argument.
+        /// </typeparam>
         /// <returns>
         /// The resolved service instance.
         /// </returns>
@@ -279,24 +279,96 @@ namespace Jwc.Funz
         /// Tries to resolve the given service by type and key, without passing arguments for its initialization.
         /// If the service is not registered, it will return a default value of the type.
         /// </summary>
-        /// <typeparam name="TService">
-        /// Type of the service to retrieve.
-        /// </typeparam>
-        /// <typeparam name="TArg">
-        /// Type of the first argument.
-        /// </typeparam>
         /// <param name="key">
         /// The key of the service to retrieve.
         /// </param>
         /// <param name="arg">
         /// The first argument to pass to the factory delegate that may create the instace.
         /// </param>
+        /// <typeparam name="TService">
+        /// Type of the service to retrieve.
+        /// </typeparam>
+        /// <typeparam name="TArg">
+        /// Type of the first argument.
+        /// </typeparam>
         /// <returns>
         /// The resolved service instance.
         /// </returns>
         public TService TryResolveKeyed<TService, TArg>(object key, TArg arg)
         {
             return ResolveImpl<TService, TArg>(key, false, arg);
+        }
+
+        /// <summary>
+        /// Resolves the given factory by type, without passing any arguments for its construction.
+        /// </summary>
+        /// <typeparam name="TService">
+        /// Type of the service to retrieve.
+        /// </typeparam>
+        /// <returns>
+        /// The resolved service factory.
+        /// </returns>
+        public Func<TService> LazyResolve<TService>()
+        {
+            GetRegistration<Func<Container, TService>, TService>(_noKey, true);
+            return () => ResolveImpl<TService>(_noKey, true);
+        }
+
+        /// <summary>
+        /// Resolves the given factory by type, without passing any arguments for its construction.
+        /// </summary>
+        /// <typeparam name="TService">
+        /// Type of the service to retrieve.
+        /// </typeparam>
+        /// <typeparam name="TArg">
+        /// Type of the first argument.
+        /// </typeparam>
+        /// <returns>
+        /// The resolved service factory.
+        /// </returns>
+        public Func<TArg, TService> LazyResolve<TService, TArg>()
+        {
+            GetRegistration<Func<Container, TArg, TService>, TService>(_noKey, true);
+            return a => ResolveImpl<TService, TArg>(_noKey, true, a);
+        }
+
+        /// <summary>
+        /// Resolves the given factory by type and key, without passing arguments for its initialization.
+        /// </summary>
+        /// <param name="key">
+        /// The key of the service to retrieve.
+        /// </param>
+        /// <typeparam name="TService">
+        /// Type of the service to retrieve.
+        /// </typeparam>
+        /// <returns>
+        /// The resolved service factory.
+        /// </returns>
+        public Func<TService> LazyResolveKeyed<TService>(object key)
+        {
+            GetRegistration<Func<Container, TService>, TService>(key, true);
+            return () => ResolveImpl<TService>(key, true);
+        }
+
+        /// <summary>
+        /// Resolves the given factory by type and key, without passing arguments for its initialization.
+        /// </summary>
+        /// <param name="key">
+        /// The key of the service to retrieve.
+        /// </param>
+        /// <typeparam name="TService">
+        /// Type of the service to retrieve.
+        /// </typeparam>
+        /// <typeparam name="TArg">
+        /// Type of the first argument.
+        /// </typeparam>
+        /// <returns>
+        /// The resolved service factory.
+        /// </returns>
+        public Func<TArg, TService> LazyResolveKeyed<TService, TArg>(object key)
+        {
+            GetRegistration<Func<Container, TArg, TService>, TService>(key, true);
+            return a => ResolveImpl<TService, TArg>(key, true, a);
         }
 
         /// <summary>
