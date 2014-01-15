@@ -1,3 +1,5 @@
+Funz
+----
 Funz is a variation of [Funq] to provide some features as the following.
 
  * Makes all the public mehtods of the Container class thead-safe.
