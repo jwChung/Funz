@@ -12,7 +12,14 @@ namespace Jwc.Funz
 	public interface IFluentInterface
 	{
 		/// <summary/>
-		[EditorBrowsable(EditorBrowsableState.Never)]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage(
+            "Microsoft.Naming",
+            "CA1716:IdentifiersShouldNotMatchKeywords",
+            MessageId = "GetType")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage(
+            "Microsoft.Design",
+            "CA1024:UsePropertiesWhereAppropriate")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
 		Type GetType();
 
 		/// <summary/>
@@ -24,7 +31,11 @@ namespace Jwc.Funz
 		string ToString();
 
 		/// <summary/>
-		[EditorBrowsable(EditorBrowsableState.Never)]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage(
+            "Microsoft.Naming",
+            "CA1720:IdentifiersShouldNotContainTypeNames",
+            MessageId = "obj")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
 		bool Equals(object obj);
 	}
 }
