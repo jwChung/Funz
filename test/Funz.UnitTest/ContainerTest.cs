@@ -154,7 +154,7 @@ namespace Jwc.Funz
         }
 
         [Spec]
-        public void ResolveServiceOnContainerAndChildReturnsSharedInstance(
+        public void ResolveServiceOnChildReturnsSharedInstanceOnContainer(
             Container sut)
         {
             // Fixture setup
@@ -263,7 +263,7 @@ namespace Jwc.Funz
         }
 
         [Spec]
-        public void ResolveServiceReusedWithinNoneOnChildAndContainerReturnsNonSharedInstance(
+        public void ResolveServiceReusedWithinNoneOnContainerReturnsNonSharedInstanceOnChild(
             Container sut)
         {
             // Fixture setup
@@ -310,7 +310,7 @@ namespace Jwc.Funz
         }
 
         [Spec]
-        public void ResolveServiceReusedWithinContainerOnChildAndContainerReturnsNonSharedInstance(
+        public void ResolveServiceReusedWithinContainerOnContainerReturnsNonSharedInstanceOnChild(
             Container sut)
         {
             // Fixture setup
@@ -341,7 +341,7 @@ namespace Jwc.Funz
         }
 
         [Spec]
-        public void ResolveServiceReusedWithinContainerOnChildAndContainerReturnsSharedInstance(
+        public void ResolveServiceReusedWithinContainerOnContainerReturnsSharedInstanceOnChild(
             Container sut)
         {
             // Fixture setup
@@ -357,7 +357,7 @@ namespace Jwc.Funz
         }
 
         [Spec]
-        public void ResolveServiceReusedWithinContainerOnContainerAndChildReturnsSharedInstance(
+        public void ResolveServiceReusedWithinContainerOnChildReturnsSharedInstanceOnContainer(
             Container sut)
         {
             // Fixture setup
@@ -428,7 +428,7 @@ namespace Jwc.Funz
         }
 
         [Spec]
-        public void ResolveServiceReusedWithinCustomOnNonScopedContainerAndScopedChildReturnsNonSharedInstance(
+        public void ResolveServiceReusedWithinCustomOnScopedChildReturnsNonSharedInstanceOnNonScopedContainer(
             object scope,
             Container sut)
         {
@@ -445,7 +445,7 @@ namespace Jwc.Funz
         }
 
         [Spec]
-        public void ResolveServiceReusedWithinCustomOnScopedGrandChildAndScopedChildReturnsSharedInstance(
+        public void ResolveServiceReusedWithinCustomOnScopedChildReturnsSharedInstanceOnScopedGrandChild(
             string scope,
             Container sut)
         {
@@ -463,7 +463,7 @@ namespace Jwc.Funz
         }
 
         [Spec]
-        public void ResolveServiceReusedWithinCustomOnScopedChildAndNewScopedGrandChildReturnsSharedInstance(
+        public void ResolveServiceReusedWithinCustomOnNewScopedGrandChildReturnsSharedInstanceOnScopedChild(
             string scope,
             Container sut)
         {
@@ -871,7 +871,7 @@ namespace Jwc.Funz
         }
 
         [Spec]
-        public void DisposeDisposesDisposableServices(
+        public void DisposeDisposesServices(
             Container sut)
         {
             // Fixture setup
@@ -926,7 +926,7 @@ namespace Jwc.Funz
         }
 
         [Spec]
-        public void DisposeDoesNotDisposeServicesOwnedByExternal(
+        public void DisposeServicesOwnedByExternalDoesNotDispose(
             Container sut)
         {
             // Fixture setup
@@ -943,7 +943,7 @@ namespace Jwc.Funz
         }
 
         [Spec]
-        public void DisposeDisposesServicesOwnedByContainer(
+        public void DisposeServicesOwnedByContainerCorrectlyDisposes(
             Container sut)
         {
             // Fixture setup
@@ -960,7 +960,7 @@ namespace Jwc.Funz
         }
 
         [Spec]
-        public void DisposeDoesNotDisposeServicesOwnedByExternalOnChild(
+        public void DisposeServicesOwnedByExternalOnChildDoesNotDispose(
             Container sut)
         {
             // Fixture setup
@@ -976,7 +976,7 @@ namespace Jwc.Funz
         }
 
         [Spec]
-        public void DisposeDoesNotDisposeServicesOwnedByExternalOnScopedChild(
+        public void DisposeServicesOwnedByExternalOnScopedChildDoesNotDispose(
             object scope,
             Container sut)
         {
