@@ -2,7 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using Jwc.AutoFixture;
+using Jwc.AutoFixture.Idioms;
 using Jwc.AutoFixture.Xunit;
+using Ploeh.AutoFixture;
 using Xunit;
 using Xunit.Extensions;
 
@@ -996,57 +999,39 @@ namespace Jwc.Funz
         }
 
         [Spec]
-        [CallMethodData]
-        public void CallMethodAfterDisposedThrowsDisposedException(
-            Action<Container> exercise,
-            Container sut)
+        [PublicMethodData]
+        public void CallAllPublicMethodAfterDisposedThrowsDisposedException(
+            MethodInfo method,
+            Container sut,
+            IFixture fixture)
         {
             // Fixture setup
-            sut.Register(c => new Foo());
-            sut.Register<Foo, string>((c, s) => new Foo());
-            sut.Register("key", c => new Foo());
-            sut.Register<Foo, string>("key", (c, s) => new Foo());
-
+            var arugments = method.GetParameters().Select(p => fixture.Create((object)p.ParameterType)).ToArray();
             sut.Dispose();
 
             // Exercise system
             // Verify outcome
-            Assert.Throws<ObjectDisposedException>(() => exercise(sut));
+            var e = Assert.Throws<TargetInvocationException>(() => method.Invoke(sut, arugments));
+            Assert.IsType<ObjectDisposedException>(e.InnerException);
         }
 
-        private class CallMethodDataAttribute : DataAttribute
+        private class PublicMethodDataAttribute : DataAttribute
         {
             public override IEnumerable<object[]> GetData(MethodInfo methodUnderTest, Type[] parameterTypes)
             {
-                return new Action<Container>[]
-                {
-                    sut => sut.Register(c => new Foo()),
-                    sut => sut.Register<Foo, string>((c, s) => new Foo(s)),
-                    sut => sut.Register("key", c => new object()),
-                    sut => sut.Register<Foo, string>("key", (c, s) => new Foo(s)),
+                const BindingFlags bindingFlags =
+                    BindingFlags.Public 
+                    | BindingFlags.Static 
+                    | BindingFlags.Instance
+                    | BindingFlags.DeclaredOnly;
 
-                    sut => sut.Resolve<Foo>(),
-                    sut => sut.Resolve<Foo, string>("arg"),
-                    sut => sut.ResolveKeyed<Foo>("key"),
-                    sut => sut.ResolveKeyed<Foo, string>("key", "arg"),
-
-                    sut => sut.TryResolve<Foo>(),
-                    sut => sut.TryResolve<Foo, string>("arg"),
-                    sut => sut.TryResolveKeyed<Foo>("key"),
-                    sut => sut.TryResolveKeyed<Foo, string>("key", "arg"),
-
-                    sut => sut.LazyResolve<Foo>().Invoke(),
-                    sut => sut.LazyResolve<Foo, string>().Invoke("arg"),
-                    sut => sut.LazyResolveKeyed<Foo>("key").Invoke(),
-                    sut => sut.LazyResolveKeyed<Foo, string>("key").Invoke("arg"),
-
-                    sut => sut.CreateChild(),
-                    sut => sut.CreateChild(scope: new object())
-                }
-                .Select(m => new object[] { m });
+                return new MemberCollection<Container>(BindingFlags.Default)
+                    .Include(typeof(Container).GetMethods(bindingFlags))
+                    .Exclude(x => x.Dispose())
+                    .Select(m => new object[] { m });
             }
         }
-
+        
         public class Foo
         {
             private readonly string _arg;

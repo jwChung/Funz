@@ -61,6 +61,8 @@ namespace Jwc.Funz
         {
             get
             {
+                ThrowsExceptionIfDisposed();
+
                 return _scope;
             }
         }
