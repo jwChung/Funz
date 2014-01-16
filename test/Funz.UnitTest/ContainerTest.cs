@@ -1024,6 +1024,40 @@ namespace Jwc.Funz
             Assert.IsType<ObjectDisposedException>(e.InnerException);
         }
 
+        [Spec]
+        public void DisposeWithFalseDisposingDoesNotDispose(
+            DerivedContainer sut)
+        {
+            // Fixture setup
+            sut.Register(c => new Disposable()).ReusedWithinContainer();
+            var disposable = sut.Resolve<Disposable>();
+            sut.Disposing = false;
+
+            // Exercise system
+            sut.Dispose();
+
+            // Verify outcome
+            Assert.Equal(0, disposable.Count);
+        }
+
+        [Spec]
+        public void DisposeWithDisposingTwiceDoesNotDispose(
+            DerivedContainer sut)
+        {
+            // Fixture setup
+            sut.Register(c => new Disposable()).ReusedWithinContainer();
+            var disposable = sut.Resolve<Disposable>();
+            sut.Disposing = false;
+            sut.Dispose();
+            sut.Disposing = true;
+
+            // Exercise system
+            sut.Dispose();
+
+            // Verify outcome
+            Assert.Equal(0, disposable.Count);
+        }
+
         private class PublicMethodDataAttribute : DataAttribute
         {
             public override IEnumerable<object[]> GetData(MethodInfo methodUnderTest, Type[] parameterTypes)
@@ -1085,6 +1119,20 @@ namespace Jwc.Funz
             public void Generate(int size)
             {
                 Content = new string('X', size * 3000);
+            }
+        }
+
+        public class DerivedContainer : Container
+        {
+            public bool Disposing
+            {
+                get;
+                set;
+            }
+
+            protected override void Dispose(bool disposing)
+            {
+                base.Dispose(Disposing);
             }
         }
     }

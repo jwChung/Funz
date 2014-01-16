@@ -430,7 +430,7 @@ namespace Jwc.Funz
             {
                 return;
             }
-
+            
             DisposeServices();
             DisposeChildren();
             RemoveFromParent();
