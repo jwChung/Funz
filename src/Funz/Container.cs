@@ -15,12 +15,12 @@ namespace Jwc.Funz
     {
         private static readonly object _noKey = new object();
 
+        private readonly ICollection<Container> _children = new ContainerCollection();
+        private readonly IDictionary<ServiceKey, Registration> _registry =
+            new ConcurrentDictionary<ServiceKey, Registration>();
         private readonly Container _parent;
-        private readonly ICollection<Container> _children;
         private readonly object _scope;
-        private readonly IDictionary<ServiceKey, Registration> _registry;
-
-        private bool _disposed;
+        private bool _disposed = false;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Container"/> class.
@@ -50,10 +50,6 @@ namespace Jwc.Funz
             
             _parent = parent;
             _scope = scope;
-
-            _children = new ContainerCollection();
-            _registry = new ConcurrentDictionary<ServiceKey, Registration>();
-            _disposed = false;
 
             Register(c => this).ReusedWithinContainer().OwnedByExternal();
         }
@@ -745,7 +741,7 @@ namespace Jwc.Funz
             private readonly TFunc _factory;
             private readonly Container _container;
             private TService _service;
-            private bool _hasService;
+            private bool _hasService = false;
 
             public Registration(
                 Container container,
@@ -756,7 +752,6 @@ namespace Jwc.Funz
             {
                 _factory = factory;
                 _container = container;
-                _hasService = false;
 
                 reusedScope.Registration = this;
             }
