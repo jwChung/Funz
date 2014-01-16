@@ -20,7 +20,7 @@ namespace Jwc.Funz
             new ConcurrentDictionary<ServiceKey, Registration>();
         private readonly Container _parent;
         private readonly object _scope;
-        private bool _disposed = false;
+        private bool _disposed;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Container"/> class.
@@ -743,7 +743,7 @@ namespace Jwc.Funz
             private readonly TFunc _factory;
             private readonly Container _container;
             private TService _service;
-            private bool _hasService = false;
+            private bool _hasService;
 
             public Registration(
                 Container container,
