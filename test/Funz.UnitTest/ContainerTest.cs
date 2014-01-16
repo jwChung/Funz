@@ -41,8 +41,9 @@ namespace Jwc.Funz
         {
             // Fixture setup
             // Exercise system
-            // Verify outcome
             var e = Assert.Throws<ResolutionException>(() => sut.Resolve<Foo>());
+
+            // Verify outcome
             Assert.Equal(typeof(Foo), e.ServiceType);
             Assert.Null(e.Key);
             Assert.Empty(e.ArgumentTypes);
@@ -55,8 +56,9 @@ namespace Jwc.Funz
         {
             // Fixture setup
             // Exercise system
-            // Verify outcome
             var e = Assert.Throws<ResolutionException>(() => sut.Resolve<Foo, string>(stringArg));
+
+            // Verify outcome
             Assert.Equal(typeof(Foo), e.ServiceType);
             Assert.Null(e.Key);
             Assert.Equal(new[] { typeof(string) }, e.ArgumentTypes);
@@ -71,8 +73,9 @@ namespace Jwc.Funz
             sut.Register(c => new Foo());
 
             // Exercise system
-            // Verify outcome
             var e = Assert.Throws<ResolutionException>(() => sut.ResolveKeyed<Foo>(key));
+
+            // Verify outcome
             Assert.Equal(typeof(Foo), e.ServiceType);
             Assert.Equal(key, e.Key);
             Assert.Empty(e.ArgumentTypes);
@@ -86,8 +89,9 @@ namespace Jwc.Funz
         {
             // Fixture setup
             // Exercise system
-            // Verify outcome
             var e = Assert.Throws<ResolutionException>(() => sut.ResolveKeyed<Foo, string>(key, stringArg));
+
+            // Verify outcome
             Assert.Equal(typeof(Foo), e.ServiceType);
             Assert.Equal(key, e.Key);
             Assert.Equal(new[] { typeof(string) }, e.ArgumentTypes);
@@ -726,8 +730,9 @@ namespace Jwc.Funz
         {
             // Fixture setup
             // Exercise system
-            // Verify outcome
             var e = Assert.Throws<ResolutionException>(() => sut.LazyResolve<Foo>());
+
+            // Verify outcome
             Assert.Equal(typeof(Foo), e.ServiceType);
             Assert.Null(e.Key);
             Assert.Empty(e.ArgumentTypes);
@@ -756,8 +761,9 @@ namespace Jwc.Funz
         {
             // Fixture setup
             // Exercise system
-            // Verify outcome
             var e = Assert.Throws<ResolutionException>(() => sut.LazyResolve<Foo, string>());
+
+            // Verify outcome
             Assert.Equal(typeof(Foo), e.ServiceType);
             Assert.Null(e.Key);
             Assert.Equal(new[] { typeof(string) }, e.ArgumentTypes);
@@ -788,8 +794,9 @@ namespace Jwc.Funz
         {
             // Fixture setup
             // Exercise system
-            // Verify outcome
             var e = Assert.Throws<ResolutionException>(() => sut.LazyResolveKeyed<Foo>(key));
+
+            // Verify outcome
             Assert.Equal(typeof(Foo), e.ServiceType);
             Assert.Equal(key, e.Key);
             Assert.Empty(e.ArgumentTypes);
@@ -820,8 +827,9 @@ namespace Jwc.Funz
         {
             // Fixture setup
             // Exercise system
-            // Verify outcome
             var e = Assert.Throws<ResolutionException>(() => sut.LazyResolveKeyed<Foo, string>(key));
+
+            // Verify outcome
             Assert.Equal(typeof(Foo), e.ServiceType);
             Assert.Equal(key, e.Key);
             Assert.Equal(new[] { typeof(string) }, e.ArgumentTypes);
@@ -1010,8 +1018,9 @@ namespace Jwc.Funz
             sut.Dispose();
 
             // Exercise system
-            // Verify outcome
             var e = Assert.Throws<TargetInvocationException>(() => method.Invoke(sut, arugments));
+
+            // Verify outcome
             Assert.IsType<ObjectDisposedException>(e.InnerException);
         }
 
