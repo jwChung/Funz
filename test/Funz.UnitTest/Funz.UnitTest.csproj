@@ -39,7 +39,7 @@
   <ItemGroup>
     <Reference Include="AutoFixture.Contrib, Version=2.10.0.0, Culture=neutral, PublicKeyToken=db4e4bc25029966c, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\packages\AutoFixture.Contrib.2.10.0-pre\lib\net40\AutoFixture.Contrib.dll</HintPath>
+      <HintPath>..\..\packages\AutoFixture.Contrib.2.10.0-pre2\lib\net40\AutoFixture.Contrib.dll</HintPath>
     </Reference>
     <Reference Include="Moq">
       <HintPath>..\..\packages\Moq.4.2.1312.1622\lib\net40\Moq.dll</HintPath>

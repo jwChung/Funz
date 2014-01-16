@@ -1069,7 +1069,7 @@ namespace Jwc.Funz
                     | BindingFlags.DeclaredOnly;
 
                 return new MemberCollection<Container>(BindingFlags.Default)
-                    .Include(typeof(Container).GetMethods(bindingFlags))
+                    .Include(t => t.GetMethods(bindingFlags))
                     .Exclude(x => x.Dispose())
                     .Select(m => new object[] { m });
             }
