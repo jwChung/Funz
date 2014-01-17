@@ -1137,6 +1137,154 @@ namespace Jwc.Funz
             Assert.Equal("key", e.ParamName);
         }
 
+        [Spec]
+        public void ResolveCreatedByTemplateReturnsCorrectInstance(
+            DerivedContainer sut,
+            object arg1,
+            int arg2,
+            string arg3)
+        {
+            // Fixture setup
+            sut.Register<Bar, object, int, string>((c, o, i, s) => new Bar(o, i, s));
+
+            // Exercise system
+            var actual = sut.Resolve<Bar, object, int, string>(arg1, arg2, arg3);
+
+            // Verify outcome
+            Assert.Equal(arg1, actual.Arg1);
+            Assert.Equal(arg2, actual.Arg2);
+            Assert.Equal(arg3, actual.Arg3);
+        }
+
+        [Spec]
+        public void TryResolveCreatedByTemplateReturnsCorrectInstance(
+            DerivedContainer sut,
+            object arg1,
+            int arg2,
+            string arg3)
+        {
+            // Fixture setup
+            sut.Register<Bar, object, int, string>((c, o, i, s) => new Bar(o, i, s));
+
+            // Exercise system
+            var actual = sut.TryResolve<Bar, object, int, string>(arg1, arg2, arg3);
+
+            // Verify outcome
+            Assert.Equal(arg1, actual.Arg1);
+            Assert.Equal(arg2, actual.Arg2);
+            Assert.Equal(arg3, actual.Arg3);
+        }
+
+        [Spec]
+        public void TryResolveCreatedByTemplateIfNotRegisteredReturnsNull(
+            DerivedContainer sut,
+            object arg1,
+            int arg2,
+            string arg3)
+        {
+            // Fixture setup
+            // Exercise system
+            var actual = sut.TryResolve<Bar, object, int, string>(arg1, arg2, arg3);
+
+            // Verify outcome
+            Assert.Null(actual);
+        }
+
+        [Spec]
+        public void LazyResolveCreatedByTemplateReturnsCorrectFactory(
+            DerivedContainer sut,
+            object arg1,
+            int arg2,
+            string arg3)
+        {
+            // Fixture setup
+            sut.Register<Bar, object, int, string>((c, o, i, s) => new Bar(o, i, s));
+
+            // Exercise system
+            var actual = sut.LazyResolve<Bar, object, int, string>().Invoke(arg1, arg2, arg3);
+
+            // Verify outcome
+            Assert.Equal(arg1, actual.Arg1);
+            Assert.Equal(arg2, actual.Arg2);
+            Assert.Equal(arg3, actual.Arg3);
+        }
+
+        [Spec]
+        public void ResolveKeyedCreatedByTemplateReturnsCorrectInstance(
+            DerivedContainer sut,
+            object key,
+            object arg1,
+            int arg2,
+            string arg3)
+        {
+            // Fixture setup
+            sut.Register<Bar, object, int, string>(key, (c, o, i, s) => new Bar(o, i, s));
+
+            // Exercise system
+            var actual = sut.ResolveKeyed<Bar, object, int, string>(key, arg1, arg2, arg3);
+
+            // Verify outcome
+            Assert.Equal(arg1, actual.Arg1);
+            Assert.Equal(arg2, actual.Arg2);
+            Assert.Equal(arg3, actual.Arg3);
+        }
+
+        [Spec]
+        public void TryResolveKeyedCreatedByTemplateReturnsCorrectInstance(
+            DerivedContainer sut,
+            object key,
+            object arg1,
+            int arg2,
+            string arg3)
+        {
+            // Fixture setup
+            sut.Register<Bar, object, int, string>(key, (c, o, i, s) => new Bar(o, i, s));
+
+            // Exercise system
+            var actual = sut.TryResolveKeyed<Bar, object, int, string>(key, arg1, arg2, arg3);
+
+            // Verify outcome
+            Assert.Equal(arg1, actual.Arg1);
+            Assert.Equal(arg2, actual.Arg2);
+            Assert.Equal(arg3, actual.Arg3);
+        }
+
+        [Spec]
+        public void TryResolveKeyedCreatedByTemplateIfNotRegisteredReturnsNull(
+            DerivedContainer sut,
+            object key,
+            object arg1,
+            int arg2,
+            string arg3)
+        {
+            // Fixture setup
+            // Exercise system
+            var actual = sut.TryResolveKeyed<Bar, object, int, string>(key, arg1, arg2, arg3);
+
+            // Verify outcome
+            Assert.Null(actual);
+        }
+
+        [Spec]
+        public void LazyResolveKeyedCreatedByTemplateReturnsCorrectFactory(
+            DerivedContainer sut,
+            object key,
+            object arg1,
+            int arg2,
+            string arg3)
+        {
+            // Fixture setup
+            sut.Register<Bar, object, int, string>(key, (c, o, i, s) => new Bar(o, i, s));
+
+            // Exercise system
+            var actual = sut.LazyResolveKeyed<Bar, object, int, string>(key).Invoke(arg1, arg2, arg3);
+
+            // Verify outcome
+            Assert.Equal(arg1, actual.Arg1);
+            Assert.Equal(arg2, actual.Arg2);
+            Assert.Equal(arg3, actual.Arg3);
+        }
+
         private class MemberDataAttribute : DataAttribute
         {
             public override IEnumerable<object[]> GetData(MethodInfo methodUnderTest, Type[] parameterTypes)
@@ -1183,6 +1331,44 @@ namespace Jwc.Funz
                 get
                 {
                     return _arg;
+                }
+            }
+        }
+
+        public class Bar
+        {
+            private readonly object _arg1;
+            private readonly int _arg2;
+            private readonly string _arg3;
+
+            public Bar(object arg1, int arg2, string arg3)
+            {
+                _arg1 = arg1;
+                _arg2 = arg2;
+                _arg3 = arg3;
+            }
+
+            public object Arg1
+            {
+                get
+                {
+                    return _arg1;
+                }
+            }
+
+            public int Arg2
+            {
+                get
+                {
+                    return _arg2;
+                }
+            }
+
+            public string Arg3
+            {
+                get
+                {
+                    return _arg3;
                 }
             }
         }
