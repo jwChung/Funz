@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Globalization;
 using System.Linq;
 
 namespace Jwc.Funz
@@ -47,7 +48,7 @@ namespace Jwc.Funz
             {
                 throw new ArgumentNullException("scope");
             }
-            
+
             _parent = parent;
             _scope = scope;
 
@@ -396,7 +397,7 @@ namespace Jwc.Funz
             ThrowsExceptionIfDisposed();
 
             var container = new Container(this, scope);
-            _children.Add(container);    
+            _children.Add(container);
             return container;
         }
 
@@ -430,7 +431,7 @@ namespace Jwc.Funz
             {
                 return;
             }
-            
+
             DisposeServices();
             DisposeChildren();
             RemoveFromParent();
@@ -508,19 +509,49 @@ namespace Jwc.Funz
                 return registration.Clone<TFunc, TService>(this, serviceKey);
             }
 
-            if (!throws)
+            if (throws)
             {
-                return null;
+                ThrowResolutionException<TService>(serviceKey);
             }
 
-            var argumentTypes = GetArgumentTypes(typeof(TFunc));
+            return null;
+        }
 
-            if (key == _noKey)
+        private static void ThrowResolutionException<TService>(ServiceKey serviceKey)
+        {
+            var argumentTypes = GetArgumentTypes(serviceKey.FactoryType);
+            if (serviceKey.Key == _noKey)
             {
-                throw new ResolutionException(typeof(TService), argumentTypes);
+                if (!argumentTypes.Any())
+                {
+                    throw new ResolutionException(string.Format(
+                        CultureInfo.CurrentCulture,
+                        "The service type '{0}' was not registered.",
+                        typeof(TService)));
+                }
+
+                throw new ResolutionException(string.Format(
+                    CultureInfo.CurrentCulture,
+                    "The service type '{0}' with argument(s) '{1}' was not registered.",
+                    typeof(TService),
+                    string.Join(", ", argumentTypes.Select(x => x.FullName))));
             }
 
-            throw new ResolutionException(typeof(TService), serviceKey.Key, argumentTypes);
+            if (!argumentTypes.Any())
+            {
+                throw new ResolutionException(string.Format(
+                    CultureInfo.CurrentCulture,
+                    "The service type '{0}' with key '{1}' was not registered.",
+                    typeof(TService),
+                    serviceKey.Key));
+            }
+
+            throw new ResolutionException(string.Format(
+                CultureInfo.CurrentCulture,
+                "The service type '{0}' with key '{1}' and argument(s) '{2}' was not registered.",
+                typeof(TService),
+                serviceKey.Key,
+                string.Join(", ", argumentTypes.Select(x => x.FullName))));
         }
 
         private static Type[] GetArgumentTypes(Type factoryType)
@@ -576,7 +607,7 @@ namespace Jwc.Funz
             {
                 lock (_syncRoot)
                 {
-                    base.InsertItem(index, item);    
+                    base.InsertItem(index, item);
                 }
             }
 
@@ -623,6 +654,14 @@ namespace Jwc.Funz
                 _key = key;
             }
 
+            public Type FactoryType
+            {
+                get
+                {
+                    return _factoryType;
+                }
+            }
+
             public object Key
             {
                 get
@@ -633,7 +672,7 @@ namespace Jwc.Funz
 
             private bool Equals(ServiceKey other)
             {
-                return _factoryType == other._factoryType && Key.Equals(other.Key);
+                return FactoryType == other.FactoryType && Key.Equals(other.Key);
             }
 
             public override bool Equals(object obj)
@@ -659,7 +698,7 @@ namespace Jwc.Funz
             {
                 unchecked
                 {
-                    return (_factoryType.GetHashCode() * 397) ^ Key.GetHashCode();
+                    return (FactoryType.GetHashCode() * 397) ^ Key.GetHashCode();
                 }
             }
         }

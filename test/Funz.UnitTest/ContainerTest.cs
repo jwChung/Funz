@@ -40,13 +40,15 @@ namespace Jwc.Funz
             Container sut)
         {
             // Fixture setup
+            var expected = string.Format(
+                "The service type '{0}' was not registered.",
+                typeof(Foo));
+
             // Exercise system
             var e = Assert.Throws<ResolutionException>(() => sut.Resolve<Foo>());
 
             // Verify outcome
-            Assert.Equal(typeof(Foo), e.ServiceType);
-            Assert.Null(e.Key);
-            Assert.Empty(e.ArgumentTypes);
+            Assert.Equal(expected, e.Message);
         }
 
         [Spec]
@@ -55,13 +57,16 @@ namespace Jwc.Funz
             string stringArg)
         {
             // Fixture setup
+            var expected = string.Format(
+                "The service type '{0}' with argument(s) '{1}' was not registered.",
+                typeof(Foo),
+                "System.String");
+
             // Exercise system
             var e = Assert.Throws<ResolutionException>(() => sut.Resolve<Foo, string>(stringArg));
 
             // Verify outcome
-            Assert.Equal(typeof(Foo), e.ServiceType);
-            Assert.Null(e.Key);
-            Assert.Equal(new[] { typeof(string) }, e.ArgumentTypes);
+            Assert.Equal(expected, e.Message);
         }
 
         [Spec]
@@ -71,14 +76,16 @@ namespace Jwc.Funz
         {
             // Fixture setup
             sut.Register(c => new Foo());
+            var expected = string.Format(
+                "The service type '{0}' with key '{1}' was not registered.",
+                typeof(Foo),
+                key);
 
             // Exercise system
             var e = Assert.Throws<ResolutionException>(() => sut.ResolveKeyed<Foo>(key));
 
             // Verify outcome
-            Assert.Equal(typeof(Foo), e.ServiceType);
-            Assert.Equal(key, e.Key);
-            Assert.Empty(e.ArgumentTypes);
+            Assert.Equal(expected, e.Message);
         }
 
         [Spec]
@@ -88,13 +95,17 @@ namespace Jwc.Funz
             string stringArg)
         {
             // Fixture setup
+            var expected = string.Format(
+                "The service type '{0}' with key '{1}' and argument(s) '{2}' was not registered.",
+                typeof(Foo),
+                key,
+                "System.String");
+
             // Exercise system
             var e = Assert.Throws<ResolutionException>(() => sut.ResolveKeyed<Foo, string>(key, stringArg));
 
             // Verify outcome
-            Assert.Equal(typeof(Foo), e.ServiceType);
-            Assert.Equal(key, e.Key);
-            Assert.Equal(new[] { typeof(string) }, e.ArgumentTypes);
+            Assert.Equal(expected, e.Message);
         }
 
         [Spec]
@@ -729,13 +740,15 @@ namespace Jwc.Funz
             Container sut)
         {
             // Fixture setup
+            var expected = string.Format(
+                "The service type '{0}' was not registered.",
+                typeof(Foo));
+
             // Exercise system
             var e = Assert.Throws<ResolutionException>(() => sut.LazyResolve<Foo>());
 
             // Verify outcome
-            Assert.Equal(typeof(Foo), e.ServiceType);
-            Assert.Null(e.Key);
-            Assert.Empty(e.ArgumentTypes);
+            Assert.Equal(expected, e.Message);
         }
 
         [Spec]
@@ -760,13 +773,16 @@ namespace Jwc.Funz
             string argument)
         {
             // Fixture setup
+            var expected = string.Format(
+                "The service type '{0}' with argument(s) '{1}' was not registered.",
+                typeof(Foo),
+                "System.String");
+
             // Exercise system
             var e = Assert.Throws<ResolutionException>(() => sut.LazyResolve<Foo, string>());
 
             // Verify outcome
-            Assert.Equal(typeof(Foo), e.ServiceType);
-            Assert.Null(e.Key);
-            Assert.Equal(new[] { typeof(string) }, e.ArgumentTypes);
+            Assert.Equal(expected, e.Message);
         }
 
         [Spec]
@@ -793,13 +809,16 @@ namespace Jwc.Funz
             object key)
         {
             // Fixture setup
+            var expected = string.Format(
+                "The service type '{0}' with key '{1}' was not registered.",
+                typeof(Foo),
+                key);
+
             // Exercise system
             var e = Assert.Throws<ResolutionException>(() => sut.LazyResolveKeyed<Foo>(key));
 
             // Verify outcome
-            Assert.Equal(typeof(Foo), e.ServiceType);
-            Assert.Equal(key, e.Key);
-            Assert.Empty(e.ArgumentTypes);
+            Assert.Equal(expected, e.Message);
         }
 
         [Spec]
@@ -826,13 +845,17 @@ namespace Jwc.Funz
             string argument)
         {
             // Fixture setup
+            var expected = string.Format(
+                "The service type '{0}' with key '{1}' and argument(s) '{2}' was not registered.",
+                typeof(Foo),
+                key,
+                "System.String");
+
             // Exercise system
             var e = Assert.Throws<ResolutionException>(() => sut.LazyResolveKeyed<Foo, string>(key));
 
             // Verify outcome
-            Assert.Equal(typeof(Foo), e.ServiceType);
-            Assert.Equal(key, e.Key);
-            Assert.Equal(new[] { typeof(string) }, e.ArgumentTypes);
+            Assert.Equal(expected, e.Message);
         }
 
         [Spec]
