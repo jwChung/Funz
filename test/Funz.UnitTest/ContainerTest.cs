@@ -6,13 +6,43 @@ using Jwc.AutoFixture;
 using Jwc.AutoFixture.Idioms;
 using Jwc.AutoFixture.Xunit;
 using Ploeh.AutoFixture;
+using Ploeh.AutoFixture.Idioms;
 using Xunit;
 using Xunit.Extensions;
 
 namespace Jwc.Funz
 {
-    public class ContainerTest : IdiomaticTestBase<Container>
+    public class ContainerTest
     {
+        [Spec]
+        [MemberData]
+        public void SutHasAppropriateGuards(
+            MemberInfo member,
+            GuardClauseAssertion assertion)
+        {
+            // Fixture setup
+            // Exercise system
+            // Verify outcome
+            assertion.Verify(member);
+        }
+
+        [Spec]
+        [MemberData]
+        public void SutHasCorrectInitializedMembers(
+            MemberInfo member,
+            IFixture fixture)
+        {
+            // Fixture setup
+            var assertion = new ConstructorInitializedMemberAssertion(
+                fixture,
+                EqualityComparer<object>.Default,
+                new ParameterPropertyMatcher());
+
+            // Exercise system
+            // Verify outcome
+            assertion.Verify(member);
+        }
+
         [Spec]
         public void SutIsDisposable(
             Container sut)
@@ -745,7 +775,7 @@ namespace Jwc.Funz
                 typeof(Foo));
 
             // Exercise system
-            var e = Assert.Throws<ResolutionException>(() => sut.LazyResolve<Foo>());
+            var e = Assert.Throws<ResolutionException>(() => sut.LazyResolve<Foo>().Invoke());
 
             // Verify outcome
             Assert.Equal(expected, e.Message);
@@ -779,7 +809,7 @@ namespace Jwc.Funz
                 "System.String");
 
             // Exercise system
-            var e = Assert.Throws<ResolutionException>(() => sut.LazyResolve<Foo, string>());
+            var e = Assert.Throws<ResolutionException>(() => sut.LazyResolve<Foo, string>().Invoke(argument));
 
             // Verify outcome
             Assert.Equal(expected, e.Message);
@@ -815,7 +845,7 @@ namespace Jwc.Funz
                 key);
 
             // Exercise system
-            var e = Assert.Throws<ResolutionException>(() => sut.LazyResolveKeyed<Foo>(key));
+            var e = Assert.Throws<ResolutionException>(() => sut.LazyResolveKeyed<Foo>(key).Invoke());
 
             // Verify outcome
             Assert.Equal(expected, e.Message);
@@ -852,7 +882,7 @@ namespace Jwc.Funz
                 "System.String");
 
             // Exercise system
-            var e = Assert.Throws<ResolutionException>(() => sut.LazyResolveKeyed<Foo, string>(key));
+            var e = Assert.Throws<ResolutionException>(() => sut.LazyResolveKeyed<Foo, string>(key).Invoke(argument));
 
             // Verify outcome
             Assert.Equal(expected, e.Message);
@@ -1079,6 +1109,17 @@ namespace Jwc.Funz
 
             // Verify outcome
             Assert.Equal(0, disposable.Count);
+        }
+
+        private class MemberDataAttribute : DataAttribute
+        {
+            public override IEnumerable<object[]> GetData(MethodInfo methodUnderTest, Type[] parameterTypes)
+            {
+                return new MemberCollection<Container>(
+                    BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public | BindingFlags.DeclaredOnly)
+                .Exclude(t => t.GetMethods().Where(m => m.Name.StartsWith("LazyResolve")))
+                .Select(m => new object[] { m });
+            }
         }
 
         private class PublicMethodDataAttribute : DataAttribute

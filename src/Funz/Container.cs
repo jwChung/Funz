@@ -311,7 +311,7 @@ namespace Jwc.Funz
         /// </returns>
         public Func<TService> LazyResolve<TService>()
         {
-            return LazyResolveKeyed<TService>(_noKey);
+            return () => ResolveImpl<TService>(_noKey, true);
         }
 
         /// <summary>
@@ -328,7 +328,7 @@ namespace Jwc.Funz
         /// </returns>
         public Func<TArg, TService> LazyResolve<TService, TArg>()
         {
-            return LazyResolveKeyed<TService, TArg>(_noKey);
+            return arg => ResolveImpl<TService, TArg>(_noKey, true, arg);
         }
 
         /// <summary>
@@ -345,7 +345,6 @@ namespace Jwc.Funz
         /// </returns>
         public Func<TService> LazyResolveKeyed<TService>(object key)
         {
-            GetRegistration<Func<Container, TService>, TService>(key, true);
             return () => ResolveImpl<TService>(key, true);
         }
 
@@ -366,7 +365,6 @@ namespace Jwc.Funz
         /// </returns>
         public Func<TArg, TService> LazyResolveKeyed<TService, TArg>(object key)
         {
-            GetRegistration<Func<Container, TArg, TService>, TService>(key, true);
             return arg => ResolveImpl<TService, TArg>(key, true, arg);
         }
 

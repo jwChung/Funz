@@ -28,7 +28,7 @@ for (var typeCount = 2; typeCount <= GenericTypeMax - 2; typeCount++)
         [DebuggerStepThrough]
         public Func<<#=typeList#>, TService> LazyResolve<TService, <#=typeList#>>()
         {
-            return LazyResolveKeyed<TService, <#=typeList#>>(_noKey);
+            return (<#=valueList#>) => ResolveImpl<TService, <#=typeList#>>(_noKey, true, <#=valueList#>);
         }
 
         /// <summary>
@@ -40,7 +40,6 @@ for (var typeCount = 2; typeCount <= GenericTypeMax - 2; typeCount++)
         [DebuggerStepThrough]
         public Func<<#=typeList#>, TService> LazyResolveKeyed<TService, <#=typeList#>>(object key)
         {
-            GetRegistration<Func<Container, <#=typeList#>, TService>, TService>(key, true);
             return (<#=valueList#>) => ResolveImpl<TService, <#=typeList#>>(key, true, <#=valueList#>);
         }
 
