@@ -1111,6 +1111,32 @@ namespace Jwc.Funz
             Assert.Equal(0, disposable.Count);
         }
 
+        [Spec]
+        public void LazyResolveWithNullKeyThrows(
+            DerivedContainer sut)
+        {
+            // Fixture setup
+            // Exercise system
+            var e = Assert.Throws<ArgumentNullException>(() => sut.LazyResolveKeyed<Foo>(null).Invoke());
+
+            // Verify outcome
+            Assert.Equal("key", e.ParamName);
+        }
+
+        [Spec]
+        public void LazyResolveWithNullKeyAndArgumentThrows(
+            DerivedContainer sut,
+            string argument)
+        {
+            // Fixture setup
+            // Exercise system
+            var e = Assert.Throws<ArgumentNullException>(
+                () => sut.LazyResolveKeyed<Foo, string>(null).Invoke(argument));
+
+            // Verify outcome
+            Assert.Equal("key", e.ParamName);
+        }
+
         private class MemberDataAttribute : DataAttribute
         {
             public override IEnumerable<object[]> GetData(MethodInfo methodUnderTest, Type[] parameterTypes)
