@@ -13,7 +13,7 @@ namespace Jwc.Funz
         {
             // Fixture setup
             var sut = new ResolutionException(serviceType);
-            string expected = string.Format("The service of type '{0}' is not registered.", serviceType);
+            string expected = string.Format("The service type '{0}' was not registered.", serviceType);
 
             // Exercise system
             var actual = sut.Message;
@@ -30,7 +30,7 @@ namespace Jwc.Funz
             // Fixture setup
             var sut = new ResolutionException(serviceType, key);
             string expected = string.Format(
-                "The service of type '{0}' and key '{1}' is not registered.",
+                "The service type '{0}' with key '{1}' was not registered.",
                 serviceType,
                 key);
 
@@ -49,7 +49,7 @@ namespace Jwc.Funz
             // Fixture setup
             var sut = new ResolutionException(serviceType, argumentTypes);
             string expected = string.Format(
-                "The service of type '{0}' with arguments '{1}' is not registered.",
+                "The service type '{0}' with argument(s) '{1}' was not registered.",
                 serviceType,
                 string.Join(", ", argumentTypes.Select(x => x.Name)));
 
@@ -69,7 +69,7 @@ namespace Jwc.Funz
             // Fixture setup
             var sut = new ResolutionException(serviceType, key, argumentTypes);
             string expected = string.Format(
-                "The service of type '{0}' and key '{1}' with arguments '{2}' is not registered.",
+                "The service type '{0}' with key '{1}' and argument(s) '{2}' was not registered.",
                 serviceType,
                 key,
                 string.Join(", ", argumentTypes.Select(x => x.Name)));
