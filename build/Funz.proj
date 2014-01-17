@@ -53,6 +53,7 @@
     <MSBuild Projects="@(TestProjects)"
              Targets="Build;"
              Properties="Configuration=Release;
+                         DefineConstants=TRACE,EXPLICITLY;
                          SignAssembly=$(SignAssembly);
                          AssemblyOriginatorKeyFile=..\..\build\PrivateKey.snk;
                          ">

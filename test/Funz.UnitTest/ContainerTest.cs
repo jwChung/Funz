@@ -382,7 +382,7 @@ namespace Jwc.Funz
             Assert.Equal(expected, actual);
         }
 
-        [Spec(Skip = "As this test is slow, run explictly.")]
+        [ExplicitSpec(Run.Skip)]
         public void ResolveServiceReusedWithinContainerDoesNotThrowOutOfMemoryException(
             Container sut)
         {
@@ -1006,7 +1006,7 @@ namespace Jwc.Funz
             Assert.Equal(0, disposable.Count);
         }
 
-        [Spec]
+        [ExplicitSpec(Run.Skip)]
         [PublicMethodData]
         public void CallAllPublicMethodAfterDisposedThrowsDisposedException(
             MethodInfo method,
