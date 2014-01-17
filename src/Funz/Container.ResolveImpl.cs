@@ -14,14 +14,10 @@ namespace Jwc.Funz
         {
             var registration = GetRegistration<Func<Container, TArg1, TArg2, TService>, TService>(key, throws);
             if (registration == null)
-            {
-                return default(TService);
-            }
+			    return default(TService);
 
             if (registration.HasService)
-            {
                 return registration.Service;
-            }
 
             var service = registration.Factory.Invoke(this, arg1, arg2);
             registration.Service = service;
@@ -32,14 +28,10 @@ namespace Jwc.Funz
         {
             var registration = GetRegistration<Func<Container, TArg1, TArg2, TArg3, TService>, TService>(key, throws);
             if (registration == null)
-            {
-                return default(TService);
-            }
+			    return default(TService);
 
             if (registration.HasService)
-            {
                 return registration.Service;
-            }
 
             var service = registration.Factory.Invoke(this, arg1, arg2, arg3);
             registration.Service = service;
@@ -50,14 +42,10 @@ namespace Jwc.Funz
         {
             var registration = GetRegistration<Func<Container, TArg1, TArg2, TArg3, TArg4, TService>, TService>(key, throws);
             if (registration == null)
-            {
-                return default(TService);
-            }
+			    return default(TService);
 
             if (registration.HasService)
-            {
                 return registration.Service;
-            }
 
             var service = registration.Factory.Invoke(this, arg1, arg2, arg3, arg4);
             registration.Service = service;
@@ -68,14 +56,10 @@ namespace Jwc.Funz
         {
             var registration = GetRegistration<Func<Container, TArg1, TArg2, TArg3, TArg4, TArg5, TService>, TService>(key, throws);
             if (registration == null)
-            {
-                return default(TService);
-            }
+			    return default(TService);
 
             if (registration.HasService)
-            {
                 return registration.Service;
-            }
 
             var service = registration.Factory.Invoke(this, arg1, arg2, arg3, arg4, arg5);
             registration.Service = service;
@@ -86,14 +70,10 @@ namespace Jwc.Funz
         {
             var registration = GetRegistration<Func<Container, TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TService>, TService>(key, throws);
             if (registration == null)
-            {
-                return default(TService);
-            }
+			    return default(TService);
 
             if (registration.HasService)
-            {
                 return registration.Service;
-            }
 
             var service = registration.Factory.Invoke(this, arg1, arg2, arg3, arg4, arg5, arg6);
             registration.Service = service;
@@ -104,14 +84,10 @@ namespace Jwc.Funz
         {
             var registration = GetRegistration<Func<Container, TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TService>, TService>(key, throws);
             if (registration == null)
-            {
-                return default(TService);
-            }
+			    return default(TService);
 
             if (registration.HasService)
-            {
                 return registration.Service;
-            }
 
             var service = registration.Factory.Invoke(this, arg1, arg2, arg3, arg4, arg5, arg6, arg7);
             registration.Service = service;
@@ -122,14 +98,10 @@ namespace Jwc.Funz
         {
             var registration = GetRegistration<Func<Container, TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TService>, TService>(key, throws);
             if (registration == null)
-            {
-                return default(TService);
-            }
+			    return default(TService);
 
             if (registration.HasService)
-            {
                 return registration.Service;
-            }
 
             var service = registration.Factory.Invoke(this, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8);
             registration.Service = service;
@@ -140,14 +112,10 @@ namespace Jwc.Funz
         {
             var registration = GetRegistration<Func<Container, TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TService>, TService>(key, throws);
             if (registration == null)
-            {
-                return default(TService);
-            }
+			    return default(TService);
 
             if (registration.HasService)
-            {
                 return registration.Service;
-            }
 
             var service = registration.Factory.Invoke(this, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9);
             registration.Service = service;
@@ -158,14 +126,10 @@ namespace Jwc.Funz
         {
             var registration = GetRegistration<Func<Container, TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TService>, TService>(key, throws);
             if (registration == null)
-            {
-                return default(TService);
-            }
+			    return default(TService);
 
             if (registration.HasService)
-            {
                 return registration.Service;
-            }
 
             var service = registration.Factory.Invoke(this, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10);
             registration.Service = service;
@@ -176,14 +140,10 @@ namespace Jwc.Funz
         {
             var registration = GetRegistration<Func<Container, TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TService>, TService>(key, throws);
             if (registration == null)
-            {
-                return default(TService);
-            }
+			    return default(TService);
 
             if (registration.HasService)
-            {
                 return registration.Service;
-            }
 
             var service = registration.Factory.Invoke(this, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11);
             registration.Service = service;
@@ -194,14 +154,10 @@ namespace Jwc.Funz
         {
             var registration = GetRegistration<Func<Container, TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TService>, TService>(key, throws);
             if (registration == null)
-            {
-                return default(TService);
-            }
+			    return default(TService);
 
             if (registration.HasService)
-            {
                 return registration.Service;
-            }
 
             var service = registration.Factory.Invoke(this, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12);
             registration.Service = service;
@@ -212,14 +168,10 @@ namespace Jwc.Funz
         {
             var registration = GetRegistration<Func<Container, TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, TService>, TService>(key, throws);
             if (registration == null)
-            {
-                return default(TService);
-            }
+			    return default(TService);
 
             if (registration.HasService)
-            {
                 return registration.Service;
-            }
 
             var service = registration.Factory.Invoke(this, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13);
             registration.Service = service;
@@ -230,14 +182,10 @@ namespace Jwc.Funz
         {
             var registration = GetRegistration<Func<Container, TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, TArg14, TService>, TService>(key, throws);
             if (registration == null)
-            {
-                return default(TService);
-            }
+			    return default(TService);
 
             if (registration.HasService)
-            {
                 return registration.Service;
-            }
 
             var service = registration.Factory.Invoke(this, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14);
             registration.Service = service;

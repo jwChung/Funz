@@ -25,14 +25,10 @@ for (var typeCount = 2; typeCount <= GenericTypeMax - 2; typeCount++)
         {
             var registration = GetRegistration<Func<Container, <#=typeList#>, TService>, TService>(key, throws);
             if (registration == null)
-            {
-                return default(TService);
-            }
+			    return default(TService);
 
             if (registration.HasService)
-            {
                 return registration.Service;
-            }
 
             var service = registration.Factory.Invoke(this, <#=valueList#>);
             registration.Service = service;

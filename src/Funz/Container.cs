@@ -45,9 +45,7 @@ namespace Jwc.Funz
         private Container(Container parent, object scope)
         {
             if (scope == null)
-            {
                 throw new ArgumentNullException("scope");
-            }
 
             _parent = parent;
             _scope = scope;
@@ -419,16 +417,12 @@ namespace Jwc.Funz
         protected virtual void Dispose(bool disposing)
         {
             if (_disposed)
-            {
                 return;
-            }
 
             _disposed = true;
 
             if (!disposing)
-            {
                 return;
-            }
 
             DisposeServices();
             DisposeChildren();
@@ -442,9 +436,7 @@ namespace Jwc.Funz
         private IRegistration RegisterImpl<TFunc, TService>(object key, TFunc factory) where TFunc : class
         {
             if (factory == null)
-            {
                 throw new ArgumentNullException("factory");
-            }
 
             ThrowsExceptionIfDisposed();
 
@@ -457,14 +449,10 @@ namespace Jwc.Funz
         {
             var registration = GetRegistration<Func<Container, TService>, TService>(key, throws);
             if (registration == null)
-            {
                 return default(TService);
-            }
 
             if (registration.HasService)
-            {
                 return registration.Service;
-            }
 
             var service = registration.Factory.Invoke(this);
             registration.Service = service;
@@ -475,14 +463,10 @@ namespace Jwc.Funz
         {
             var registration = GetRegistration<Func<Container, TArg, TService>, TService>(key, throws);
             if (registration == null)
-            {
                 return default(TService);
-            }
 
             if (registration.HasService)
-            {
                 return registration.Service;
-            }
 
             var service = registration.Factory.Invoke(this, arg);
             registration.Service = service;
@@ -498,19 +482,13 @@ namespace Jwc.Funz
             Container current = this;
             Registration registration = null;
             while (current != null && !current._registry.TryGetValue(serviceKey, out registration))
-            {
                 current = current._parent;
-            }
 
             if (registration != null)
-            {
                 return registration.Clone<TFunc, TService>(this, serviceKey);
-            }
 
             if (throws)
-            {
                 ThrowResolutionException<TService>(serviceKey);
-            }
 
             return null;
         }
@@ -561,25 +539,19 @@ namespace Jwc.Funz
         private void DisposeServices()
         {
             foreach (var registration in _registry.Values)
-            {
                 registration.Dispose();
-            }
         }
 
         private void DisposeChildren()
         {
             foreach (var child in _children)
-            {
                 child.Dispose();
-            }
         }
 
         private void RemoveFromParent()
         {
             if (_parent == null)
-            {
                 return;
-            }
 
             _parent._children.Remove(this);
         }
@@ -587,9 +559,7 @@ namespace Jwc.Funz
         private void ThrowsExceptionIfDisposed()
         {
             if (_disposed)
-            {
                 throw new ObjectDisposedException(ToString());
-            }
         }
 
         private class ContainerCollection : Collection<Container>, IEnumerable<Container>
@@ -604,17 +574,13 @@ namespace Jwc.Funz
             protected override void InsertItem(int index, Container item)
             {
                 lock (_syncRoot)
-                {
                     base.InsertItem(index, item);
-                }
             }
 
             protected override void RemoveItem(int index)
             {
                 lock (_syncRoot)
-                {
                     base.RemoveItem(index);
-                }
             }
 
             IEnumerator<Container> IEnumerable<Container>.GetEnumerator()
@@ -630,9 +596,7 @@ namespace Jwc.Funz
             private new IEnumerator<Container> GetEnumerator()
             {
                 lock (_syncRoot)
-                {
                     return ((IEnumerable<Container>)this.ToArray()).GetEnumerator();
-                }
             }
         }
 
@@ -644,9 +608,7 @@ namespace Jwc.Funz
             public ServiceKey(Type factoryType, object key)
             {
                 if (key == null)
-                {
                     throw new ArgumentNullException("key");
-                }
 
                 _factoryType = factoryType;
                 _key = key;
@@ -676,19 +638,14 @@ namespace Jwc.Funz
             public override bool Equals(object obj)
             {
                 if (ReferenceEquals(null, obj))
-                {
                     return false;
-                }
 
                 if (ReferenceEquals(this, obj))
-                {
                     return true;
-                }
 
                 if (obj.GetType() != GetType())
-                {
                     return false;
-                }
+
                 return Equals((ServiceKey)obj);
             }
 
@@ -812,9 +769,7 @@ namespace Jwc.Funz
                 set
                 {
                     if (!ReusedScope.CanSave)
-                    {
                         return;
-                    }
 
                     _service = value;
                     _hasService = true;
@@ -840,20 +795,14 @@ namespace Jwc.Funz
             protected override void Dispose(bool disposing)
             {
                 if (!disposing)
-                {
                     return;
-                }
 
                 if (!CanDispose)
-                {
                     return;
-                }
 
                 var disposable = Service as IDisposable;
                 if (disposable != null)
-                {
                     disposable.Dispose();
-                }
             }
         }
 
@@ -911,9 +860,7 @@ namespace Jwc.Funz
                 var registration = (Registration<TFunc, TService>)Registration;
 
                 if (registration.Container == container)
-                {
                     return registration;
-                }
 
                 var clone = new Registration<TFunc, TService>(
                     container,
@@ -973,16 +920,12 @@ namespace Jwc.Funz
 
                 var scoped = GetScopedContainer(container);
                 if (scoped == null)
-                {
                     return registration;
-                }
 
                 _canSave = true;
 
                 if (registration.Container == scoped)
-                {
                     return registration;
-                }
 
                 var clone = new Registration<TFunc, TService>(
                     scoped,
@@ -998,9 +941,7 @@ namespace Jwc.Funz
             {
                 Container current = container;
                 while (current != null && current.Scope != _scope)
-                {
                     current = current._parent;
-                }
 
                 return current;
             }
