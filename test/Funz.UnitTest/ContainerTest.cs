@@ -940,7 +940,7 @@ namespace Jwc.Funz
         }
 
         [Spec]
-        public void DisposeServicesOwnedByExternalDoesNotDispose(
+        public void DisposeDoesNotDisposeServicesOwnedByExternal(
             Container sut)
         {
             // Fixture setup
@@ -957,7 +957,7 @@ namespace Jwc.Funz
         }
 
         [Spec]
-        public void DisposeServicesOwnedByContainerCorrectlyDisposes(
+        public void DisposeDisposesServicesOwnedByContainer(
             Container sut)
         {
             // Fixture setup
@@ -974,7 +974,7 @@ namespace Jwc.Funz
         }
 
         [Spec]
-        public void DisposeServicesOwnedByExternalOnChildDoesNotDispose(
+        public void DisposeDoesNotDisposeServicesOwnedByExternalOnChild(
             Container sut)
         {
             // Fixture setup
@@ -990,7 +990,7 @@ namespace Jwc.Funz
         }
 
         [Spec]
-        public void DisposeServicesOwnedByExternalOnScopedChildDoesNotDispose(
+        public void DisposeDoesNotDisposeServicesOwnedByExternalOnScopedChild(
             object scope,
             Container sut)
         {
