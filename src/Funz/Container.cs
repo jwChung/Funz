@@ -19,6 +19,7 @@ namespace Jwc.Funz
         private readonly ICollection<Container> _children = new ContainerCollection();
         private readonly IDictionary<ServiceKey, Registration> _registry =
             new ConcurrentDictionary<ServiceKey, Registration>();
+        private readonly HashSet<ServiceKey> _resolvingServiceKeys = new HashSet<ServiceKey>();
         private readonly Container _parent;
         private readonly object _scope;
         private bool _disposed;
@@ -447,21 +448,41 @@ namespace Jwc.Funz
 
         private TService ResolveImpl<TService>(object key, bool throws)
         {
-            var registration = GetRegistration<Func<Container, TService>, TService>(key, throws);
+            var serviceKey = new ServiceKey(typeof(Func<Container, TService>), key);
+            var registration = GetRegistration<Func<Container, TService>, TService>(serviceKey, throws);
             if (registration == null)
                 return default(TService);
 
             if (registration.HasService)
                 return registration.Service;
 
+            if (_resolvingServiceKeys.Contains(serviceKey))
+            {
+                if (key == _noKey)
+                {
+                    throw new ResolutionException(string.Format(
+                        CultureInfo.CurrentCulture,
+                        "The service type '{0}' was registered recursively.",
+                        typeof(TService)));
+                }
+
+                throw new ResolutionException(string.Format(
+                    CultureInfo.CurrentCulture,
+                    "The service type '{0}' with the key '{1}' was registered recursively.",
+                    typeof(TService),
+                    key));
+            }
+
+            _resolvingServiceKeys.Add(serviceKey);
             var service = registration.Factory.Invoke(this);
+            _resolvingServiceKeys.Remove(serviceKey);
             registration.Service = service;
             return service;
         }
 
         private TService ResolveImpl<TService, TArg>(object key, bool throws, TArg arg)
         {
-            var registration = GetRegistration<Func<Container, TArg, TService>, TService>(key, throws);
+            var registration = GetRegistration<Func<Container, TArg, TService>, TService>(new ServiceKey(typeof(Func<Container, TArg, TService>), key), throws);
             if (registration == null)
                 return default(TService);
 
@@ -473,11 +494,9 @@ namespace Jwc.Funz
             return service;
         }
 
-        private Registration<TFunc, TService> GetRegistration<TFunc, TService>(object key, bool throws)
+        private Registration<TFunc, TService> GetRegistration<TFunc, TService>(ServiceKey serviceKey, bool throws)
         {
             ThrowsExceptionIfDisposed();
-
-            var serviceKey = new ServiceKey(typeof(TFunc), key);
 
             Container current = this;
             Registration registration = null;

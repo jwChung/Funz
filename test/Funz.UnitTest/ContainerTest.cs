@@ -1285,6 +1285,48 @@ namespace Jwc.Funz
             Assert.Equal(arg3, actual.Arg3);
         }
 
+        [Spec]
+        public void ResolveRecursiveServiceThrows(
+            Container sut)
+        {
+            // Fixture setup
+            sut.Register(c =>
+            {
+                c.Resolve<Foo>();
+                return new Foo();
+            });
+
+            // Exercise system
+            var e = Assert.Throws<ResolutionException>(() => sut.Resolve<Foo>());
+
+            // Verify outcome
+            Assert.Equal(
+                "The service type 'Jwc.Funz.ContainerTest+Foo' was registered recursively.",
+                e.Message);
+        }
+
+        [Spec]
+        public void ResolveKeyedRecursiveServiceThrows(
+            Container sut,
+            object key)
+        {
+            // Fixture setup
+            sut.Register(key, c =>
+            {
+                c.ResolveKeyed<Foo>(key);
+                return new Foo();
+            });
+
+            // Exercise system
+            var e = Assert.Throws<ResolutionException>(() => sut.ResolveKeyed<Foo>(key));
+
+            // Verify outcome
+            Assert.Equal(
+                "The service type 'Jwc.Funz.ContainerTest+Foo' with the key 'System.Object' " +
+                "was registered recursively.",
+                e.Message);
+        }
+
         private class MemberDataAttribute : DataAttribute
         {
             public override IEnumerable<object[]> GetData(MethodInfo methodUnderTest, Type[] parameterTypes)
