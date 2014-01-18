@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Threading;
 using Jwc.AutoFixture;
 using Jwc.AutoFixture.Idioms;
 using Jwc.AutoFixture.Xunit;
@@ -1483,6 +1485,31 @@ namespace Jwc.Funz
             // Verify outcome
             Assert.NotNull(actual1);
             Assert.NotNull(actual2);
+        }
+
+        [Spec]
+        public void ResolveShouldBeThreadSafe(
+            Container sut)
+        {
+            // Fixture setup
+            sut.Register(c => new Foo());
+            var exceptions = new ConcurrentBag<Exception>();
+            AppDomain.CurrentDomain.UnhandledException +=
+                (s, e) => exceptions.Add((Exception)e.ExceptionObject);
+
+            // Exercise system
+            var threads = new Thread[1000];
+            for (int i = 0; i < threads.Length; i++)
+                threads[i] = new Thread(() => sut.Resolve<Foo>());
+
+            foreach (Thread thread in threads)
+                thread.Start();
+
+            foreach (Thread thread in threads)
+                thread.Join();
+
+            // Verify outcome
+            Assert.Empty(exceptions);
         }
 
         private class MemberDataAttribute : DataAttribute

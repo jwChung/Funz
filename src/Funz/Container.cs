@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Linq;
+using System.Threading;
 
 namespace Jwc.Funz
 {
@@ -19,7 +20,6 @@ namespace Jwc.Funz
         private readonly ICollection<Container> _children = new ContainerCollection();
         private readonly IDictionary<ServiceKey, Registration> _registry =
             new ConcurrentDictionary<ServiceKey, Registration>();
-        private readonly RecursionGuard _recursionGuard = new RecursionGuard();
         private readonly Container _parent;
         private readonly object _scope;
         private bool _disposed;
@@ -456,7 +456,7 @@ namespace Jwc.Funz
             if (registration.HasService)
                 return registration.Service;
 
-            using (_recursionGuard.Inspect(serviceKey))
+            using (RecursionGuard.Inspect(serviceKey))
             {
                 var service = registration.Factory.Invoke(this);
                 registration.Service = service;
@@ -474,7 +474,7 @@ namespace Jwc.Funz
             if (registration.HasService)
                 return registration.Service;
 
-            using (_recursionGuard.Inspect(serviceKey))
+            using (RecursionGuard.Inspect(serviceKey))
             {
                 var service = registration.Factory.Invoke(this, arg);
                 registration.Service = service;
@@ -609,17 +609,18 @@ namespace Jwc.Funz
             }
         }
 
-        private class RecursionGuard
+        private static class RecursionGuard
         {
-            private readonly Stack<ServiceKey> _serviceKeys = new Stack<ServiceKey>();
+            private static readonly ThreadLocal<Stack<ServiceKey>> _serviceKeys =
+                new ThreadLocal<Stack<ServiceKey>>(() => new Stack<ServiceKey>());
 
-            public IDisposable Inspect(ServiceKey serviceKey)
+            public static IDisposable Inspect(ServiceKey serviceKey)
             {
-                if (_serviceKeys.Contains(serviceKey))
+                if (_serviceKeys.Value.Contains(serviceKey))
                     ThrowRecursionException(serviceKey);
 
-                _serviceKeys.Push(serviceKey);
-                return new EndInspection(_serviceKeys);
+                _serviceKeys.Value.Push(serviceKey);
+                return new EndInspection();
             }
 
             private static void ThrowRecursionException(ServiceKey serviceKey)
@@ -663,16 +664,9 @@ namespace Jwc.Funz
 
             private class EndInspection : IDisposable
             {
-                private readonly Stack<ServiceKey> _serviceKeys;
-
-                public EndInspection(Stack<ServiceKey> serviceKeys)
-                {
-                    _serviceKeys = serviceKeys;
-                }
-
                 public void Dispose()
                 {
-                    _serviceKeys.Pop();
+                    _serviceKeys.Value.Pop();
                 }
             }
         }

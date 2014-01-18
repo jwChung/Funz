@@ -31,7 +31,7 @@ for (var typeCount = 2; typeCount <= GenericTypeMax - 2; typeCount++)
             if (registration.HasService)
                 return registration.Service;
 
-            using (_recursionGuard.Inspect(serviceKey))
+            using (RecursionGuard.Inspect(serviceKey))
             {
                 var service = registration.Factory.Invoke(this, <#=valueList#>);
                 registration.Service = service;

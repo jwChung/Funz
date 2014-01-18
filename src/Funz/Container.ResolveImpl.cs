@@ -20,7 +20,7 @@ namespace Jwc.Funz
             if (registration.HasService)
                 return registration.Service;
 
-            using (_recursionGuard.Inspect(serviceKey))
+            using (RecursionGuard.Inspect(serviceKey))
             {
                 var service = registration.Factory.Invoke(this, arg1, arg2);
                 registration.Service = service;
@@ -38,7 +38,7 @@ namespace Jwc.Funz
             if (registration.HasService)
                 return registration.Service;
 
-            using (_recursionGuard.Inspect(serviceKey))
+            using (RecursionGuard.Inspect(serviceKey))
             {
                 var service = registration.Factory.Invoke(this, arg1, arg2, arg3);
                 registration.Service = service;
@@ -56,7 +56,7 @@ namespace Jwc.Funz
             if (registration.HasService)
                 return registration.Service;
 
-            using (_recursionGuard.Inspect(serviceKey))
+            using (RecursionGuard.Inspect(serviceKey))
             {
                 var service = registration.Factory.Invoke(this, arg1, arg2, arg3, arg4);
                 registration.Service = service;
@@ -74,7 +74,7 @@ namespace Jwc.Funz
             if (registration.HasService)
                 return registration.Service;
 
-            using (_recursionGuard.Inspect(serviceKey))
+            using (RecursionGuard.Inspect(serviceKey))
             {
                 var service = registration.Factory.Invoke(this, arg1, arg2, arg3, arg4, arg5);
                 registration.Service = service;
@@ -92,7 +92,7 @@ namespace Jwc.Funz
             if (registration.HasService)
                 return registration.Service;
 
-            using (_recursionGuard.Inspect(serviceKey))
+            using (RecursionGuard.Inspect(serviceKey))
             {
                 var service = registration.Factory.Invoke(this, arg1, arg2, arg3, arg4, arg5, arg6);
                 registration.Service = service;
@@ -110,7 +110,7 @@ namespace Jwc.Funz
             if (registration.HasService)
                 return registration.Service;
 
-            using (_recursionGuard.Inspect(serviceKey))
+            using (RecursionGuard.Inspect(serviceKey))
             {
                 var service = registration.Factory.Invoke(this, arg1, arg2, arg3, arg4, arg5, arg6, arg7);
                 registration.Service = service;
@@ -128,7 +128,7 @@ namespace Jwc.Funz
             if (registration.HasService)
                 return registration.Service;
 
-            using (_recursionGuard.Inspect(serviceKey))
+            using (RecursionGuard.Inspect(serviceKey))
             {
                 var service = registration.Factory.Invoke(this, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8);
                 registration.Service = service;
@@ -146,7 +146,7 @@ namespace Jwc.Funz
             if (registration.HasService)
                 return registration.Service;
 
-            using (_recursionGuard.Inspect(serviceKey))
+            using (RecursionGuard.Inspect(serviceKey))
             {
                 var service = registration.Factory.Invoke(this, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9);
                 registration.Service = service;
@@ -164,7 +164,7 @@ namespace Jwc.Funz
             if (registration.HasService)
                 return registration.Service;
 
-            using (_recursionGuard.Inspect(serviceKey))
+            using (RecursionGuard.Inspect(serviceKey))
             {
                 var service = registration.Factory.Invoke(this, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10);
                 registration.Service = service;
@@ -182,7 +182,7 @@ namespace Jwc.Funz
             if (registration.HasService)
                 return registration.Service;
 
-            using (_recursionGuard.Inspect(serviceKey))
+            using (RecursionGuard.Inspect(serviceKey))
             {
                 var service = registration.Factory.Invoke(this, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11);
                 registration.Service = service;
@@ -200,7 +200,7 @@ namespace Jwc.Funz
             if (registration.HasService)
                 return registration.Service;
 
-            using (_recursionGuard.Inspect(serviceKey))
+            using (RecursionGuard.Inspect(serviceKey))
             {
                 var service = registration.Factory.Invoke(this, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12);
                 registration.Service = service;
@@ -218,7 +218,7 @@ namespace Jwc.Funz
             if (registration.HasService)
                 return registration.Service;
 
-            using (_recursionGuard.Inspect(serviceKey))
+            using (RecursionGuard.Inspect(serviceKey))
             {
                 var service = registration.Factory.Invoke(this, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13);
                 registration.Service = service;
@@ -236,7 +236,7 @@ namespace Jwc.Funz
             if (registration.HasService)
                 return registration.Service;
 
-            using (_recursionGuard.Inspect(serviceKey))
+            using (RecursionGuard.Inspect(serviceKey))
             {
                 var service = registration.Factory.Invoke(this, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14);
                 registration.Service = service;
