@@ -1372,6 +1372,38 @@ namespace Jwc.Funz
                 e.Message);
         }
 
+        [Spec]
+        public void ResolveRecursiveManyStepsThrows(
+            Container sut)
+        {
+            // Fixture setup
+            sut.Register(c =>
+            {
+                c.Resolve<object>();
+                return new Foo();
+            });
+
+            sut.Register(c =>
+            {
+                c.Resolve<Bar>();
+                return new object();
+            });
+
+            sut.Register(c =>
+            {
+                c.Resolve<Foo>();
+                return new Bar(null, 0, string.Empty);
+            });
+
+            // Exercise system
+            var e = Assert.Throws<ResolutionException>(() => sut.Resolve<Foo>());
+
+            // Verify outcome
+            Assert.Equal(
+                "The service type 'Jwc.Funz.ContainerTest+Foo' was registered recursively.",
+                e.Message);
+        }
+
         private class MemberDataAttribute : DataAttribute
         {
             public override IEnumerable<object[]> GetData(MethodInfo methodUnderTest, Type[] parameterTypes)
