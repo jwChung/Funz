@@ -12,184 +12,236 @@ namespace Jwc.Funz
 
         private TService ResolveImpl<TService, TArg1, TArg2>(object key, bool throws, TArg1 arg1, TArg2 arg2)
         {
-            var registration = GetRegistration<Func<Container, TArg1, TArg2, TService>, TService>(new ServiceKey(typeof(Func<Container, TArg1, TArg2, TService>), key), throws);
+		    var serviceKey = new ServiceKey(typeof(Func<Container, TArg1, TArg2, TService>), key);
+            var registration = GetRegistration<Func<Container, TArg1, TArg2, TService>, TService>(serviceKey, throws);
             if (registration == null)
 			    return default(TService);
 
             if (registration.HasService)
                 return registration.Service;
 
-            var service = registration.Factory.Invoke(this, arg1, arg2);
-            registration.Service = service;
-            return service;
+            using (_recursionGuard.Inspect(serviceKey))
+            {
+                var service = registration.Factory.Invoke(this, arg1, arg2);
+                registration.Service = service;
+                return service;
+            }
         }
 
         private TService ResolveImpl<TService, TArg1, TArg2, TArg3>(object key, bool throws, TArg1 arg1, TArg2 arg2, TArg3 arg3)
         {
-            var registration = GetRegistration<Func<Container, TArg1, TArg2, TArg3, TService>, TService>(new ServiceKey(typeof(Func<Container, TArg1, TArg2, TArg3, TService>), key), throws);
+		    var serviceKey = new ServiceKey(typeof(Func<Container, TArg1, TArg2, TArg3, TService>), key);
+            var registration = GetRegistration<Func<Container, TArg1, TArg2, TArg3, TService>, TService>(serviceKey, throws);
             if (registration == null)
 			    return default(TService);
 
             if (registration.HasService)
                 return registration.Service;
 
-            var service = registration.Factory.Invoke(this, arg1, arg2, arg3);
-            registration.Service = service;
-            return service;
+            using (_recursionGuard.Inspect(serviceKey))
+            {
+                var service = registration.Factory.Invoke(this, arg1, arg2, arg3);
+                registration.Service = service;
+                return service;
+            }
         }
 
         private TService ResolveImpl<TService, TArg1, TArg2, TArg3, TArg4>(object key, bool throws, TArg1 arg1, TArg2 arg2, TArg3 arg3, TArg4 arg4)
         {
-            var registration = GetRegistration<Func<Container, TArg1, TArg2, TArg3, TArg4, TService>, TService>(new ServiceKey(typeof(Func<Container, TArg1, TArg2, TArg3, TArg4, TService>), key), throws);
+		    var serviceKey = new ServiceKey(typeof(Func<Container, TArg1, TArg2, TArg3, TArg4, TService>), key);
+            var registration = GetRegistration<Func<Container, TArg1, TArg2, TArg3, TArg4, TService>, TService>(serviceKey, throws);
             if (registration == null)
 			    return default(TService);
 
             if (registration.HasService)
                 return registration.Service;
 
-            var service = registration.Factory.Invoke(this, arg1, arg2, arg3, arg4);
-            registration.Service = service;
-            return service;
+            using (_recursionGuard.Inspect(serviceKey))
+            {
+                var service = registration.Factory.Invoke(this, arg1, arg2, arg3, arg4);
+                registration.Service = service;
+                return service;
+            }
         }
 
         private TService ResolveImpl<TService, TArg1, TArg2, TArg3, TArg4, TArg5>(object key, bool throws, TArg1 arg1, TArg2 arg2, TArg3 arg3, TArg4 arg4, TArg5 arg5)
         {
-            var registration = GetRegistration<Func<Container, TArg1, TArg2, TArg3, TArg4, TArg5, TService>, TService>(new ServiceKey(typeof(Func<Container, TArg1, TArg2, TArg3, TArg4, TArg5, TService>), key), throws);
+		    var serviceKey = new ServiceKey(typeof(Func<Container, TArg1, TArg2, TArg3, TArg4, TArg5, TService>), key);
+            var registration = GetRegistration<Func<Container, TArg1, TArg2, TArg3, TArg4, TArg5, TService>, TService>(serviceKey, throws);
             if (registration == null)
 			    return default(TService);
 
             if (registration.HasService)
                 return registration.Service;
 
-            var service = registration.Factory.Invoke(this, arg1, arg2, arg3, arg4, arg5);
-            registration.Service = service;
-            return service;
+            using (_recursionGuard.Inspect(serviceKey))
+            {
+                var service = registration.Factory.Invoke(this, arg1, arg2, arg3, arg4, arg5);
+                registration.Service = service;
+                return service;
+            }
         }
 
         private TService ResolveImpl<TService, TArg1, TArg2, TArg3, TArg4, TArg5, TArg6>(object key, bool throws, TArg1 arg1, TArg2 arg2, TArg3 arg3, TArg4 arg4, TArg5 arg5, TArg6 arg6)
         {
-            var registration = GetRegistration<Func<Container, TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TService>, TService>(new ServiceKey(typeof(Func<Container, TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TService>), key), throws);
+		    var serviceKey = new ServiceKey(typeof(Func<Container, TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TService>), key);
+            var registration = GetRegistration<Func<Container, TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TService>, TService>(serviceKey, throws);
             if (registration == null)
 			    return default(TService);
 
             if (registration.HasService)
                 return registration.Service;
 
-            var service = registration.Factory.Invoke(this, arg1, arg2, arg3, arg4, arg5, arg6);
-            registration.Service = service;
-            return service;
+            using (_recursionGuard.Inspect(serviceKey))
+            {
+                var service = registration.Factory.Invoke(this, arg1, arg2, arg3, arg4, arg5, arg6);
+                registration.Service = service;
+                return service;
+            }
         }
 
         private TService ResolveImpl<TService, TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7>(object key, bool throws, TArg1 arg1, TArg2 arg2, TArg3 arg3, TArg4 arg4, TArg5 arg5, TArg6 arg6, TArg7 arg7)
         {
-            var registration = GetRegistration<Func<Container, TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TService>, TService>(new ServiceKey(typeof(Func<Container, TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TService>), key), throws);
+		    var serviceKey = new ServiceKey(typeof(Func<Container, TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TService>), key);
+            var registration = GetRegistration<Func<Container, TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TService>, TService>(serviceKey, throws);
             if (registration == null)
 			    return default(TService);
 
             if (registration.HasService)
                 return registration.Service;
 
-            var service = registration.Factory.Invoke(this, arg1, arg2, arg3, arg4, arg5, arg6, arg7);
-            registration.Service = service;
-            return service;
+            using (_recursionGuard.Inspect(serviceKey))
+            {
+                var service = registration.Factory.Invoke(this, arg1, arg2, arg3, arg4, arg5, arg6, arg7);
+                registration.Service = service;
+                return service;
+            }
         }
 
         private TService ResolveImpl<TService, TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8>(object key, bool throws, TArg1 arg1, TArg2 arg2, TArg3 arg3, TArg4 arg4, TArg5 arg5, TArg6 arg6, TArg7 arg7, TArg8 arg8)
         {
-            var registration = GetRegistration<Func<Container, TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TService>, TService>(new ServiceKey(typeof(Func<Container, TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TService>), key), throws);
+		    var serviceKey = new ServiceKey(typeof(Func<Container, TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TService>), key);
+            var registration = GetRegistration<Func<Container, TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TService>, TService>(serviceKey, throws);
             if (registration == null)
 			    return default(TService);
 
             if (registration.HasService)
                 return registration.Service;
 
-            var service = registration.Factory.Invoke(this, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8);
-            registration.Service = service;
-            return service;
+            using (_recursionGuard.Inspect(serviceKey))
+            {
+                var service = registration.Factory.Invoke(this, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8);
+                registration.Service = service;
+                return service;
+            }
         }
 
         private TService ResolveImpl<TService, TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9>(object key, bool throws, TArg1 arg1, TArg2 arg2, TArg3 arg3, TArg4 arg4, TArg5 arg5, TArg6 arg6, TArg7 arg7, TArg8 arg8, TArg9 arg9)
         {
-            var registration = GetRegistration<Func<Container, TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TService>, TService>(new ServiceKey(typeof(Func<Container, TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TService>), key), throws);
+		    var serviceKey = new ServiceKey(typeof(Func<Container, TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TService>), key);
+            var registration = GetRegistration<Func<Container, TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TService>, TService>(serviceKey, throws);
             if (registration == null)
 			    return default(TService);
 
             if (registration.HasService)
                 return registration.Service;
 
-            var service = registration.Factory.Invoke(this, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9);
-            registration.Service = service;
-            return service;
+            using (_recursionGuard.Inspect(serviceKey))
+            {
+                var service = registration.Factory.Invoke(this, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9);
+                registration.Service = service;
+                return service;
+            }
         }
 
         private TService ResolveImpl<TService, TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10>(object key, bool throws, TArg1 arg1, TArg2 arg2, TArg3 arg3, TArg4 arg4, TArg5 arg5, TArg6 arg6, TArg7 arg7, TArg8 arg8, TArg9 arg9, TArg10 arg10)
         {
-            var registration = GetRegistration<Func<Container, TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TService>, TService>(new ServiceKey(typeof(Func<Container, TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TService>), key), throws);
+		    var serviceKey = new ServiceKey(typeof(Func<Container, TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TService>), key);
+            var registration = GetRegistration<Func<Container, TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TService>, TService>(serviceKey, throws);
             if (registration == null)
 			    return default(TService);
 
             if (registration.HasService)
                 return registration.Service;
 
-            var service = registration.Factory.Invoke(this, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10);
-            registration.Service = service;
-            return service;
+            using (_recursionGuard.Inspect(serviceKey))
+            {
+                var service = registration.Factory.Invoke(this, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10);
+                registration.Service = service;
+                return service;
+            }
         }
 
         private TService ResolveImpl<TService, TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11>(object key, bool throws, TArg1 arg1, TArg2 arg2, TArg3 arg3, TArg4 arg4, TArg5 arg5, TArg6 arg6, TArg7 arg7, TArg8 arg8, TArg9 arg9, TArg10 arg10, TArg11 arg11)
         {
-            var registration = GetRegistration<Func<Container, TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TService>, TService>(new ServiceKey(typeof(Func<Container, TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TService>), key), throws);
+		    var serviceKey = new ServiceKey(typeof(Func<Container, TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TService>), key);
+            var registration = GetRegistration<Func<Container, TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TService>, TService>(serviceKey, throws);
             if (registration == null)
 			    return default(TService);
 
             if (registration.HasService)
                 return registration.Service;
 
-            var service = registration.Factory.Invoke(this, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11);
-            registration.Service = service;
-            return service;
+            using (_recursionGuard.Inspect(serviceKey))
+            {
+                var service = registration.Factory.Invoke(this, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11);
+                registration.Service = service;
+                return service;
+            }
         }
 
         private TService ResolveImpl<TService, TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12>(object key, bool throws, TArg1 arg1, TArg2 arg2, TArg3 arg3, TArg4 arg4, TArg5 arg5, TArg6 arg6, TArg7 arg7, TArg8 arg8, TArg9 arg9, TArg10 arg10, TArg11 arg11, TArg12 arg12)
         {
-            var registration = GetRegistration<Func<Container, TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TService>, TService>(new ServiceKey(typeof(Func<Container, TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TService>), key), throws);
+		    var serviceKey = new ServiceKey(typeof(Func<Container, TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TService>), key);
+            var registration = GetRegistration<Func<Container, TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TService>, TService>(serviceKey, throws);
             if (registration == null)
 			    return default(TService);
 
             if (registration.HasService)
                 return registration.Service;
 
-            var service = registration.Factory.Invoke(this, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12);
-            registration.Service = service;
-            return service;
+            using (_recursionGuard.Inspect(serviceKey))
+            {
+                var service = registration.Factory.Invoke(this, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12);
+                registration.Service = service;
+                return service;
+            }
         }
 
         private TService ResolveImpl<TService, TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13>(object key, bool throws, TArg1 arg1, TArg2 arg2, TArg3 arg3, TArg4 arg4, TArg5 arg5, TArg6 arg6, TArg7 arg7, TArg8 arg8, TArg9 arg9, TArg10 arg10, TArg11 arg11, TArg12 arg12, TArg13 arg13)
         {
-            var registration = GetRegistration<Func<Container, TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, TService>, TService>(new ServiceKey(typeof(Func<Container, TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, TService>), key), throws);
+		    var serviceKey = new ServiceKey(typeof(Func<Container, TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, TService>), key);
+            var registration = GetRegistration<Func<Container, TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, TService>, TService>(serviceKey, throws);
             if (registration == null)
 			    return default(TService);
 
             if (registration.HasService)
                 return registration.Service;
 
-            var service = registration.Factory.Invoke(this, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13);
-            registration.Service = service;
-            return service;
+            using (_recursionGuard.Inspect(serviceKey))
+            {
+                var service = registration.Factory.Invoke(this, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13);
+                registration.Service = service;
+                return service;
+            }
         }
 
         private TService ResolveImpl<TService, TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, TArg14>(object key, bool throws, TArg1 arg1, TArg2 arg2, TArg3 arg3, TArg4 arg4, TArg5 arg5, TArg6 arg6, TArg7 arg7, TArg8 arg8, TArg9 arg9, TArg10 arg10, TArg11 arg11, TArg12 arg12, TArg13 arg13, TArg14 arg14)
         {
-            var registration = GetRegistration<Func<Container, TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, TArg14, TService>, TService>(new ServiceKey(typeof(Func<Container, TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, TArg14, TService>), key), throws);
+		    var serviceKey = new ServiceKey(typeof(Func<Container, TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, TArg14, TService>), key);
+            var registration = GetRegistration<Func<Container, TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, TArg14, TService>, TService>(serviceKey, throws);
             if (registration == null)
 			    return default(TService);
 
             if (registration.HasService)
                 return registration.Service;
 
-            var service = registration.Factory.Invoke(this, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14);
-            registration.Service = service;
-            return service;
+            using (_recursionGuard.Inspect(serviceKey))
+            {
+                var service = registration.Factory.Invoke(this, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14);
+                registration.Service = service;
+                return service;
+            }
         }
 
     }

@@ -23,16 +23,20 @@ for (var typeCount = 2; typeCount <= GenericTypeMax - 2; typeCount++)
 #>
         private TService ResolveImpl<TService, <#=typeList#>>(object key, bool throws, <#=argumentList#>)
         {
-            var registration = GetRegistration<Func<Container, <#=typeList#>, TService>, TService>(key, throws);
+		    var serviceKey = new ServiceKey(typeof(Func<Container, <#=typeList#>, TService>), key);
+            var registration = GetRegistration<Func<Container, <#=typeList#>, TService>, TService>(serviceKey, throws);
             if (registration == null)
 			    return default(TService);
 
             if (registration.HasService)
                 return registration.Service;
 
-            var service = registration.Factory.Invoke(this, <#=valueList#>);
-            registration.Service = service;
-            return service;
+            using (_recursionGuard.Inspect(serviceKey))
+            {
+                var service = registration.Factory.Invoke(this, <#=valueList#>);
+                registration.Service = service;
+                return service;
+            }
         }
 
 <#

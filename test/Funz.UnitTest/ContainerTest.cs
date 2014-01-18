@@ -1404,6 +1404,56 @@ namespace Jwc.Funz
                 e.Message);
         }
 
+        [Spec]
+        public void ResolveRecursiveServiceCreatedByTemplateThrows(
+            Container sut,
+            object arg1,
+            int arg2, 
+            string arg3)
+        {
+            // Fixture setup
+            sut.Register<Bar, object, int, string>((c, o, i, s) =>
+            {
+                c.Resolve<Bar, object, int, string>(o, i, s);
+                return new Bar(o, i, s);
+            });
+
+            // Exercise system
+            var e = Assert.Throws<ResolutionException>(() => sut.Resolve<Bar, object, int, string>(arg1, arg2, arg3));
+
+            // Verify outcome
+            Assert.Equal(
+                "The service type 'Jwc.Funz.ContainerTest+Bar' with the argument(s) " +
+                "'System.Object, System.Int32, System.String' was registered recursively.",
+                e.Message);
+        }
+
+        [Spec]
+        public void ResolveKeyedRecursiveServiceCreatedByTemplateThrows(
+            Container sut,
+            object key,
+            object arg1,
+            int arg2,
+            string arg3)
+        {
+            // Fixture setup
+            sut.Register<Bar, object, int, string>(key, (c, o, i, s) =>
+            {
+                c.ResolveKeyed<Bar, object, int, string>(key, o, i, s);
+                return new Bar(o, i, s);
+            });
+
+            // Exercise system
+            var e = Assert.Throws<ResolutionException>(
+                () => sut.ResolveKeyed<Bar, object, int, string>(key, arg1, arg2, arg3));
+
+            // Verify outcome
+            Assert.Equal(
+                "The service type 'Jwc.Funz.ContainerTest+Bar' with the key 'System.Object' and the argument(s) " +
+                "'System.Object, System.Int32, System.String' was registered recursively.",
+                e.Message);
+        }
+
         private class MemberDataAttribute : DataAttribute
         {
             public override IEnumerable<object[]> GetData(MethodInfo methodUnderTest, Type[] parameterTypes)
