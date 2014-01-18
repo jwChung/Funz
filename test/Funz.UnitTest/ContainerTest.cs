@@ -1534,7 +1534,7 @@ namespace Jwc.Funz
                     | BindingFlags.DeclaredOnly;
 
                 return new MemberCollection<Container>(BindingFlags.Default)
-                    .Include(t => t.GetMethods(bindingFlags))
+                    .Include(t => t.GetMethods(bindingFlags).Where(m => !m.Name.StartsWith("LazyResolve")))
                     .Exclude(x => x.Dispose())
                     .Select(m => new object[] { m });
             }
