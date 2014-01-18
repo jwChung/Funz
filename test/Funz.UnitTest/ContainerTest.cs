@@ -1446,12 +1446,43 @@ namespace Jwc.Funz
             // Exercise system
             var e = Assert.Throws<ResolutionException>(
                 () => sut.ResolveKeyed<Bar, object, int, string>(key, arg1, arg2, arg3));
-
+            
             // Verify outcome
             Assert.Equal(
                 "The service type 'Jwc.Funz.ContainerTest+Bar' with the key 'System.Object' and the argument(s) " +
                 "'System.Object, System.Int32, System.String' was registered recursively.",
                 e.Message);
+        }
+
+        [Spec]
+        public void ResolveServiceAfterRecursionExceptionReturnsCorrectInstance(
+            Container sut)
+        {
+            // Fixture setup
+            sut.Register(c =>
+            {
+                c.Resolve<object>();
+                return new Foo();
+            });
+
+            sut.Register(c =>
+            {
+                c.Resolve<Foo>();
+                return new object();
+            });
+
+
+            Assert.Throws<ResolutionException>(() => sut.Resolve<Foo>());
+            sut.Register(c => new Foo());
+            sut.Register(c => new object());
+
+            // Exercise system
+            var actual1 = sut.Resolve<Foo>();
+            var actual2 = sut.Resolve<object>();
+
+            // Verify outcome
+            Assert.NotNull(actual1);
+            Assert.NotNull(actual2);
         }
 
         private class MemberDataAttribute : DataAttribute
