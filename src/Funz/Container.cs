@@ -61,7 +61,7 @@ namespace Jwc.Funz
         {
             get
             {
-                ThrowsExceptionIfDisposed();
+                ThrowExceptionIfDisposed();
 
                 return _scope;
             }
@@ -391,7 +391,7 @@ namespace Jwc.Funz
         /// </returns>
         public Container CreateChild(object scope)
         {
-            ThrowsExceptionIfDisposed();
+            ThrowExceptionIfDisposed();
 
             var container = new Container(this, scope);
             _children.Add(container);
@@ -439,7 +439,7 @@ namespace Jwc.Funz
             if (factory == null)
                 throw new ArgumentNullException("factory");
 
-            ThrowsExceptionIfDisposed();
+            ThrowExceptionIfDisposed();
 
             var registration = new Registration<TFunc, TService>(this, factory, new HierarchyScope());
             _registry[new ServiceKey(typeof(TFunc), key)] = registration;
@@ -484,7 +484,7 @@ namespace Jwc.Funz
 
         private Registration<TFunc, TService> GetRegistration<TFunc, TService>(ServiceKey serviceKey, bool throws)
         {
-            ThrowsExceptionIfDisposed();
+            ThrowExceptionIfDisposed();
 
             Container current = this;
             Registration registration = null;
@@ -495,7 +495,7 @@ namespace Jwc.Funz
                 return registration.Clone<TFunc, TService>(this, serviceKey);
 
             if (throws)
-                ThrowNotRegisteredException(serviceKey);
+                ThrowNotRegistered(serviceKey);
 
             return null;
         }
@@ -526,13 +526,13 @@ namespace Jwc.Funz
             _parent._children.Remove(this);
         }
 
-        private void ThrowsExceptionIfDisposed()
+        private void ThrowExceptionIfDisposed()
         {
             if (_disposed)
                 throw new ObjectDisposedException(ToString());
         }
 
-        private static void ThrowNotRegisteredException(ServiceKey serviceKey)
+        private static void ThrowNotRegistered(ServiceKey serviceKey)
         {
             var argumentTypes = GetArgumentTypes(serviceKey.FactoryType);
             var serviceType = serviceKey.FactoryType.GetGenericArguments().Last();
