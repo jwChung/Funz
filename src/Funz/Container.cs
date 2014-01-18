@@ -5,7 +5,6 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Linq;
-using System.Threading;
 
 namespace Jwc.Funz
 {
@@ -611,15 +610,18 @@ namespace Jwc.Funz
 
         private static class RecursionGuard
         {
-            private static readonly ThreadLocal<Stack<ServiceKey>> _serviceKeys =
-                new ThreadLocal<Stack<ServiceKey>>(() => new Stack<ServiceKey>());
+            [ThreadStatic]
+            private static Stack<ServiceKey> _serviceKeys;
 
             public static IDisposable Inspect(ServiceKey serviceKey)
             {
-                if (_serviceKeys.Value.Contains(serviceKey))
+                if (_serviceKeys == null)
+                    _serviceKeys = new Stack<ServiceKey>();
+
+                if (_serviceKeys.Contains(serviceKey))
                     ThrowRecursionException(serviceKey);
 
-                _serviceKeys.Value.Push(serviceKey);
+                _serviceKeys.Push(serviceKey);
                 return new EndInspection();
             }
 
@@ -666,7 +668,7 @@ namespace Jwc.Funz
             {
                 public void Dispose()
                 {
-                    _serviceKeys.Value.Pop();
+                    _serviceKeys.Pop();
                 }
             }
         }
