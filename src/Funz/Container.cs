@@ -457,7 +457,7 @@ namespace Jwc.Funz
                 return registration.Service;
 
             if (_resolvingServiceKeys.Contains(serviceKey))
-                ThrowRecursivelyRegisteredException<TService>(serviceKey);
+                ThrowRecursivelyRegisteredException(serviceKey, typeof(TService));
 
             _resolvingServiceKeys.Add(serviceKey);
             var service = registration.Factory.Invoke(this);
@@ -477,7 +477,7 @@ namespace Jwc.Funz
                 return registration.Service;
 
             if (_resolvingServiceKeys.Contains(serviceKey))
-                ThrowRecursivelyRegisteredException<TService>(serviceKey);
+                ThrowRecursivelyRegisteredException(serviceKey, typeof(TService));
 
             _resolvingServiceKeys.Add(serviceKey);
             var service = registration.Factory.Invoke(this, arg);
@@ -499,7 +499,7 @@ namespace Jwc.Funz
                 return registration.Clone<TFunc, TService>(this, serviceKey);
 
             if (throws)
-                ThrowNotRegisteredException<TService>(serviceKey);
+                ThrowNotRegisteredException(serviceKey, typeof(TService));
 
             return null;
         }
@@ -536,7 +536,7 @@ namespace Jwc.Funz
                 throw new ObjectDisposedException(ToString());
         }
 
-        private static void ThrowNotRegisteredException<TService>(ServiceKey serviceKey)
+        private static void ThrowNotRegisteredException(ServiceKey serviceKey, Type serviceType)
         {
             var argumentTypes = GetArgumentTypes(serviceKey.FactoryType);
             if (serviceKey.Key == _noKey)
@@ -546,13 +546,13 @@ namespace Jwc.Funz
                     throw new ResolutionException(string.Format(
                         CultureInfo.CurrentCulture,
                         "The service type '{0}' was not registered.",
-                        typeof(TService)));
+                        serviceType));
                 }
 
                 throw new ResolutionException(string.Format(
                     CultureInfo.CurrentCulture,
                     "The service type '{0}' with the argument(s) '{1}' was not registered.",
-                    typeof(TService),
+                    serviceType,
                     string.Join(", ", argumentTypes.Select(x => x.FullName))));
             }
 
@@ -561,19 +561,19 @@ namespace Jwc.Funz
                 throw new ResolutionException(string.Format(
                     CultureInfo.CurrentCulture,
                     "The service type '{0}' with the key '{1}' was not registered.",
-                    typeof(TService),
+                    serviceType,
                     serviceKey.Key));
             }
 
             throw new ResolutionException(string.Format(
                 CultureInfo.CurrentCulture,
                 "The service type '{0}' with the key '{1}' and the argument(s) '{2}' was not registered.",
-                typeof(TService),
+                serviceType,
                 serviceKey.Key,
                 string.Join(", ", argumentTypes.Select(x => x.FullName))));
         }
 
-        private static void ThrowRecursivelyRegisteredException<TService>(ServiceKey serviceKey)
+        private static void ThrowRecursivelyRegisteredException(ServiceKey serviceKey, Type serviceType)
         {
             var argumentTypes = GetArgumentTypes(serviceKey.FactoryType);
             if (serviceKey.Key == _noKey)
@@ -583,13 +583,13 @@ namespace Jwc.Funz
                     throw new ResolutionException(string.Format(
                         CultureInfo.CurrentCulture,
                         "The service type '{0}' was registered recursively.",
-                        typeof(TService)));
+                        serviceType));
                 }
 
                 throw new ResolutionException(string.Format(
                     CultureInfo.CurrentCulture,
                     "The service type '{0}' with the argument(s) '{1}' was registered recursively.",
-                    typeof(TService),
+                    serviceType,
                     string.Join(", ", argumentTypes.Select(x => x.FullName))));
             }
 
@@ -598,14 +598,14 @@ namespace Jwc.Funz
                 throw new ResolutionException(string.Format(
                     CultureInfo.CurrentCulture,
                     "The service type '{0}' with the key '{1}' was registered recursively.",
-                    typeof(TService),
+                    serviceType,
                     serviceKey.Key));
             }
 
             throw new ResolutionException(string.Format(
                 CultureInfo.CurrentCulture,
                 "The service type '{0}' with the key '{1}' and the argument(s) '{2}' was registered recursively.",
-                typeof(TService),
+                serviceType,
                 serviceKey.Key,
                 string.Join(", ", argumentTypes.Select(x => x.FullName))));
         }
