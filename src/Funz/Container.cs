@@ -482,14 +482,37 @@ namespace Jwc.Funz
 
         private TService ResolveImpl<TService, TArg>(object key, bool throws, TArg arg)
         {
-            var registration = GetRegistration<Func<Container, TArg, TService>, TService>(new ServiceKey(typeof(Func<Container, TArg, TService>), key), throws);
+            var serviceKey = new ServiceKey(typeof(Func<Container, TArg, TService>), key);
+            var registration = GetRegistration<Func<Container, TArg, TService>, TService>(serviceKey, throws);
             if (registration == null)
                 return default(TService);
 
             if (registration.HasService)
                 return registration.Service;
 
+            if (_resolvingServiceKeys.Contains(serviceKey))
+            {
+                var argumentTypes = GetArgumentTypes(serviceKey.FactoryType);
+                if (key == _noKey)
+                {
+                    throw new ResolutionException(string.Format(
+                        CultureInfo.CurrentCulture,
+                        "The service type '{0}' with the argument(s) '{1}' was registered recursively.",
+                        typeof(TService),
+                        string.Join(", ", argumentTypes.Select(x => x.FullName))));
+                }
+
+                throw new ResolutionException(string.Format(
+                    CultureInfo.CurrentCulture,
+                    "The service type '{0}' with the key '{1}' and the argument(s) '{2}' was registered recursively.",
+                    typeof(TService),
+                    key,
+                    string.Join(", ", argumentTypes.Select(x => x.FullName))));
+            }
+
+            _resolvingServiceKeys.Add(serviceKey);
             var service = registration.Factory.Invoke(this, arg);
+            _resolvingServiceKeys.Remove(serviceKey);
             registration.Service = service;
             return service;
         }
@@ -527,7 +550,7 @@ namespace Jwc.Funz
 
                 throw new ResolutionException(string.Format(
                     CultureInfo.CurrentCulture,
-                    "The service type '{0}' with argument(s) '{1}' was not registered.",
+                    "The service type '{0}' with the argument(s) '{1}' was not registered.",
                     typeof(TService),
                     string.Join(", ", argumentTypes.Select(x => x.FullName))));
             }
@@ -536,14 +559,14 @@ namespace Jwc.Funz
             {
                 throw new ResolutionException(string.Format(
                     CultureInfo.CurrentCulture,
-                    "The service type '{0}' with key '{1}' was not registered.",
+                    "The service type '{0}' with the key '{1}' was not registered.",
                     typeof(TService),
                     serviceKey.Key));
             }
 
             throw new ResolutionException(string.Format(
                 CultureInfo.CurrentCulture,
-                "The service type '{0}' with key '{1}' and argument(s) '{2}' was not registered.",
+                "The service type '{0}' with the key '{1}' and the argument(s) '{2}' was not registered.",
                 typeof(TService),
                 serviceKey.Key,
                 string.Join(", ", argumentTypes.Select(x => x.FullName))));

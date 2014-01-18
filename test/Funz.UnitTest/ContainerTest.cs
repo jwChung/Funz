@@ -88,7 +88,7 @@ namespace Jwc.Funz
         {
             // Fixture setup
             var expected = string.Format(
-                "The service type '{0}' with argument(s) '{1}' was not registered.",
+                "The service type '{0}' with the argument(s) '{1}' was not registered.",
                 typeof(Foo),
                 "System.String");
 
@@ -107,7 +107,7 @@ namespace Jwc.Funz
             // Fixture setup
             sut.Register(c => new Foo());
             var expected = string.Format(
-                "The service type '{0}' with key '{1}' was not registered.",
+                "The service type '{0}' with the key '{1}' was not registered.",
                 typeof(Foo),
                 key);
 
@@ -126,7 +126,7 @@ namespace Jwc.Funz
         {
             // Fixture setup
             var expected = string.Format(
-                "The service type '{0}' with key '{1}' and argument(s) '{2}' was not registered.",
+                "The service type '{0}' with the key '{1}' and the argument(s) '{2}' was not registered.",
                 typeof(Foo),
                 key,
                 "System.String");
@@ -804,7 +804,7 @@ namespace Jwc.Funz
         {
             // Fixture setup
             var expected = string.Format(
-                "The service type '{0}' with argument(s) '{1}' was not registered.",
+                "The service type '{0}' with the argument(s) '{1}' was not registered.",
                 typeof(Foo),
                 "System.String");
 
@@ -840,7 +840,7 @@ namespace Jwc.Funz
         {
             // Fixture setup
             var expected = string.Format(
-                "The service type '{0}' with key '{1}' was not registered.",
+                "The service type '{0}' with the key '{1}' was not registered.",
                 typeof(Foo),
                 key);
 
@@ -876,7 +876,7 @@ namespace Jwc.Funz
         {
             // Fixture setup
             var expected = string.Format(
-                "The service type '{0}' with key '{1}' and argument(s) '{2}' was not registered.",
+                "The service type '{0}' with the key '{1}' and the argument(s) '{2}' was not registered.",
                 typeof(Foo),
                 key,
                 "System.String");
@@ -1324,6 +1324,51 @@ namespace Jwc.Funz
             Assert.Equal(
                 "The service type 'Jwc.Funz.ContainerTest+Foo' with the key 'System.Object' " +
                 "was registered recursively.",
+                e.Message);
+        }
+
+        [Spec]
+        public void ResolveRecursiveServiceWithArgumentThrows(
+            Container sut,
+            string argument)
+        {
+            // Fixture setup
+            sut.Register<Foo, string>((c, s) =>
+            {
+                c.Resolve<Foo, string>(argument);
+                return new Foo(s);
+            });
+
+            // Exercise system
+            var e = Assert.Throws<ResolutionException>(() => sut.Resolve<Foo, string>(argument));
+
+            // Verify outcome
+            Assert.Equal(
+                "The service type 'Jwc.Funz.ContainerTest+Foo' with the argument(s) " +
+                "'System.String' was registered recursively.",
+                e.Message);
+        }
+
+        [Spec]
+        public void ResolveKeyedRecursiveServiceWithArgumentThrows(
+            Container sut,
+            object key,
+            string argument)
+        {
+            // Fixture setup
+            sut.Register<Foo, string>(key, (c, s) =>
+            {
+                c.ResolveKeyed<Foo, string>(key, argument);
+                return new Foo(s);
+            });
+
+            // Exercise system
+            var e = Assert.Throws<ResolutionException>(() => sut.ResolveKeyed<Foo, string>(key, argument));
+
+            // Verify outcome
+            Assert.Equal(
+                "The service type 'Jwc.Funz.ContainerTest+Foo' with the key 'System.Object' " +
+                "and the argument(s) 'System.String' was registered recursively.",
                 e.Message);
         }
 
