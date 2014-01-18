@@ -19,7 +19,7 @@ namespace Jwc.Funz
         private readonly ICollection<Container> _children = new ContainerCollection();
         private readonly IDictionary<ServiceKey, Registration> _registry =
             new ConcurrentDictionary<ServiceKey, Registration>();
-        private readonly HashSet<ServiceKey> _resolvingServiceKeys = new HashSet<ServiceKey>();
+        private readonly RecursionGuard _recursionGuard = new RecursionGuard();
         private readonly Container _parent;
         private readonly object _scope;
         private bool _disposed;
@@ -456,14 +456,12 @@ namespace Jwc.Funz
             if (registration.HasService)
                 return registration.Service;
 
-            if (_resolvingServiceKeys.Contains(serviceKey))
-                ThrowRecursivelyRegisteredException(serviceKey, typeof(TService));
-
-            _resolvingServiceKeys.Add(serviceKey);
-            var service = registration.Factory.Invoke(this);
-            _resolvingServiceKeys.Remove(serviceKey);
-            registration.Service = service;
-            return service;
+            using (_recursionGuard.Inspect(serviceKey))
+            {
+                var service = registration.Factory.Invoke(this);
+                registration.Service = service;
+                return service;
+            }
         }
 
         private TService ResolveImpl<TService, TArg>(object key, bool throws, TArg arg)
@@ -476,14 +474,12 @@ namespace Jwc.Funz
             if (registration.HasService)
                 return registration.Service;
 
-            if (_resolvingServiceKeys.Contains(serviceKey))
-                ThrowRecursivelyRegisteredException(serviceKey, typeof(TService));
-
-            _resolvingServiceKeys.Add(serviceKey);
-            var service = registration.Factory.Invoke(this, arg);
-            _resolvingServiceKeys.Remove(serviceKey);
-            registration.Service = service;
-            return service;
+            using (_recursionGuard.Inspect(serviceKey))
+            {
+                var service = registration.Factory.Invoke(this, arg);
+                registration.Service = service;
+                return service;
+            }
         }
 
         private Registration<TFunc, TService> GetRegistration<TFunc, TService>(ServiceKey serviceKey, bool throws)
@@ -499,7 +495,7 @@ namespace Jwc.Funz
                 return registration.Clone<TFunc, TService>(this, serviceKey);
 
             if (throws)
-                ThrowNotRegisteredException(serviceKey, typeof(TService));
+                ThrowNotRegisteredException(serviceKey);
 
             return null;
         }
@@ -536,9 +532,11 @@ namespace Jwc.Funz
                 throw new ObjectDisposedException(ToString());
         }
 
-        private static void ThrowNotRegisteredException(ServiceKey serviceKey, Type serviceType)
+        private static void ThrowNotRegisteredException(ServiceKey serviceKey)
         {
             var argumentTypes = GetArgumentTypes(serviceKey.FactoryType);
+            var serviceType = serviceKey.FactoryType.GetGenericArguments().Last();
+
             if (serviceKey.Key == _noKey)
             {
                 if (!argumentTypes.Any())
@@ -568,43 +566,6 @@ namespace Jwc.Funz
             throw new ResolutionException(string.Format(
                 CultureInfo.CurrentCulture,
                 "The service type '{0}' with the key '{1}' and the argument(s) '{2}' was not registered.",
-                serviceType,
-                serviceKey.Key,
-                string.Join(", ", argumentTypes.Select(x => x.FullName))));
-        }
-
-        private static void ThrowRecursivelyRegisteredException(ServiceKey serviceKey, Type serviceType)
-        {
-            var argumentTypes = GetArgumentTypes(serviceKey.FactoryType);
-            if (serviceKey.Key == _noKey)
-            {
-                if (!argumentTypes.Any())
-                {
-                    throw new ResolutionException(string.Format(
-                        CultureInfo.CurrentCulture,
-                        "The service type '{0}' was registered recursively.",
-                        serviceType));
-                }
-
-                throw new ResolutionException(string.Format(
-                    CultureInfo.CurrentCulture,
-                    "The service type '{0}' with the argument(s) '{1}' was registered recursively.",
-                    serviceType,
-                    string.Join(", ", argumentTypes.Select(x => x.FullName))));
-            }
-
-            if (!argumentTypes.Any())
-            {
-                throw new ResolutionException(string.Format(
-                    CultureInfo.CurrentCulture,
-                    "The service type '{0}' with the key '{1}' was registered recursively.",
-                    serviceType,
-                    serviceKey.Key));
-            }
-
-            throw new ResolutionException(string.Format(
-                CultureInfo.CurrentCulture,
-                "The service type '{0}' with the key '{1}' and the argument(s) '{2}' was registered recursively.",
                 serviceType,
                 serviceKey.Key,
                 string.Join(", ", argumentTypes.Select(x => x.FullName))));
@@ -645,6 +606,74 @@ namespace Jwc.Funz
             {
                 lock (_syncRoot)
                     return ((IEnumerable<Container>)this.ToArray()).GetEnumerator();
+            }
+        }
+
+        private class RecursionGuard
+        {
+            private readonly Stack<ServiceKey> _serviceKeys = new Stack<ServiceKey>();
+
+            public IDisposable Inspect(ServiceKey serviceKey)
+            {
+                if (_serviceKeys.Contains(serviceKey))
+                    ThrowRecursionException(serviceKey);
+
+                _serviceKeys.Push(serviceKey);
+                return new EndInspection(_serviceKeys);
+            }
+
+            private static void ThrowRecursionException(ServiceKey serviceKey)
+            {
+                var argumentTypes = GetArgumentTypes(serviceKey.FactoryType);
+                var serviceType = serviceKey.FactoryType.GetGenericArguments().Last();
+
+                if (serviceKey.Key == _noKey)
+                {
+                    if (!argumentTypes.Any())
+                    {
+                        throw new ResolutionException(string.Format(
+                            CultureInfo.CurrentCulture,
+                            "The service type '{0}' was registered recursively.",
+                            serviceType));
+                    }
+
+                    throw new ResolutionException(string.Format(
+                        CultureInfo.CurrentCulture,
+                        "The service type '{0}' with the argument(s) '{1}' was registered recursively.",
+                        serviceType,
+                        string.Join(", ", argumentTypes.Select(x => x.FullName))));
+                }
+
+                if (!argumentTypes.Any())
+                {
+                    throw new ResolutionException(string.Format(
+                        CultureInfo.CurrentCulture,
+                        "The service type '{0}' with the key '{1}' was registered recursively.",
+                        serviceType,
+                        serviceKey.Key));
+                }
+
+                throw new ResolutionException(string.Format(
+                    CultureInfo.CurrentCulture,
+                    "The service type '{0}' with the key '{1}' and the argument(s) '{2}' was registered recursively.",
+                    serviceType,
+                    serviceKey.Key,
+                    string.Join(", ", argumentTypes.Select(x => x.FullName))));
+            }
+
+            private class EndInspection : IDisposable
+            {
+                private readonly Stack<ServiceKey> _serviceKeys;
+
+                public EndInspection(Stack<ServiceKey> serviceKeys)
+                {
+                    _serviceKeys = serviceKeys;
+                }
+
+                public void Dispose()
+                {
+                    _serviceKeys.Pop();
+                }
             }
         }
 
