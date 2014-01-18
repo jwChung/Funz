@@ -1061,7 +1061,7 @@ namespace Jwc.Funz
             Assert.Equal(0, disposable.Count);
         }
 
-        [ExplicitSpec(Run.Skip)]
+        [Spec]
         [PublicMethodData]
         public void CallAllPublicMethodAfterDisposedThrowsDisposedException(
             MethodInfo method,
