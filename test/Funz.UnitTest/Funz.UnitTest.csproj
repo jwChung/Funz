@@ -68,6 +68,7 @@
     </Compile>
     <Compile Include="CompositContainerVisitorTest.cs" />
     <Compile Include="ContainerTest.cs" />
+    <Compile Include="IdiomaticTestBase.cs" />
     <Compile Include="ParameterPropertyMatcher.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ResolutionExceptionTest.cs" />
