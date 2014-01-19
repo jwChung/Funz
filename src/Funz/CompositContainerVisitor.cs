@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Jwc.Funz
 {
@@ -12,6 +13,9 @@ namespace Jwc.Funz
 
         public IContainerVisitor<IEnumerable<TResult>> Visit(Container container)
         {
+            if (container == null)
+                throw new ArgumentNullException("container");
+
             throw new System.NotImplementedException();
         }
     }
