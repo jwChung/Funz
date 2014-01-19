@@ -69,6 +69,7 @@
       <DependentUpon>Container.ResolveImpl.tt</DependentUpon>
     </Compile>
     <Compile Include="GlobalSuppressions.cs" />
+    <Compile Include="IContainerVisitor.cs" />
     <Compile Include="IFluentInterface.cs" />
     <Compile Include="IOwned.cs" />
     <Compile Include="IReused.cs" />

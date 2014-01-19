@@ -7,6 +7,7 @@ using System.Threading;
 using Jwc.AutoFixture;
 using Jwc.AutoFixture.Idioms;
 using Jwc.AutoFixture.Xunit;
+using Moq;
 using Ploeh.AutoFixture;
 using Ploeh.AutoFixture.Idioms;
 using Xunit;
@@ -1510,6 +1511,22 @@ namespace Jwc.Funz
 
             // Verify outcome
             Assert.Empty(exceptions);
+        }
+
+        [Spec]
+        public void AcceptCorrectlyAcceptsVisitor(
+            Container sut,
+            IContainerVisitor<object> visitor,
+            IContainerVisitor<object> expected)
+        {
+            // Fixture setup
+            Mock.Get(visitor).Setup(x => x.Visit(sut)).Returns(expected);
+
+            // Exercise system
+            var actual = sut.Accept(visitor);
+
+            // Verify outcome
+            Assert.Equal(expected, actual);
         }
 
         private class MemberDataAttribute : DataAttribute

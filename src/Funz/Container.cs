@@ -407,6 +407,17 @@ namespace Jwc.Funz
             GC.SuppressFinalize(this);
         }
 
+        public IContainerVisitor<TResult> Accept<TResult>(IContainerVisitor<TResult> visitor)
+        {
+            if (visitor == null)
+                throw new ArgumentNullException("visitor");
+
+            ThrowExceptionIfDisposed();
+
+            return visitor.Visit(this);
+        }
+
+
         /// <summary>
         /// Disposes the container and all instances owned by it, as well as all child containers
         ///	created through <see cref="CreateChild()"/>.
