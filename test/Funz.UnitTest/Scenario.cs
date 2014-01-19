@@ -237,7 +237,7 @@ namespace Jwc.Funz
             // Verify outcome
             Assert.NotSame(expected, actual);
         }
-        
+
         [VersionSpec(major: 0, minor: 1, patch: 0)]
         public void ContainerHasReusedWithinHierarchyOptionAsDefault(
             Container container)
@@ -252,6 +252,67 @@ namespace Jwc.Funz
 
             // Verify outcome
             Assert.Same(expected, actual);
+        }
+
+        [VersionSpec(major: 0, minor: 1, patch: 0)]
+        public void DisposeReusedInstanceCorrectlyDisposes(
+            Container container)
+        {
+            // Fixture setup
+            container.Register(c => new Disposable()).ReusedWithinContainer();
+            var service = container.Resolve<Disposable>();
+
+            // Exercise system
+            container.Dispose();
+
+            // Verify outcome
+            Assert.True(service.Disposed, "Disposed");
+        }
+
+        [VersionSpec(major: 0, minor: 1, patch: 0)]
+        public void DisposeNonReusedInstanceDoesNotDispose(
+            Container container)
+        {
+            // Fixture setup
+            container.Register(c => new Disposable()).ReusedWithinNone();
+            var service = container.Resolve<Disposable>();
+
+            // Exercise system
+            container.Dispose();
+
+            // Verify outcome
+            Assert.False(service.Disposed, "Disposed");
+        }
+
+        [VersionSpec(major: 0, minor: 1, patch: 0)]
+        public void DisposeReusedInstanceOwnedByExternalDoesNotDispose(
+            Container container)
+        {
+            // Fixture setup
+            container.Register(c => new Disposable()).ReusedWithinContainer().OwnedByExternal();
+            var service = container.Resolve<Disposable>();
+
+            // Exercise system
+            container.Dispose();
+
+            // Verify outcome
+            Assert.False(service.Disposed, "Disposed");
+        }
+
+        [VersionSpec(major: 0, minor: 1, patch: 0)]
+        public void DisposeAlsoDisposesChildContainer(
+            Container container)
+        {
+            // Fixture setup
+            container.Register(c => new Disposable()).ReusedWithinContainer();
+            var child = container.CreateChild();
+            var service = child.Resolve<Disposable>();
+
+            // Exercise system
+            container.Dispose();
+
+            // Verify outcome
+            Assert.True(service.Disposed, "Disposed");
         }
 
         [VersionSpec(major: 0, minor: 1, patch: 1)]
@@ -293,6 +354,20 @@ namespace Jwc.Funz
             {
                 get;
                 set;
+            }
+        }
+
+        public class Disposable : IDisposable
+        {
+            public bool Disposed
+            {
+                get;
+                private set;
+            }
+
+            public void Dispose()
+            {
+                Disposed = true;
             }
         }
     }
