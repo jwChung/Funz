@@ -58,6 +58,25 @@ namespace Jwc.Funz
             Assert.IsType<Foo>(actual.Invoke());
         }
 
+        [VersionSpec(major: 0, minor: 1, patch: 0)]
+        public void ResolveKeyedServiceReturnsDifferentInstanceFromUnkeyed(
+            Container container,
+            Foo foo1,
+            Foo foo2,
+            string key)
+        {
+            // Fixture setup
+            container.Register<IFoo>(key, c => foo1);
+            container.Register<IFoo>(c => foo2);
+            var expected = container.Resolve<IFoo>();
+
+            // Exercise system
+            var actual = container.ResolveKeyed<IFoo>(key);
+
+            // Verify outcome
+            Assert.NotEqual(expected, actual);
+        }
+
         [VersionSpec(major: 0, minor: 1, patch: 1)]
         public void ResolveRecursiveServiceThrowsResolutionException(
             Container container)
@@ -72,17 +91,17 @@ namespace Jwc.Funz
             Assert.Throws<ResolutionException>(() => container.Resolve<IBar>());
         }
 
-        private interface IFoo
+        public interface IFoo
         {
             IBar Bar { get; set; }
         }
 
-        private interface IBar
+        public interface IBar
         {
             IFoo Foo { get; set; }
         }
 
-        private class Foo : IFoo
+        public class Foo : IFoo
         {
             public IBar Bar
             {
@@ -91,7 +110,7 @@ namespace Jwc.Funz
             }
         }
 
-        private class Bar : IBar
+        public class Bar : IBar
         {
             public IFoo Foo
             {
