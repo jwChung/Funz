@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reflection;
 using Jwc.AutoFixture.Idioms;
 using Jwc.AutoFixture.Xunit;
+using Moq;
 using Ploeh.AutoFixture;
 using Ploeh.AutoFixture.Idioms;
 using Xunit;
@@ -50,6 +51,43 @@ namespace Jwc.Funz
             // Exercise system
             // Verify outcome
             Assert.IsAssignableFrom<IContainerVisitor<IEnumerable<string>>>(sut);
+        }
+
+        [Spec]
+        public void VisitMakesAllVisitorsVisitContainer(
+            CompositContainerVisitor<int> sut,
+            Container container,
+            IContainerVisitor<int>[] returnedVisitors,
+            int[] expected)
+        {
+            // Fixture setup
+            Mock.Get(returnedVisitors[0]).SetupGet(x => x.Result).Returns(expected[0]);
+            Mock.Get(returnedVisitors[1]).SetupGet(x => x.Result).Returns(expected[1]);
+            Mock.Get(returnedVisitors[2]).SetupGet(x => x.Result).Returns(expected[2]);
+            
+            var visitors = sut.Visitors.ToArray();
+            Mock.Get(visitors[0]).Setup(x => x.Visit(container)).Returns(returnedVisitors[0]);
+            Mock.Get(visitors[1]).Setup(x => x.Visit(container)).Returns(returnedVisitors[1]);
+            Mock.Get(visitors[2]).Setup(x => x.Visit(container)).Returns(returnedVisitors[2]);
+            
+            // Exercise system
+            var actual = sut.Visit(container).Result;
+
+            // Verify outcome
+            Assert.Equal(expected, actual);
+        }
+
+        [Spec]
+        public void VisitReturnsNewInstance(
+            CompositContainerVisitor<int> sut,
+            Container container)
+        {
+            // Fixture setup
+            // Exercise system
+            var actual = sut.Visit(container);
+
+            // Verify outcome
+            Assert.NotEqual(sut, actual);
         }
 
         private class GuardMemberDataAttribute : DataAttribute
