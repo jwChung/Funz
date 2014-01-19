@@ -1,6 +1,6 @@
 ﻿namespace Jwc.Funz
 {
-    public class ResolutionExceptionTest : IdiomaticTestBase<ResolutionException>
+    public class ResolutionExceptionTest : IdiomaticTest<ResolutionException>
     {
     }
 }

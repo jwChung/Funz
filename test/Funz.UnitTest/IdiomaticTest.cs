@@ -9,7 +9,7 @@ using Xunit.Extensions;
 
 namespace Jwc.Funz
 {
-    public abstract class IdiomaticTestBase<TSUT>
+    public abstract class IdiomaticTest<TSUT>
     {
         [Spec]
         [PropertyData("MemberData")]
