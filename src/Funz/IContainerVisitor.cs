@@ -3,7 +3,7 @@
     /// <summary>
     /// Represents a contianer visitor.
     /// </summary>
-    /// <typeparam name="TResult">The result type.</typeparam>
+    /// <typeparam name="TResult">A result type.</typeparam>
     public interface IContainerVisitor<out TResult>
     {
         /// <summary>
@@ -14,8 +14,8 @@
         /// <summary>
         /// Visits a container.
         /// </summary>
-        /// <param name="container">The target container for visiting.</param>
-        /// <returns>The visitor to provide a result.</returns>
+        /// <param name="container">A target container for visiting.</param>
+        /// <returns>A visitor to provide a result.</returns>
         IContainerVisitor<TResult> Visit(Container container);
     }
 }
