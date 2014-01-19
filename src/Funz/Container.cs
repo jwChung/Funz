@@ -423,7 +423,6 @@ namespace Jwc.Funz
             return visitor.Visit(this);
         }
 
-
         /// <summary>
         /// Disposes the container and all instances owned by it, as well as all child containers
         ///	created through <see cref="CreateChild()"/>.

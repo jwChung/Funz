@@ -356,12 +356,11 @@ namespace Jwc.Funz
             container.Accept(batch);
             
             // Exercise system
-            var actual = container.Accept(builder);
+            var actual = container.Accept(builder).Result;
 
             // Verify outcome
-            var result = actual.Result;
-            Assert.IsType<Foo>(result);
-            Assert.IsType<Bar>(result.Bar);
+            Assert.IsType<Foo>(actual);
+            Assert.IsType<Bar>(actual.Bar);
         }
 
         public interface IFoo
