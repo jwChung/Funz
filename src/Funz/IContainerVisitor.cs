@@ -1,6 +1,6 @@
 ﻿namespace Jwc.Funz
 {
-    public interface IContainerVisitor<TResult>
+    public interface IContainerVisitor<out TResult>
     {
         TResult Result { get; }
 
