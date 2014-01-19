@@ -407,6 +407,12 @@ namespace Jwc.Funz
             GC.SuppressFinalize(this);
         }
 
+        /// <summary>
+        /// Accepts a container visitor.
+        /// </summary>
+        /// <param name="visitor">A container visitor.</param>
+        /// <typeparam name="TResult">A result type.</typeparam>
+        /// <returns>A visitor to provide a result produced after visiting.</returns>
         public IContainerVisitor<TResult> Accept<TResult>(IContainerVisitor<TResult> visitor)
         {
             if (visitor == null)
