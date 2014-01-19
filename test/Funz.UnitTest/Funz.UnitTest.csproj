@@ -66,6 +66,7 @@
     <Compile Include="..\..\build\CommonAssemblyInfo.cs">
       <Link>Properties\CommonAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="CompositContainerVisitorTest.cs" />
     <Compile Include="ContainerTest.cs" />
     <Compile Include="ParameterPropertyMatcher.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
