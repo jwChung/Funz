@@ -20,7 +20,7 @@ namespace Jwc.Funz
         }
 
         [VersionSpec(major: 0, minor: 1, patch: 0)]
-        public void ResolveUnregisteredServiceThrowsResoutionException(
+        public void ResolveUnregisteredServiceThrowsResolutionException(
             Container container)
         {
             // Fixture setup
