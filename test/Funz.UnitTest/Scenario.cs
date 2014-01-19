@@ -77,6 +77,183 @@ namespace Jwc.Funz
             Assert.NotEqual(expected, actual);
         }
 
+        [VersionSpec(major: 0, minor: 1, patch: 0)]
+        public void ResolveOnChildReturnsCorrectInstance(
+            Container container)
+        {
+            // Fixture setup
+            container.Register<IFoo>(c => new Foo());
+            var child = container.CreateChild();
+
+            // Exercise system
+            var actual = child.Resolve<IFoo>();
+
+            // Verify outcome
+            Assert.IsType<Foo>(actual);
+        }
+
+        [VersionSpec(major: 0, minor: 1, patch: 0)]
+        public void ResolveServiceReusedWithinNoneAlwayReturnsNewInstance(
+            Container container)
+        {
+            // Fixture setup
+            container.Register<IFoo>(c => new Foo()).ReusedWithinNone();
+            var expected = container.Resolve<IFoo>();
+
+            // Exercise system
+            var actual = container.Resolve<IFoo>();
+
+            // Verify outcome
+            Assert.NotSame(expected, actual);
+        }
+
+        [VersionSpec(major: 0, minor: 1, patch: 0)]
+        public void ResolveServiceReusedWithinContainerReturnsSharedInstance(
+            Container container)
+        {
+            // Fixture setup
+            container.Register<IFoo>(c => new Foo()).ReusedWithinContainer();
+            var expected = container.Resolve<IFoo>();
+
+            // Exercise system
+            var actual = container.Resolve<IFoo>();
+
+            // Verify outcome
+            Assert.Same(expected, actual);
+        }
+
+        [VersionSpec(major: 0, minor: 1, patch: 0)]
+        public void ResolveServiceReusedWithinContainerReturnsNonSharedInstanceWithChild(
+            Container container)
+        {
+            // Fixture setup
+            container.Register<IFoo>(c => new Foo()).ReusedWithinContainer();
+            var child = container.CreateChild();
+            var expected = child.Resolve<IFoo>();
+
+            // Exercise system
+            var actual = container.Resolve<IFoo>();
+
+            // Verify outcome
+            Assert.NotSame(expected, actual);
+        }
+
+        [VersionSpec(major: 0, minor: 1, patch: 0)]
+        public void ResolveServiceReusedWithinContainerOnChildReturnsSharedInstance(
+            Container container)
+        {
+            // Fixture setup
+            container.Register<IFoo>(c => new Foo()).ReusedWithinContainer();
+            var child = container.CreateChild();
+            var expected = child.Resolve<IFoo>();
+
+            // Exercise system
+            var actual = child.Resolve<IFoo>();
+
+            // Verify outcome
+            Assert.Same(expected, actual);
+        }
+
+        [VersionSpec(major: 0, minor: 1, patch: 0)]
+        public void ResolveServiceReusedWithinHierarchyReturnsSharedInstanceWithChildAndGrandChild(
+            Container container)
+        {
+            // Fixture setup
+            container.Register<IFoo>(c => new Foo()).ReusedWithinHierarchy();
+            var child = container.CreateChild();
+            var grandChild = child.CreateChild();
+            var expected1 = child.Resolve<IFoo>();
+            var expected2 = grandChild.Resolve<IFoo>();
+
+            // Exercise system
+            var actual = container.Resolve<IFoo>();
+
+            // Verify outcome
+            Assert.Same(expected1, actual);
+            Assert.Same(expected2, actual);
+        }
+
+        [VersionSpec(major: 0, minor: 1, patch: 0)]
+        public void ResolveServieReusedWithinScopeReturnsNonSharedInstanceWithDifferentScope(
+            Container container,
+            string scope)
+        {
+            // Fixture setup
+            Assert.NotEqual(scope, container.Scope);
+            container.Register<IFoo>(c => new Foo()).ReusedWithin(scope);
+            var expected = container.Resolve<IFoo>();
+
+            // Exercise system
+            var actual = container.Resolve<IFoo>();
+
+            // Verify outcome
+            Assert.NotSame(expected, actual);
+        }
+
+        [VersionSpec(major: 0, minor: 1, patch: 0)]
+        public void ResolveServieReusedWithinScopeReturnsSharedInstanceWithSameScope(
+            Container container)
+        {
+            // Fixture setup
+            container.Register<IFoo>(c => new Foo()).ReusedWithin(container.Scope);
+            var expected = container.Resolve<IFoo>();
+
+            // Exercise system
+            var actual = container.Resolve<IFoo>();
+
+            // Verify outcome
+            Assert.Same(expected, actual);
+        }
+
+        [VersionSpec(major: 0, minor: 1, patch: 0)]
+        public void ResolveServieReusedWithinScopeReturnsSharedInstanceWithSameScopedChild(
+            Container container)
+        {
+            // Fixture setup
+            container.Register<IFoo>(c => new Foo()).ReusedWithin(container.Scope);
+            var scopedChild = container.CreateChild();
+            var expected = container.Resolve<IFoo>();
+
+            // Exercise system
+            var actual = scopedChild.Resolve<IFoo>();
+
+            // Verify outcome
+            Assert.Same(expected, actual);
+        }
+
+        [VersionSpec(major: 0, minor: 1, patch: 0)]
+        public void ResolveServieReusedWithinScopeReturnsNonSharedInstanceWithDifferentScopedChild(
+            Container container,
+            int scope)
+        {
+            // Fixture setup
+            container.Register<IFoo>(c => new Foo()).ReusedWithin(scope);
+            var child = container.CreateChild(scope);
+            var expected = container.Resolve<IFoo>();
+
+            // Exercise system
+            var actual = child.Resolve<IFoo>();
+
+            // Verify outcome
+            Assert.NotSame(expected, actual);
+        }
+        
+        [VersionSpec(major: 0, minor: 1, patch: 0)]
+        public void ContainerHasReusedWithinHierarchyOptionAsDefault(
+            Container container)
+        {
+            // Fixture setup
+            container.Register<IFoo>(c => new Foo());
+            var child = container.CreateChild();
+            var expected = child.Resolve<IFoo>();
+
+            // Exercise system
+            var actual = container.Resolve<IFoo>();
+
+            // Verify outcome
+            Assert.Same(expected, actual);
+        }
+
         [VersionSpec(major: 0, minor: 1, patch: 1)]
         public void ResolveRecursiveServiceThrowsResolutionException(
             Container container)
