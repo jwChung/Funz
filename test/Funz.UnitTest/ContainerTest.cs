@@ -1488,7 +1488,7 @@ namespace Jwc.Funz
             Assert.NotNull(actual2);
         }
 
-        [Spec]
+        [ExplicitSpec(Run.Skip)]
         public void ResolveShouldBeThreadSafe(
             Container sut)
         {
@@ -1499,7 +1499,7 @@ namespace Jwc.Funz
                 (s, e) => exceptions.Add((Exception)e.ExceptionObject);
 
             // Exercise system
-            var threads = new Thread[1000];
+            var threads = new Thread[10000];
             for (int i = 0; i < threads.Length; i++)
                 threads[i] = new Thread(() => sut.Resolve<Foo>());
 
@@ -1527,6 +1527,39 @@ namespace Jwc.Funz
 
             // Verify outcome
             Assert.Equal(expected, actual);
+        }
+
+        [ExplicitSpec(Run.Skip)]
+        public void ResolveOnChildShouldBeThreadSafe(
+            Container sut)
+        {
+            // Fixture setup
+            sut.Register(c => new Foo());
+            var exceptions = new ConcurrentBag<Exception>();
+            AppDomain.CurrentDomain.UnhandledException +=
+                (s, e) => exceptions.Add((Exception)e.ExceptionObject);
+
+            // Exercise system
+            var threads = new Thread[10000];
+            for (int i = 0; i < threads.Length; i++)
+            {
+                threads[i] = new Thread(() =>
+                {
+                    using (var child = sut.CreateChild())
+                    {
+                        child.Resolve<Foo>();
+                    }
+                });
+            }
+
+            foreach (Thread thread in threads)
+                thread.Start();
+
+            foreach (Thread thread in threads)
+                thread.Join();
+
+            // Verify outcome
+            Assert.Empty(exceptions);
         }
 
         private class MemberDataAttribute : DataAttribute

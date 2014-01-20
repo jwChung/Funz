@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Linq;
 
@@ -16,7 +14,7 @@ namespace Jwc.Funz
     {
         private static readonly object _noKey = new object();
 
-        private readonly ICollection<Container> _children = new ContainerCollection();
+        private readonly ConcurrentBag<Container> _children = new ConcurrentBag<Container>();
         private readonly IDictionary<ServiceKey, Registration> _registry =
             new ConcurrentDictionary<ServiceKey, Registration>();
         private readonly Container _parent;
@@ -538,7 +536,8 @@ namespace Jwc.Funz
             if (_parent == null)
                 return;
 
-            _parent._children.Remove(this);
+            Container container;
+            _parent._children.TryTake(out container);
         }
 
         private void ThrowExceptionIfDisposed()
@@ -623,44 +622,6 @@ namespace Jwc.Funz
                 serviceType,
                 serviceKey.Key,
                 string.Join(", ", argumentTypes.Select(x => x.FullName))));
-        }
-
-        private class ContainerCollection : Collection<Container>, IEnumerable<Container>
-        {
-            private readonly object _syncRoot;
-
-            public ContainerCollection()
-            {
-                _syncRoot = ((ICollection)this).SyncRoot;
-            }
-
-            protected override void InsertItem(int index, Container item)
-            {
-                lock (_syncRoot)
-                    base.InsertItem(index, item);
-            }
-
-            protected override void RemoveItem(int index)
-            {
-                lock (_syncRoot)
-                    base.RemoveItem(index);
-            }
-
-            IEnumerator<Container> IEnumerable<Container>.GetEnumerator()
-            {
-                return GetEnumerator();
-            }
-
-            IEnumerator IEnumerable.GetEnumerator()
-            {
-                return GetEnumerator();
-            }
-
-            private new IEnumerator<Container> GetEnumerator()
-            {
-                lock (_syncRoot)
-                    return ((IEnumerable<Container>)this.ToArray()).GetEnumerator();
-            }
         }
 
         private static class RecursionGuard
