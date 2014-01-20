@@ -895,7 +895,7 @@ namespace Jwc.Funz
 
             // Exercise system
             var actual = sut.CreateChild();
-            
+
             // Verify outcome
             Assert.NotNull(actual.Resolve<Foo>());
         }
@@ -1387,7 +1387,7 @@ namespace Jwc.Funz
         public void ResolveRecursiveServiceCreatedByTemplateThrows(
             Container sut,
             object arg1,
-            int arg2, 
+            int arg2,
             string arg3)
         {
             // Fixture setup
@@ -1425,7 +1425,7 @@ namespace Jwc.Funz
             // Exercise system
             var e = Assert.Throws<ResolutionException>(
                 () => sut.ResolveKeyed<Bar, object, int, string>(key, arg1, arg2, arg3));
-            
+
             // Verify outcome
             Assert.Equal(
                 "The service type 'Jwc.Funz.ContainerTest+Bar' with the key 'System.Object' and the argument(s) " +
@@ -1471,22 +1471,30 @@ namespace Jwc.Funz
             // Fixture setup
             sut.Register(c => new Foo());
             var exceptions = new ConcurrentBag<Exception>();
-            AppDomain.CurrentDomain.UnhandledException +=
-                (s, e) => exceptions.Add((Exception)e.ExceptionObject);
+            UnhandledExceptionEventHandler handler = (s, e) => exceptions.Add((Exception)e.ExceptionObject);
+            try
+            {
+                AppDomain.CurrentDomain.UnhandledException += handler;
 
-            // Exercise system
-            var threads = new Thread[1000];
-            for (int i = 0; i < threads.Length; i++)
-                threads[i] = new Thread(() => sut.Resolve<Foo>());
+                // Exercise system
+                var threads = new Thread[1000];
+                for (int i = 0; i < threads.Length; i++)
+                    threads[i] = new Thread(() => sut.Resolve<Foo>());
 
-            foreach (Thread thread in threads)
-                thread.Start();
+                foreach (Thread thread in threads)
+                    thread.Start();
 
-            foreach (Thread thread in threads)
-                thread.Join();
+                foreach (Thread thread in threads)
+                    thread.Join();
 
-            // Verify outcome
-            Assert.Empty(exceptions);
+                // Verify outcome
+                Assert.Empty(exceptions);
+            }
+            finally
+            {
+                // Teardown
+                AppDomain.CurrentDomain.UnhandledException -= handler;
+            }
         }
 
         [Spec]
@@ -1512,34 +1520,42 @@ namespace Jwc.Funz
             // Fixture setup
             sut.Register(c => new Foo());
             var exceptions = new ConcurrentBag<Exception>();
-            AppDomain.CurrentDomain.UnhandledException +=
-                (s, e) => exceptions.Add((Exception)e.ExceptionObject);
-
-            // Exercise system
-            var threads = new Thread[100];
-            for (int i = 0; i < threads.Length; i++)
+            UnhandledExceptionEventHandler handler = (s, e) => exceptions.Add((Exception)e.ExceptionObject);
+            try
             {
-                threads[i] = new Thread(() =>
+                AppDomain.CurrentDomain.UnhandledException += handler;
+
+                // Exercise system
+                var threads = new Thread[100];
+                for (int i = 0; i < threads.Length; i++)
                 {
-                    for (int j = 0; j < 100; j++)
+                    threads[i] = new Thread(() =>
                     {
-                        using (sut.CreateChild())
+                        for (int j = 0; j < 100; j++)
                         {
-                        }    
-                    }
-                });
+                            using (sut.CreateChild())
+                            {
+                            }
+                        }
+                    });
+                }
+
+                foreach (Thread thread in threads)
+                    thread.Start();
+
+                foreach (Thread thread in threads)
+                    thread.Join();
+
+                // Verify outcome
+                Assert.Empty(exceptions);
             }
-
-            foreach (Thread thread in threads)
-                thread.Start();
-
-            foreach (Thread thread in threads)
-                thread.Join();
-
-            // Verify outcome
-            Assert.Empty(exceptions);
+            finally
+            {
+                // Teardown
+                AppDomain.CurrentDomain.UnhandledException -= handler;
+            }
         }
-        
+
         [Spec]
         public void DisposeIfOneChildWereDisposedCorrectlyDisposesOtherChildren(
             Container sut)
@@ -1567,8 +1583,8 @@ namespace Jwc.Funz
             public override IEnumerable<object[]> GetData(MethodInfo methodUnderTest, Type[] parameterTypes)
             {
                 const BindingFlags bindingFlags =
-                    BindingFlags.Public 
-                    | BindingFlags.Static 
+                    BindingFlags.Public
+                    | BindingFlags.Static
                     | BindingFlags.Instance
                     | BindingFlags.DeclaredOnly;
 
@@ -1578,7 +1594,7 @@ namespace Jwc.Funz
                     .Select(m => new object[] { m });
             }
         }
-        
+
         public class Foo
         {
             private readonly string _arg;
@@ -1652,7 +1668,7 @@ namespace Jwc.Funz
                 Count++;
             }
         }
-        
+
         private class Dummy
         {
 #pragma warning disable once UnusedAutoPropertyAccessor.Local
