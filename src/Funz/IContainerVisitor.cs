@@ -7,7 +7,7 @@
     public interface IContainerVisitor<out TResult>
     {
         /// <summary>
-        /// Gets a value to indicating a result produced after visiting.
+        /// Gets a value to indicating the result produced after visiting.
         /// </summary>
         TResult Result { get; }
 
