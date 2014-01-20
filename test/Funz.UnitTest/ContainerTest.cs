@@ -9,41 +9,17 @@ using Jwc.AutoFixture.Idioms;
 using Jwc.AutoFixture.Xunit;
 using Moq;
 using Ploeh.AutoFixture;
-using Ploeh.AutoFixture.Idioms;
 using Xunit;
 using Xunit.Extensions;
 
 namespace Jwc.Funz
 {
-    public class ContainerTest
+    public class ContainerTest : IdiomaticTest<Container, ContainerTest>
     {
-        [Spec]
-        [MemberData]
-        public void SutHasAppropriateGuards(
-            MemberInfo member,
-            GuardClauseAssertion assertion)
+        public override MemberCollection<Container> GetGuardMembers()
         {
-            // Fixture setup
-            // Exercise system
-            // Verify outcome
-            assertion.Verify(member);
-        }
-
-        [Spec]
-        [MemberData]
-        public void SutHasCorrectInitializedMembers(
-            MemberInfo member,
-            IFixture fixture)
-        {
-            // Fixture setup
-            var assertion = new ConstructorInitializedMemberAssertion(
-                fixture,
-                EqualityComparer<object>.Default,
-                new ParameterPropertyMatcher());
-
-            // Exercise system
-            // Verify outcome
-            assertion.Verify(member);
+            return base.GetGuardMembers()
+                .Exclude(t => t.GetMethods().Where(m => m.Name.StartsWith("LazyResolve")));
         }
 
         [Spec]
@@ -1582,17 +1558,6 @@ namespace Jwc.Funz
             // Verify outcome
             Assert.Equal(1, disposable1.Count);
             Assert.Equal(1, disposable3.Count);
-        }
-
-        private class MemberDataAttribute : DataAttribute
-        {
-            public override IEnumerable<object[]> GetData(MethodInfo methodUnderTest, Type[] parameterTypes)
-            {
-                return new MemberCollection<Container>(
-                    BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public | BindingFlags.DeclaredOnly)
-                .Exclude(t => t.GetMethods().Where(m => m.Name.StartsWith("LazyResolve")))
-                .Select(m => new object[] { m });
-            }
         }
 
         private class PublicMethodDataAttribute : DataAttribute

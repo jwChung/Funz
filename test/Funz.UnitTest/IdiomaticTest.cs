@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -11,8 +12,24 @@ namespace Jwc.Funz
 {
     public abstract class IdiomaticTest<TSUT>
     {
+        private const BindingFlags _bindingFlags =
+            BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public | BindingFlags.DeclaredOnly;
+
+        public virtual MemberCollection<TSUT> GetGuardMembers()
+        {
+            return new MemberCollection<TSUT>(_bindingFlags);
+        }
+
+        public virtual MemberCollection<TSUT> GetInitializedMembers()
+        {
+            return new MemberCollection<TSUT>(_bindingFlags);
+        }
+    }
+
+    public abstract class IdiomaticTest<TSUT, TTestClass> : IdiomaticTest<TSUT>
+    {
         [Spec]
-        [PropertyData("MemberData")]
+        [PropertyData("GuardMemberData")]
         public void SutHasAppropriateGuards(
             MemberInfo member,
             GuardClauseAssertion assertion)
@@ -24,7 +41,7 @@ namespace Jwc.Funz
         }
 
         [Spec]
-        [PropertyData("MemberData")]
+        [PropertyData("InitializedMemberData")]
         public void SutHasCorrectInitializedMembers(
             MemberInfo member,
             IFixture fixture)
@@ -40,13 +57,23 @@ namespace Jwc.Funz
             assertion.Verify(member);
         }
 
-        public static IEnumerable<object[]> MemberData
+        public static IEnumerable<object[]> GuardMemberData
         {
             get
             {
-                return new MemberCollection<TSUT>(
-                    BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public | BindingFlags.DeclaredOnly)
-                .Select(m => new object[] { m });
+                return ((IdiomaticTest<TSUT>)Activator.CreateInstance(typeof(TTestClass)))
+                    .GetGuardMembers()
+                    .Select(m => new object[] { m });
+            }
+        }
+
+        public static IEnumerable<object[]> InitializedMemberData
+        {
+            get
+            {
+                return ((IdiomaticTest<TSUT>)Activator.CreateInstance(typeof(TTestClass)))
+                    .GetInitializedMembers()
+                    .Select(m => new object[] { m });
             }
         }
     }
