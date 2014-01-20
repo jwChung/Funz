@@ -1562,6 +1562,28 @@ namespace Jwc.Funz
             Assert.Empty(exceptions);
         }
 
+        [Spec]
+        public void DisposeIfOneChildWereDisposedCorrectlyDisposesOtherChildren(
+            Container sut)
+        {
+            // Fixture setup
+            sut.Register(c => new Disposable()).ReusedWithinContainer();
+            var child1 = sut.CreateChild();
+            var child2 = sut.CreateChild();
+            var child3 = sut.CreateChild();
+            child2.Dispose();
+
+            var disposable1 = child1.Resolve<Disposable>();
+            var disposable3 = child3.Resolve<Disposable>();
+
+            // Exercise system
+            sut.Dispose();
+
+            // Verify outcome
+            Assert.Equal(1, disposable1.Count);
+            Assert.Equal(1, disposable3.Count);
+        }
+
         private class MemberDataAttribute : DataAttribute
         {
             public override IEnumerable<object[]> GetData(MethodInfo methodUnderTest, Type[] parameterTypes)

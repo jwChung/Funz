@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Globalization;
@@ -14,7 +15,7 @@ namespace Jwc.Funz
     {
         private static readonly object _noKey = new object();
 
-        private readonly ConcurrentBag<Container> _children = new ConcurrentBag<Container>();
+        private readonly ContainerCollection _children = new ContainerCollection();
         private readonly IDictionary<ServiceKey, Registration> _registry =
             new ConcurrentDictionary<ServiceKey, Registration>();
         private readonly Container _parent;
@@ -386,6 +387,10 @@ namespace Jwc.Funz
         /// <returns>
         /// The new child container.
         /// </returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage(
+            "Microsoft.Reliability",
+            "CA2000:Dispose objects before losing scope",
+            Justification = "The disposing process of the container will be performed explicitly.")]
         public Container CreateChild(object scope)
         {
             ThrowExceptionIfDisposed();
@@ -536,8 +541,7 @@ namespace Jwc.Funz
             if (_parent == null)
                 return;
 
-            Container container;
-            _parent._children.TryTake(out container);
+            _parent._children.Remove(this);
         }
 
         private void ThrowExceptionIfDisposed()
@@ -622,6 +626,35 @@ namespace Jwc.Funz
                 serviceType,
                 serviceKey.Key,
                 string.Join(", ", argumentTypes.Select(x => x.FullName))));
+        }
+
+        private class ContainerCollection : IEnumerable<Container>
+        {
+            private readonly IList<Container> _containers = new List<Container>();
+
+            public void Add(Container container)
+            {
+                lock (_containers)
+                    _containers.Add(container);
+
+            }
+
+            public void Remove(Container container)
+            {
+                lock (_containers)
+                    _containers.Remove(container);
+            }
+
+            public IEnumerator<Container> GetEnumerator()
+            {
+                lock (_containers)
+                    return ((IEnumerable<Container>)_containers.ToArray()).GetEnumerator();
+            }
+
+            IEnumerator IEnumerable.GetEnumerator()
+            {
+                return GetEnumerator();
+            }
         }
 
         private static class RecursionGuard
