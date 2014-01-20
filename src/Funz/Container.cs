@@ -636,7 +636,6 @@ namespace Jwc.Funz
             {
                 lock (_containers)
                     _containers.Add(container);
-
             }
 
             public void Remove(Container container)

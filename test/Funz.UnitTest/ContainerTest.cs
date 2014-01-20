@@ -1464,7 +1464,7 @@ namespace Jwc.Funz
             Assert.NotNull(actual2);
         }
 
-        [ExplicitSpec(Run.Skip)]
+        [Spec]
         public void ResolveShouldBeThreadSafe(
             Container sut)
         {
@@ -1475,7 +1475,7 @@ namespace Jwc.Funz
                 (s, e) => exceptions.Add((Exception)e.ExceptionObject);
 
             // Exercise system
-            var threads = new Thread[10000];
+            var threads = new Thread[1000];
             for (int i = 0; i < threads.Length; i++)
                 threads[i] = new Thread(() => sut.Resolve<Foo>());
 
@@ -1505,8 +1505,8 @@ namespace Jwc.Funz
             Assert.Equal(expected, actual);
         }
 
-        [ExplicitSpec(Run.Skip)]
-        public void ResolveOnChildShouldBeThreadSafe(
+        [Spec]
+        public void CreateChildAndDiposeShouldBeThreadSafe(
             Container sut)
         {
             // Fixture setup
@@ -1516,14 +1516,16 @@ namespace Jwc.Funz
                 (s, e) => exceptions.Add((Exception)e.ExceptionObject);
 
             // Exercise system
-            var threads = new Thread[10000];
+            var threads = new Thread[100];
             for (int i = 0; i < threads.Length; i++)
             {
                 threads[i] = new Thread(() =>
                 {
-                    using (var child = sut.CreateChild())
+                    for (int j = 0; j < 100; j++)
                     {
-                        child.Resolve<Foo>();
+                        using (sut.CreateChild())
+                        {
+                        }    
                     }
                 });
             }
@@ -1537,7 +1539,7 @@ namespace Jwc.Funz
             // Verify outcome
             Assert.Empty(exceptions);
         }
-
+        
         [Spec]
         public void DisposeIfOneChildWereDisposedCorrectlyDisposesOtherChildren(
             Container sut)
