@@ -26,7 +26,8 @@ namespace Jwc.Funz
         }
     }
 
-    public abstract class IdiomaticTest<TSUT, TTestClass> : IdiomaticTest<TSUT>
+    public abstract class IdiomaticTest<TSUT, TTestClass> 
+        : IdiomaticTest<TSUT> where TTestClass : IdiomaticTest<TSUT>
     {
         [Spec]
         [PropertyData("GuardMemberData")]
@@ -61,7 +62,7 @@ namespace Jwc.Funz
         {
             get
             {
-                return ((IdiomaticTest<TSUT>)Activator.CreateInstance(typeof(TTestClass)))
+                return Activator.CreateInstance<TTestClass>()
                     .GetGuardMembers()
                     .Select(m => new object[] { m });
             }
@@ -71,7 +72,7 @@ namespace Jwc.Funz
         {
             get
             {
-                return ((IdiomaticTest<TSUT>)Activator.CreateInstance(typeof(TTestClass)))
+                return Activator.CreateInstance<TTestClass>()
                     .GetInitializedMembers()
                     .Select(m => new object[] { m });
             }
