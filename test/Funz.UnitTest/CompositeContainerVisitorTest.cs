@@ -55,12 +55,12 @@ namespace Jwc.Funz
 
         [Spec]
         public void VisitMakesAllVisitorsVisitContainer(
-            CompositeContainerVisitor<int> sut,
+            [Inject] IContainerVisitor<int>[] visitors,
+            [Build] CompositeContainerVisitor<int> sut,
             Container container,
             IContainerVisitor<int>[] returnedVisitors)
         {
             // Fixture setup
-            var visitors = sut.Visitors.ToArray();
             Mock.Get(visitors[0]).Setup(x => x.Visit(container)).Returns(returnedVisitors[0]);
             Mock.Get(visitors[1]).Setup(x => x.Visit(container)).Returns(returnedVisitors[1]);
             Mock.Get(visitors[2]).Setup(x => x.Visit(container)).Returns(returnedVisitors[2]);
@@ -88,11 +88,11 @@ namespace Jwc.Funz
 
         [Spec]
         public void ResultReturnsEnumerableOfVisitorResult(
-            CompositeContainerVisitor<string> sut,
+            [Inject] IContainerVisitor<string>[] visitors,
+            [Build] CompositeContainerVisitor<string> sut,
             string[] expected)
         {
             // Fixture setup
-            var visitors = sut.Visitors.ToArray();
             Mock.Get(visitors[0]).SetupGet(x => x.Result).Returns(expected[0]);
             Mock.Get(visitors[1]).SetupGet(x => x.Result).Returns(expected[1]);
             Mock.Get(visitors[2]).SetupGet(x => x.Result).Returns(expected[2]);
