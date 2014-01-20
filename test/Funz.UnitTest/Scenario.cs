@@ -409,8 +409,10 @@ namespace Jwc.Funz
         {
             public object Result
             {
-                get;
-                private set;
+                get
+                {
+                    return null;
+                }
             }
 
             public IContainerVisitor<object> Visit(Container container)
@@ -423,10 +425,23 @@ namespace Jwc.Funz
 
         public class FooBuilder : IContainerVisitor<IFoo>
         {
+            private readonly IFoo _result;
+
+            public FooBuilder()
+            {
+            }
+
+            private FooBuilder(IFoo result)
+            {
+                _result = result;
+            }
+
             public IFoo Result
             {
-                get;
-                private set;
+                get
+                {
+                    return _result;
+                }
             }
 
             public IContainerVisitor<IFoo> Visit(Container container)
@@ -434,7 +449,7 @@ namespace Jwc.Funz
                 var foo = container.Resolve<IFoo>();
                 var bar = container.Resolve<IBar>();
                 foo.Bar = bar;
-                return new FooBuilder { Result = foo };
+                return new FooBuilder(foo);
             }
         }
     }
