@@ -57,24 +57,20 @@ namespace Jwc.Funz
         public void VisitMakesAllVisitorsVisitContainer(
             CompositContainerVisitor<int> sut,
             Container container,
-            IContainerVisitor<int>[] returnedVisitors,
-            int[] expected)
+            IContainerVisitor<int>[] returnedVisitors)
         {
             // Fixture setup
-            Mock.Get(returnedVisitors[0]).SetupGet(x => x.Result).Returns(expected[0]);
-            Mock.Get(returnedVisitors[1]).SetupGet(x => x.Result).Returns(expected[1]);
-            Mock.Get(returnedVisitors[2]).SetupGet(x => x.Result).Returns(expected[2]);
-            
             var visitors = sut.Visitors.ToArray();
             Mock.Get(visitors[0]).Setup(x => x.Visit(container)).Returns(returnedVisitors[0]);
             Mock.Get(visitors[1]).Setup(x => x.Visit(container)).Returns(returnedVisitors[1]);
             Mock.Get(visitors[2]).Setup(x => x.Visit(container)).Returns(returnedVisitors[2]);
             
             // Exercise system
-            var actual = sut.Visit(container).Result;
+            var actual = sut.Visit(container);
 
             // Verify outcome
-            Assert.Equal(expected, actual);
+            var result = Assert.IsType<CompositContainerVisitor<int>>(actual);
+            Assert.Equal(returnedVisitors, result.Visitors);
         }
 
         [Spec]
@@ -88,6 +84,24 @@ namespace Jwc.Funz
 
             // Verify outcome
             Assert.NotEqual(sut, actual);
+        }
+
+        [Spec]
+        public void ResultReturnsEnumerableOfVisitorResult(
+            CompositContainerVisitor<string> sut,
+            string[] expected)
+        {
+            // Fixture setup
+            var visitors = sut.Visitors.ToArray();
+            Mock.Get(visitors[0]).SetupGet(x => x.Result).Returns(expected[0]);
+            Mock.Get(visitors[1]).SetupGet(x => x.Result).Returns(expected[1]);
+            Mock.Get(visitors[2]).SetupGet(x => x.Result).Returns(expected[2]);
+
+            // Exercise system
+            var actual = sut.Result;
+
+            // Verify outcome
+            Assert.Equal(expected, actual);
         }
 
         private class GuardMemberDataAttribute : DataAttribute

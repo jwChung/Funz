@@ -7,7 +7,6 @@ namespace Jwc.Funz
     public class CompositContainerVisitor<TResult> : IContainerVisitor<IEnumerable<TResult>>
     {
         private readonly IContainerVisitor<TResult>[] _visitors;
-        private readonly IEnumerable<TResult> _result;
 
         public CompositContainerVisitor(params IContainerVisitor<TResult>[] visitors)
         {
@@ -17,16 +16,11 @@ namespace Jwc.Funz
             _visitors = visitors;
         }
 
-        private CompositContainerVisitor(IEnumerable<TResult> result)
-        {
-            _result = result;
-        }
-
         public IEnumerable<TResult> Result
         {
             get
             {
-                return _result;
+                return _visitors.Select(v => v.Result);
             }
         }
 
@@ -43,8 +37,8 @@ namespace Jwc.Funz
             if (container == null)
                 throw new ArgumentNullException("container");
 
-            var result = Visitors.Select(v => v.Visit(container).Result);
-            return new CompositContainerVisitor<TResult>(result);
+            var newVisitors = Visitors.Select(v => v.Visit(container)).ToArray();
+            return new CompositContainerVisitor<TResult>(newVisitors);
         }
     }
 }
