@@ -39,6 +39,9 @@ namespace Jwc.Funz
         /// <summary>
         /// Gets a value indicating the visitors composed.
         /// </summary>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage(
+            "Microsoft.Design",
+            "CA1006:DoNotNestGenericTypesInMemberSignatures")]
         public IEnumerable<IContainerVisitor<TResult>> Visitors
         {
             get
