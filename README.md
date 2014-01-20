@@ -3,7 +3,7 @@ Overview
 Funz is a variation of [Funq] to provide some features as the following.
 Check out scenario tests to get [how to use].
 
- * Makes all the public mehtods of the Container class thead-safe.
+ * Makes all the public methods of the Container class thead-safe.
  * Releases serivce instances when a container disposes, which fixes the out of memory issue. (see [here])
  * Supports the custom scope scenario. (see the CreateChild(scope) and the ReusedWithin(scope) methods)
  * Etc
