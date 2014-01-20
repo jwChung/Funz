@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Xunit;
 
 namespace Jwc.Funz
@@ -332,7 +333,7 @@ namespace Jwc.Funz
         [VersionSpec(0, 2, 0)]
         public void ContainerVisitorCanBeUsedToBatchRegistrations(
             Container container,
-            RegistrationBatch batch)
+            BatchRegistration batch)
         {
             // Fixture setup
             container.Accept(batch);
@@ -349,7 +350,7 @@ namespace Jwc.Funz
         [VersionSpec(0, 2, 0)]
         public void ContainerVisitorCanProvideOtherFunction(
             Container container,
-            RegistrationBatch batch,
+            BatchRegistration batch,
             FooBuilder builder)
         {
             // Fixture setup
@@ -361,6 +362,30 @@ namespace Jwc.Funz
             // Verify outcome
             Assert.IsType<Foo>(actual);
             Assert.IsType<Bar>(actual.Bar);
+        }
+
+        [VersionSpec(0, 2, 0)]
+        public void CompositeContainerVisitorCorrectlyComposesVisitors(
+            Container container,
+            BatchRegistration batch,
+            FooBuilder fooBuilder,
+            BarBuilder barBuilder)
+        {
+            // Fixture setup
+            var visitors = new CompositeContainerVisitor<object>(batch, fooBuilder, barBuilder);
+
+            // Exercise system
+            var actual = container.Accept(visitors);
+
+            // Verify outcome
+            var result = actual.Result.ToArray();
+
+            Assert.Null(result[0]);
+            var foo = Assert.IsType<Foo>(result[1]);
+            var bar = Assert.IsType<Bar>(result[2]);
+
+            Assert.Same(foo, bar.Foo);
+            Assert.Same(bar, foo.Bar);
         }
 
         public interface IFoo
@@ -405,7 +430,7 @@ namespace Jwc.Funz
             }
         }
 
-        public class RegistrationBatch : IContainerVisitor<object>
+        public class BatchRegistration : IContainerVisitor<object>
         {
             public object Result
             {
@@ -450,6 +475,36 @@ namespace Jwc.Funz
                 var bar = container.Resolve<IBar>();
                 foo.Bar = bar;
                 return new FooBuilder(foo);
+            }
+        }
+
+        public class BarBuilder : IContainerVisitor<IBar>
+        {
+            private readonly IBar _result;
+
+            public BarBuilder()
+            {
+            }
+
+            private BarBuilder(IBar result)
+            {
+                _result = result;
+            }
+
+            public IBar Result
+            {
+                get
+                {
+                    return _result;
+                }
+            }
+
+            public IContainerVisitor<IBar> Visit(Container container)
+            {
+                var foo = container.Resolve<IFoo>();
+                var bar = container.Resolve<IBar>();
+                bar.Foo = foo;
+                return new BarBuilder(bar);
             }
         }
     }
