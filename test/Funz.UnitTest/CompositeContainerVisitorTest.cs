@@ -12,7 +12,7 @@ using Xunit.Extensions;
 
 namespace Jwc.Funz
 {
-    public class CompositContainerVisitorTest
+    public class CompositeContainerVisitorTest
     {
         [Spec]
         [GuardMemberData]
@@ -45,7 +45,7 @@ namespace Jwc.Funz
         
         [Spec]
         public void SutIsContainerVisitorOfEnumerable(
-            CompositContainerVisitor<string> sut)
+            CompositeContainerVisitor<string> sut)
         {
             // Fixture setup
             // Exercise system
@@ -55,7 +55,7 @@ namespace Jwc.Funz
 
         [Spec]
         public void VisitMakesAllVisitorsVisitContainer(
-            CompositContainerVisitor<int> sut,
+            CompositeContainerVisitor<int> sut,
             Container container,
             IContainerVisitor<int>[] returnedVisitors)
         {
@@ -69,13 +69,13 @@ namespace Jwc.Funz
             var actual = sut.Visit(container);
 
             // Verify outcome
-            var result = Assert.IsType<CompositContainerVisitor<int>>(actual);
+            var result = Assert.IsType<CompositeContainerVisitor<int>>(actual);
             Assert.Equal(returnedVisitors, result.Visitors);
         }
 
         [Spec]
         public void VisitReturnsNewInstance(
-            CompositContainerVisitor<int> sut,
+            CompositeContainerVisitor<int> sut,
             Container container)
         {
             // Fixture setup
@@ -88,7 +88,7 @@ namespace Jwc.Funz
 
         [Spec]
         public void ResultReturnsEnumerableOfVisitorResult(
-            CompositContainerVisitor<string> sut,
+            CompositeContainerVisitor<string> sut,
             string[] expected)
         {
             // Fixture setup
@@ -108,7 +108,7 @@ namespace Jwc.Funz
         {
             public override IEnumerable<object[]> GetData(MethodInfo methodUnderTest, Type[] parameterTypes)
             {
-                return new MemberCollection<CompositContainerVisitor<object>>(
+                return new MemberCollection<CompositeContainerVisitor<object>>(
                     BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public | BindingFlags.DeclaredOnly)
                 .Select(m => new object[] { m });
             }
@@ -118,7 +118,7 @@ namespace Jwc.Funz
         {
             public override IEnumerable<object[]> GetData(MethodInfo methodUnderTest, Type[] parameterTypes)
             {
-                return new MemberCollection<CompositContainerVisitor<object>>(
+                return new MemberCollection<CompositeContainerVisitor<object>>(
                     BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public | BindingFlags.DeclaredOnly)
                 .Exclude(x => x.Result)
                 .Select(m => new object[] { m });

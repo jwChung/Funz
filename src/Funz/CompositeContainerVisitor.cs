@@ -4,15 +4,15 @@ using System.Linq;
 
 namespace Jwc.Funz
 {
-    public class CompositContainerVisitor<TResult> : IContainerVisitor<IEnumerable<TResult>>
+    public class CompositeContainerVisitor<TResult> : IContainerVisitor<IEnumerable<TResult>>
     {
         private readonly IContainerVisitor<TResult>[] _visitors;
 
-        public CompositContainerVisitor(params IContainerVisitor<TResult>[] visitors)
+        public CompositeContainerVisitor(params IContainerVisitor<TResult>[] visitors)
         {
             if (visitors == null)
                 throw new ArgumentNullException("visitors");
-
+            
             _visitors = visitors;
         }
 
@@ -24,7 +24,7 @@ namespace Jwc.Funz
             }
         }
 
-        public IContainerVisitor<TResult>[] Visitors
+        public IEnumerable<IContainerVisitor<TResult>> Visitors
         {
             get
             {
@@ -38,7 +38,7 @@ namespace Jwc.Funz
                 throw new ArgumentNullException("container");
 
             var newVisitors = Visitors.Select(v => v.Visit(container)).ToArray();
-            return new CompositContainerVisitor<TResult>(newVisitors);
+            return new CompositeContainerVisitor<TResult>(newVisitors);
         }
     }
 }
