@@ -1698,6 +1698,34 @@ namespace Jwc.Funz
             Assert.True(actual, "CanResolve");
         }
 
+        [Spec]
+        public void CanResolveKeyedNonRegisteredServiceWithArgumentReturnsFalse(
+            Container sut,
+            object key)
+        {
+            // Fixture setup
+            // Exercise system
+            var actual = sut.CanResolveKeyed<Foo, string>(key);
+
+            // Verify outcome
+            Assert.False(actual, "CanResolve");
+        }
+
+        [Spec]
+        public void CanResolveKeyedRegisteredServiceWithArgumentReturnsTrue(
+            Container sut,
+            object key)
+        {
+            // Fixture setup
+            sut.Register<Foo, string>(key, (c, s) => new Foo(s));
+
+            // Exercise system
+            var actual = sut.CanResolveKeyed<Foo, string>(key);
+
+            // Verify outcome
+            Assert.True(actual, "CanResolve");
+        }
+
         private class PublicMethodDataAttribute : DataAttribute
         {
             public override IEnumerable<object[]> GetData(MethodInfo methodUnderTest, Type[] parameterTypes)
