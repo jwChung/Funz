@@ -408,7 +408,7 @@ namespace Jwc.Funz
         {
             // Fixture setup
             sut.Register(c => new Dummy()).ReusedWithinContainer();
-
+            
             // Exercise system
             // Verify outcome
             Assert.DoesNotThrow(() =>
@@ -1616,6 +1616,58 @@ namespace Jwc.Funz
             // Verify outcome
             Assert.Equal(1, disposable1.Count);
             Assert.Equal(1, disposable3.Count);
+        }
+
+        [Spec]
+        public void CanResolveNonRegisteredServiceReturnsFalse(
+            Container sut)
+        {
+            // Fixture setup
+            // Exercise system
+            var actual = sut.CanResolve<Foo>();
+
+            // Verify outcome
+            Assert.False(actual, "CanResolve");
+        }
+
+        [Spec]
+        public void CanResolveRegisteredServiceReturnsTrue(
+            Container sut)
+        {
+            // Fixture setup
+            sut.Register(c => new Foo());
+
+            // Exercise system
+            var actual = sut.CanResolve<Foo>();
+
+            // Verify outcome
+            Assert.True(actual, "CanResolve");
+        }
+
+        [Spec]
+        public void CanResolveNonRegisteredServiceWithArgumentReturnsFalse(
+            Container sut)
+        {
+            // Fixture setup
+            // Exercise system
+            var actual = sut.CanResolve<Foo, string>();
+
+            // Verify outcome
+            Assert.False(actual, "CanResolve");
+        }
+
+        [Spec]
+        public void CanResolveRegisteredServiceWithArgumentReturnsTrue(
+            Container sut)
+        {
+            // Fixture setup
+            sut.Register<Foo, string>((c, s) => new Foo(s));
+
+            // Exercise system
+            var actual = sut.CanResolve<Foo, string>();
+
+            // Verify outcome
+            Assert.True(actual, "CanResolve");
         }
 
         private class PublicMethodDataAttribute : DataAttribute

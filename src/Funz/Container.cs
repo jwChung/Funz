@@ -366,6 +366,29 @@ namespace Jwc.Funz
         }
 
         /// <summary>
+        /// Determines whether this container can resolve a service of the type or not.
+        /// </summary>
+        /// <typeparam name="TService">Type of the service to retrieve.</typeparam>
+        /// <returns>The result whether this container can resolve.</returns>
+        public bool CanResolve<TService>()
+        {
+            var serviceKey = new ServiceKey(typeof(Func<Container, TService>), _noKey);
+            return GetRegistration<Func<Container, TService>, TService>(serviceKey, false) != null;
+        }
+        
+        /// <summary>
+        /// Determines whether this container can resolve a service of the type or not.
+        /// </summary>
+        /// <typeparam name="TService">Type of the service to retrieve.</typeparam>
+        /// <typeparam name="TArg">The type of the first argument.</typeparam>
+        /// <returns>The result whether this container can resolve.</returns>
+        public bool CanResolve<TService, TArg>()
+        {
+            var serviceKey = new ServiceKey(typeof(Func<Container, TArg, TService>), _noKey);
+            return GetRegistration<Func<Container, TArg, TService>, TService>(serviceKey, false) != null;
+        }
+
+        /// <summary>
         /// Creates a child container of the current one, which exposes its
         /// current service registration to the new child container.
         /// </summary>
