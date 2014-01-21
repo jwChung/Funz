@@ -50,9 +50,9 @@
       <DependentUpon>Container.Register.tt</DependentUpon>
     </Compile>
     <Compile Include="Container.LazyResolve.cs">
-      <DependentUpon>Container.LazyResolve.tt</DependentUpon>
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
+      <DependentUpon>Container.LazyResolve.tt</DependentUpon>
     </Compile>
     <Compile Include="Container.CanResolve.cs">
       <AutoGen>True</AutoGen>
@@ -100,6 +100,7 @@
       <LastGenOutput>Container.LazyResolve.cs</LastGenOutput>
     </None>
     <None Include="Container.CanResolve.tt">
+      <DependentUpon>Container.cs</DependentUpon>
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>Container.CanResolve.cs</LastGenOutput>
     </None>
