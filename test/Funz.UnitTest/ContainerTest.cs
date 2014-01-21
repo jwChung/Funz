@@ -1471,16 +1471,99 @@ namespace Jwc.Funz
             // Fixture setup
             sut.Register(c => new Foo());
             var exceptions = new ConcurrentBag<Exception>();
-            UnhandledExceptionEventHandler handler = (s, e) => exceptions.Add((Exception)e.ExceptionObject);
+
+            UnhandledExceptionEventHandler handler =
+                (s, e) => exceptions.Add((Exception)e.ExceptionObject);
+            AppDomain.CurrentDomain.UnhandledException += handler;
+
+            var threads = new Thread[100];
+            for (int i = 0; i < threads.Length; i++)
+                threads[i] = new Thread(() => sut.Resolve<Foo>());
+
             try
             {
-                AppDomain.CurrentDomain.UnhandledException += handler;
-
                 // Exercise system
-                var threads = new Thread[1000];
-                for (int i = 0; i < threads.Length; i++)
-                    threads[i] = new Thread(() => sut.Resolve<Foo>());
+                foreach (Thread thread in threads)
+                    thread.Start();
 
+                foreach (Thread thread in threads)
+                    thread.Join();
+
+                // Verify outcome
+                Assert.Empty(exceptions);
+            }
+            finally
+            {
+                // Teardown
+                AppDomain.CurrentDomain.UnhandledException -= handler;
+            }
+        }
+
+        [Spec]
+        public void CreateChildShouldBeThreadSafe(
+            Container sut)
+        {
+            // Fixture setup
+            sut.Register(c => new StaticDisposable()).ReusedWithinContainer();
+            var threads = new Thread[100];
+            for (int i = 0; i < threads.Length; i++)
+            {
+                threads[i] = new Thread(() =>
+                {
+                    for (int j = 0; j < 100; j++)
+                    {
+                        var child = sut.CreateChild();
+                        child.Resolve<StaticDisposable>();
+                    }
+                });
+            }
+
+            try
+            {
+                // Exercise sysetm
+                foreach (Thread thread in threads)
+                    thread.Start();
+
+                foreach (Thread thread in threads)
+                    thread.Join();
+
+                // Verify outcome
+                sut.Dispose();
+                Assert.Equal(threads.Length * 100, StaticDisposable.Count);
+            }
+            finally
+            {
+                // Teardown
+                StaticDisposable.Count = 0;
+            }
+        }
+
+        [Spec]
+        public void DisposeShouldBeThreadSafe(
+            Container sut)
+        {
+            // Fixture setup
+            var exceptions = new ConcurrentBag<Exception>();
+
+            UnhandledExceptionEventHandler handler =
+                (s, e) => exceptions.Add((Exception)e.ExceptionObject);
+            AppDomain.CurrentDomain.UnhandledException += handler;
+
+            var threads = new Thread[100];
+            for (int i = 0; i < threads.Length; i++)
+            {
+                threads[i] = new Thread(() =>
+                {
+                    for (int j = 0; j < 100; j++)
+                    {
+                        using (sut.CreateChild()) { }
+                    }
+                });
+            }
+
+            try
+            {
+                // Exercise system
                 foreach (Thread thread in threads)
                     thread.Start();
 
@@ -1511,49 +1594,6 @@ namespace Jwc.Funz
 
             // Verify outcome
             Assert.Equal(expected, actual);
-        }
-
-        [Spec]
-        public void CreateChildAndDiposeShouldBeThreadSafe(
-            Container sut)
-        {
-            // Fixture setup
-            sut.Register(c => new Foo());
-            var exceptions = new ConcurrentBag<Exception>();
-            UnhandledExceptionEventHandler handler = (s, e) => exceptions.Add((Exception)e.ExceptionObject);
-            try
-            {
-                AppDomain.CurrentDomain.UnhandledException += handler;
-
-                // Exercise system
-                var threads = new Thread[100];
-                for (int i = 0; i < threads.Length; i++)
-                {
-                    threads[i] = new Thread(() =>
-                    {
-                        for (int j = 0; j < 100; j++)
-                        {
-                            using (sut.CreateChild())
-                            {
-                            }
-                        }
-                    });
-                }
-
-                foreach (Thread thread in threads)
-                    thread.Start();
-
-                foreach (Thread thread in threads)
-                    thread.Join();
-
-                // Verify outcome
-                Assert.Empty(exceptions);
-            }
-            finally
-            {
-                // Teardown
-                AppDomain.CurrentDomain.UnhandledException -= handler;
-            }
         }
 
         [Spec]
@@ -1691,6 +1731,28 @@ namespace Jwc.Funz
             protected override void Dispose(bool disposing)
             {
                 base.Dispose(Disposing);
+            }
+        }
+
+        public class StaticDisposable : IDisposable
+        {
+            private static int _count;
+
+            public static int Count
+            {
+                get
+                {
+                    return _count;
+                }
+                set
+                {
+                    _count = value;
+                }
+            }
+
+            public void Dispose()
+            {
+                Interlocked.Increment(ref _count);
             }
         }
     }
