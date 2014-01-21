@@ -322,6 +322,20 @@ namespace Jwc.Funz
         }
 
         /// <summary>
+        /// Determines whether this container can resolve a keyed service of the type or not.
+        /// </summary>
+        /// <typeparam name="TService">The type of the service to retrieve.</typeparam>
+        /// <param name="key">The key of the service to retrieve.</param>
+        /// <returns>
+        /// The result whether this container can resolve.
+        /// </returns>
+        public bool CanResolveKeyed<TService>(object key)
+        {
+            var serviceKey = new ServiceKey(typeof(Func<Container, TService>), key);
+            return GetRegistration<Func<Container, TService>, TService>(serviceKey, false) != null;
+        }
+
+        /// <summary>
         /// Creates a child container of the current one, which exposes its
         /// current service registration to the new child container.
         /// </summary>
