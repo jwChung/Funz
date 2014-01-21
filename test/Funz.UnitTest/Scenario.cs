@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using Jwc.AutoFixture.Xunit;
 using Xunit;
 
 namespace Jwc.Funz
@@ -386,6 +387,32 @@ namespace Jwc.Funz
 
             Assert.Same(foo, bar.Foo);
             Assert.Same(bar, foo.Bar);
+        }
+
+        [VersionSpec(0, 3, 0)]
+        public void CanResolveNotRegisteredServideReturnsFalse(
+            Container container)
+        {
+            // Fixture setup
+            // Exercise system
+            var actual = container.CanResolve<IFoo>();
+
+            // Verify outcome
+            Assert.False(actual, "CanResolve");
+        }
+
+        [VersionSpec(0, 3, 0)]
+        public void CanResolveRegisteredServideReturnsTrue(
+            Container container)
+        {
+            // Fixture setup
+            container.Register<IFoo>(c => new Foo());
+
+            // Exercise system
+            var actual = container.CanResolve<IFoo>();
+
+            // Verify outcome
+            Assert.True(actual, "CanResolve");
         }
 
         public interface IFoo
