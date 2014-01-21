@@ -20,8 +20,7 @@ namespace Jwc.Funz
 		[DebuggerStepThrough]
         public bool CanResolve<TService, TArg1, TArg2>()
         {
-            var serviceKey = new ServiceKey(typeof(Func<Container, TArg1, TArg2, TService>), _noKey);
-            return GetRegistration<Func<Container, TArg1, TArg2, TService>, TService>(serviceKey, false) != null;
+            return CanResolveImpl<Func<Container, TArg1, TArg2, TService>, TService>(_noKey);
         }
 
 		/// <summary>
@@ -36,8 +35,7 @@ namespace Jwc.Funz
 		[DebuggerStepThrough]
         public bool CanResolveKeyed<TService, TArg1, TArg2>(object key)
         {
-            var serviceKey = new ServiceKey(typeof(Func<Container, TArg1, TArg2, TService>), key);
-            return GetRegistration<Func<Container, TArg1, TArg2, TService>, TService>(serviceKey, false) != null;
+            return CanResolveImpl<Func<Container, TArg1, TArg2, TService>, TService>(key);
         }
 
         /// <summary>
@@ -52,8 +50,7 @@ namespace Jwc.Funz
 		[DebuggerStepThrough]
         public bool CanResolve<TService, TArg1, TArg2, TArg3>()
         {
-            var serviceKey = new ServiceKey(typeof(Func<Container, TArg1, TArg2, TArg3, TService>), _noKey);
-            return GetRegistration<Func<Container, TArg1, TArg2, TArg3, TService>, TService>(serviceKey, false) != null;
+            return CanResolveImpl<Func<Container, TArg1, TArg2, TArg3, TService>, TService>(_noKey);
         }
 
 		/// <summary>
@@ -68,8 +65,7 @@ namespace Jwc.Funz
 		[DebuggerStepThrough]
         public bool CanResolveKeyed<TService, TArg1, TArg2, TArg3>(object key)
         {
-            var serviceKey = new ServiceKey(typeof(Func<Container, TArg1, TArg2, TArg3, TService>), key);
-            return GetRegistration<Func<Container, TArg1, TArg2, TArg3, TService>, TService>(serviceKey, false) != null;
+            return CanResolveImpl<Func<Container, TArg1, TArg2, TArg3, TService>, TService>(key);
         }
 
         /// <summary>
@@ -84,8 +80,7 @@ namespace Jwc.Funz
 		[DebuggerStepThrough]
         public bool CanResolve<TService, TArg1, TArg2, TArg3, TArg4>()
         {
-            var serviceKey = new ServiceKey(typeof(Func<Container, TArg1, TArg2, TArg3, TArg4, TService>), _noKey);
-            return GetRegistration<Func<Container, TArg1, TArg2, TArg3, TArg4, TService>, TService>(serviceKey, false) != null;
+            return CanResolveImpl<Func<Container, TArg1, TArg2, TArg3, TArg4, TService>, TService>(_noKey);
         }
 
 		/// <summary>
@@ -100,8 +95,7 @@ namespace Jwc.Funz
 		[DebuggerStepThrough]
         public bool CanResolveKeyed<TService, TArg1, TArg2, TArg3, TArg4>(object key)
         {
-            var serviceKey = new ServiceKey(typeof(Func<Container, TArg1, TArg2, TArg3, TArg4, TService>), key);
-            return GetRegistration<Func<Container, TArg1, TArg2, TArg3, TArg4, TService>, TService>(serviceKey, false) != null;
+            return CanResolveImpl<Func<Container, TArg1, TArg2, TArg3, TArg4, TService>, TService>(key);
         }
 
         /// <summary>
@@ -116,8 +110,7 @@ namespace Jwc.Funz
 		[DebuggerStepThrough]
         public bool CanResolve<TService, TArg1, TArg2, TArg3, TArg4, TArg5>()
         {
-            var serviceKey = new ServiceKey(typeof(Func<Container, TArg1, TArg2, TArg3, TArg4, TArg5, TService>), _noKey);
-            return GetRegistration<Func<Container, TArg1, TArg2, TArg3, TArg4, TArg5, TService>, TService>(serviceKey, false) != null;
+            return CanResolveImpl<Func<Container, TArg1, TArg2, TArg3, TArg4, TArg5, TService>, TService>(_noKey);
         }
 
 		/// <summary>
@@ -132,8 +125,7 @@ namespace Jwc.Funz
 		[DebuggerStepThrough]
         public bool CanResolveKeyed<TService, TArg1, TArg2, TArg3, TArg4, TArg5>(object key)
         {
-            var serviceKey = new ServiceKey(typeof(Func<Container, TArg1, TArg2, TArg3, TArg4, TArg5, TService>), key);
-            return GetRegistration<Func<Container, TArg1, TArg2, TArg3, TArg4, TArg5, TService>, TService>(serviceKey, false) != null;
+            return CanResolveImpl<Func<Container, TArg1, TArg2, TArg3, TArg4, TArg5, TService>, TService>(key);
         }
 
         /// <summary>
@@ -148,8 +140,7 @@ namespace Jwc.Funz
 		[DebuggerStepThrough]
         public bool CanResolve<TService, TArg1, TArg2, TArg3, TArg4, TArg5, TArg6>()
         {
-            var serviceKey = new ServiceKey(typeof(Func<Container, TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TService>), _noKey);
-            return GetRegistration<Func<Container, TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TService>, TService>(serviceKey, false) != null;
+            return CanResolveImpl<Func<Container, TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TService>, TService>(_noKey);
         }
 
 		/// <summary>
@@ -164,8 +155,7 @@ namespace Jwc.Funz
 		[DebuggerStepThrough]
         public bool CanResolveKeyed<TService, TArg1, TArg2, TArg3, TArg4, TArg5, TArg6>(object key)
         {
-            var serviceKey = new ServiceKey(typeof(Func<Container, TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TService>), key);
-            return GetRegistration<Func<Container, TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TService>, TService>(serviceKey, false) != null;
+            return CanResolveImpl<Func<Container, TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TService>, TService>(key);
         }
 
         /// <summary>
@@ -180,8 +170,7 @@ namespace Jwc.Funz
 		[DebuggerStepThrough]
         public bool CanResolve<TService, TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7>()
         {
-            var serviceKey = new ServiceKey(typeof(Func<Container, TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TService>), _noKey);
-            return GetRegistration<Func<Container, TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TService>, TService>(serviceKey, false) != null;
+            return CanResolveImpl<Func<Container, TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TService>, TService>(_noKey);
         }
 
 		/// <summary>
@@ -196,8 +185,7 @@ namespace Jwc.Funz
 		[DebuggerStepThrough]
         public bool CanResolveKeyed<TService, TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7>(object key)
         {
-            var serviceKey = new ServiceKey(typeof(Func<Container, TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TService>), key);
-            return GetRegistration<Func<Container, TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TService>, TService>(serviceKey, false) != null;
+            return CanResolveImpl<Func<Container, TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TService>, TService>(key);
         }
 
         /// <summary>
@@ -212,8 +200,7 @@ namespace Jwc.Funz
 		[DebuggerStepThrough]
         public bool CanResolve<TService, TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8>()
         {
-            var serviceKey = new ServiceKey(typeof(Func<Container, TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TService>), _noKey);
-            return GetRegistration<Func<Container, TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TService>, TService>(serviceKey, false) != null;
+            return CanResolveImpl<Func<Container, TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TService>, TService>(_noKey);
         }
 
 		/// <summary>
@@ -228,8 +215,7 @@ namespace Jwc.Funz
 		[DebuggerStepThrough]
         public bool CanResolveKeyed<TService, TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8>(object key)
         {
-            var serviceKey = new ServiceKey(typeof(Func<Container, TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TService>), key);
-            return GetRegistration<Func<Container, TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TService>, TService>(serviceKey, false) != null;
+            return CanResolveImpl<Func<Container, TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TService>, TService>(key);
         }
 
         /// <summary>
@@ -244,8 +230,7 @@ namespace Jwc.Funz
 		[DebuggerStepThrough]
         public bool CanResolve<TService, TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9>()
         {
-            var serviceKey = new ServiceKey(typeof(Func<Container, TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TService>), _noKey);
-            return GetRegistration<Func<Container, TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TService>, TService>(serviceKey, false) != null;
+            return CanResolveImpl<Func<Container, TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TService>, TService>(_noKey);
         }
 
 		/// <summary>
@@ -260,8 +245,7 @@ namespace Jwc.Funz
 		[DebuggerStepThrough]
         public bool CanResolveKeyed<TService, TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9>(object key)
         {
-            var serviceKey = new ServiceKey(typeof(Func<Container, TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TService>), key);
-            return GetRegistration<Func<Container, TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TService>, TService>(serviceKey, false) != null;
+            return CanResolveImpl<Func<Container, TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TService>, TService>(key);
         }
 
         /// <summary>
@@ -276,8 +260,7 @@ namespace Jwc.Funz
 		[DebuggerStepThrough]
         public bool CanResolve<TService, TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10>()
         {
-            var serviceKey = new ServiceKey(typeof(Func<Container, TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TService>), _noKey);
-            return GetRegistration<Func<Container, TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TService>, TService>(serviceKey, false) != null;
+            return CanResolveImpl<Func<Container, TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TService>, TService>(_noKey);
         }
 
 		/// <summary>
@@ -292,8 +275,7 @@ namespace Jwc.Funz
 		[DebuggerStepThrough]
         public bool CanResolveKeyed<TService, TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10>(object key)
         {
-            var serviceKey = new ServiceKey(typeof(Func<Container, TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TService>), key);
-            return GetRegistration<Func<Container, TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TService>, TService>(serviceKey, false) != null;
+            return CanResolveImpl<Func<Container, TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TService>, TService>(key);
         }
 
         /// <summary>
@@ -308,8 +290,7 @@ namespace Jwc.Funz
 		[DebuggerStepThrough]
         public bool CanResolve<TService, TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11>()
         {
-            var serviceKey = new ServiceKey(typeof(Func<Container, TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TService>), _noKey);
-            return GetRegistration<Func<Container, TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TService>, TService>(serviceKey, false) != null;
+            return CanResolveImpl<Func<Container, TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TService>, TService>(_noKey);
         }
 
 		/// <summary>
@@ -324,8 +305,7 @@ namespace Jwc.Funz
 		[DebuggerStepThrough]
         public bool CanResolveKeyed<TService, TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11>(object key)
         {
-            var serviceKey = new ServiceKey(typeof(Func<Container, TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TService>), key);
-            return GetRegistration<Func<Container, TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TService>, TService>(serviceKey, false) != null;
+            return CanResolveImpl<Func<Container, TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TService>, TService>(key);
         }
 
         /// <summary>
@@ -340,8 +320,7 @@ namespace Jwc.Funz
 		[DebuggerStepThrough]
         public bool CanResolve<TService, TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12>()
         {
-            var serviceKey = new ServiceKey(typeof(Func<Container, TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TService>), _noKey);
-            return GetRegistration<Func<Container, TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TService>, TService>(serviceKey, false) != null;
+            return CanResolveImpl<Func<Container, TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TService>, TService>(_noKey);
         }
 
 		/// <summary>
@@ -356,8 +335,7 @@ namespace Jwc.Funz
 		[DebuggerStepThrough]
         public bool CanResolveKeyed<TService, TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12>(object key)
         {
-            var serviceKey = new ServiceKey(typeof(Func<Container, TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TService>), key);
-            return GetRegistration<Func<Container, TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TService>, TService>(serviceKey, false) != null;
+            return CanResolveImpl<Func<Container, TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TService>, TService>(key);
         }
 
         /// <summary>
@@ -372,8 +350,7 @@ namespace Jwc.Funz
 		[DebuggerStepThrough]
         public bool CanResolve<TService, TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13>()
         {
-            var serviceKey = new ServiceKey(typeof(Func<Container, TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, TService>), _noKey);
-            return GetRegistration<Func<Container, TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, TService>, TService>(serviceKey, false) != null;
+            return CanResolveImpl<Func<Container, TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, TService>, TService>(_noKey);
         }
 
 		/// <summary>
@@ -388,8 +365,7 @@ namespace Jwc.Funz
 		[DebuggerStepThrough]
         public bool CanResolveKeyed<TService, TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13>(object key)
         {
-            var serviceKey = new ServiceKey(typeof(Func<Container, TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, TService>), key);
-            return GetRegistration<Func<Container, TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, TService>, TService>(serviceKey, false) != null;
+            return CanResolveImpl<Func<Container, TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, TService>, TService>(key);
         }
 
         /// <summary>
@@ -404,8 +380,7 @@ namespace Jwc.Funz
 		[DebuggerStepThrough]
         public bool CanResolve<TService, TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, TArg14>()
         {
-            var serviceKey = new ServiceKey(typeof(Func<Container, TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, TArg14, TService>), _noKey);
-            return GetRegistration<Func<Container, TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, TArg14, TService>, TService>(serviceKey, false) != null;
+            return CanResolveImpl<Func<Container, TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, TArg14, TService>, TService>(_noKey);
         }
 
 		/// <summary>
@@ -420,8 +395,7 @@ namespace Jwc.Funz
 		[DebuggerStepThrough]
         public bool CanResolveKeyed<TService, TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, TArg14>(object key)
         {
-            var serviceKey = new ServiceKey(typeof(Func<Container, TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, TArg14, TService>), key);
-            return GetRegistration<Func<Container, TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, TArg14, TService>, TService>(serviceKey, false) != null;
+            return CanResolveImpl<Func<Container, TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, TArg14, TService>, TService>(key);
         }
 
     }

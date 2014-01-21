@@ -306,8 +306,7 @@ namespace Jwc.Funz
             "CA1004:GenericMethodsShouldProvideTypeParameter")]
         public bool CanResolve<TService>()
         {
-            var serviceKey = new ServiceKey(typeof(Func<Container, TService>), _noKey);
-            return GetRegistration<Func<Container, TService>, TService>(serviceKey, false) != null;
+            return CanResolveImpl<Func<Container, TService>, TService>(_noKey);
         }
 
         /// <summary>
@@ -323,8 +322,7 @@ namespace Jwc.Funz
             "CA1004:GenericMethodsShouldProvideTypeParameter")]
         public bool CanResolve<TService, TArg>()
         {
-            var serviceKey = new ServiceKey(typeof(Func<Container, TArg, TService>), _noKey);
-            return GetRegistration<Func<Container, TArg, TService>, TService>(serviceKey, false) != null;
+            return CanResolveImpl<Func<Container, TArg, TService>, TService>(_noKey);
         }
 
         /// <summary>
@@ -340,8 +338,7 @@ namespace Jwc.Funz
             "CA1004:GenericMethodsShouldProvideTypeParameter")]
         public bool CanResolveKeyed<TService>(object key)
         {
-            var serviceKey = new ServiceKey(typeof(Func<Container, TService>), key);
-            return GetRegistration<Func<Container, TService>, TService>(serviceKey, false) != null;
+            return CanResolveImpl<Func<Container, TService>, TService>(key);
         }
 
         /// <summary>
@@ -358,8 +355,7 @@ namespace Jwc.Funz
             "CA1004:GenericMethodsShouldProvideTypeParameter")]
         public bool CanResolveKeyed<TService, TArg>(object key)
         {
-            var serviceKey = new ServiceKey(typeof(Func<Container, TArg, TService>), key);
-            return GetRegistration<Func<Container, TArg, TService>, TService>(serviceKey, false) != null;
+            return CanResolveImpl<Func<Container, TArg, TService>, TService>(key);
         }
 
         /// <summary>
@@ -495,6 +491,11 @@ namespace Jwc.Funz
                 registration.Service = service;
                 return service;
             }
+        }
+
+        private bool CanResolveImpl<TFunc, TService>(object key)
+        {
+            return GetRegistration<TFunc, TService>(new ServiceKey(typeof(TFunc), key), false) != null;
         }
 
         private Registration<TFunc, TService> GetRegistration<TFunc, TService>(ServiceKey serviceKey, bool throws)

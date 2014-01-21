@@ -29,8 +29,7 @@ for (var typeCount = 2; typeCount <= GenericTypeMax - 2; typeCount++)
 		[DebuggerStepThrough]
         public bool CanResolve<TService, <#=typeList#>>()
         {
-            var serviceKey = new ServiceKey(typeof(Func<Container, <#=typeList#>, TService>), _noKey);
-            return GetRegistration<Func<Container, <#=typeList#>, TService>, TService>(serviceKey, false) != null;
+            return CanResolveImpl<Func<Container, <#=typeList#>, TService>, TService>(_noKey);
         }
 
 		/// <summary>
@@ -45,8 +44,7 @@ for (var typeCount = 2; typeCount <= GenericTypeMax - 2; typeCount++)
 		[DebuggerStepThrough]
         public bool CanResolveKeyed<TService, <#=typeList#>>(object key)
         {
-            var serviceKey = new ServiceKey(typeof(Func<Container, <#=typeList#>, TService>), key);
-            return GetRegistration<Func<Container, <#=typeList#>, TService>, TService>(serviceKey, false) != null;
+            return CanResolveImpl<Func<Container, <#=typeList#>, TService>, TService>(key);
         }
 
 <#
