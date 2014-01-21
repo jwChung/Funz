@@ -16,8 +16,6 @@ namespace Jwc.Funz
 for (var typeCount = 2; typeCount <= GenericTypeMax - 2; typeCount++)
 {
     var typeList = GetGenericList(typeCount, "TArg{0}");
-    var argumentList = GetGenericList(typeCount, "TArg{0} arg{0}");
-    var valueList = GetGenericList(typeCount, "arg{0}");
 #>
         /// <summary>
         /// Determines whether this container can resolve a service of the type or not.
