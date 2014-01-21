@@ -9,7 +9,7 @@ namespace Jwc.Funz
 {
     /// <summary>
     /// Main container class for components, supporting container hierarchies and
-    /// lifetime management of <see cref="IDisposable"/> instances.
+    /// lifetime management of <see cref="IDisposable" /> instances.
     /// </summary>
     public partial class Container : IDisposable
     {
@@ -23,7 +23,7 @@ namespace Jwc.Funz
         private bool _disposed;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Container"/> class.
+        /// Initializes a new instance of the <see cref="Container" /> class.
         /// </summary>
         public Container()
             : this(new object())
@@ -31,16 +31,20 @@ namespace Jwc.Funz
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Container"/> class with container scope.
+        /// Initializes a new instance of the <see cref="Container" /> class with container scope.
         /// </summary>
-        /// <param name="scope">
-        /// The scope to represent custom lifetime.
-        /// </param>
+        /// <param name="scope">The scope to represent custom lifetime.</param>
         public Container(object scope)
             : this(null, scope)
         {
         }
 
+        /// <summary>
+        /// Prevents a default instance of the <see cref="Container"/> class from being created.
+        /// </summary>
+        /// <param name="parent">The parent.</param>
+        /// <param name="scope">The scope.</param>
+        /// <exception cref="System.ArgumentNullException">scope</exception>
         private Container(Container parent, object scope)
         {
             if (scope == null)
@@ -55,6 +59,9 @@ namespace Jwc.Funz
         /// <summary>
         /// Gets a value indicating the container scope.
         /// </summary>
+        /// <value>
+        /// The scope.
+        /// </value>
         public object Scope
         {
             get
@@ -68,12 +75,8 @@ namespace Jwc.Funz
         /// <summary>
         /// Registers the given service by providing a factory delegate to instantiate it.
         /// </summary>
-        /// <param name="factory">
-        /// The factory delegate to initialize new instances of the service when needed.
-        /// </param>
-        /// <typeparam name="TService">
-        /// The service type to register.
-        /// </typeparam>
+        /// <typeparam name="TService">The service type to register.</typeparam>
+        /// <param name="factory">The factory delegate to initialize new instances of the service when needed.</param>
         /// <returns>
         /// The registration object to perform further configuration via its fluent interface.
         /// </returns>
@@ -85,15 +88,9 @@ namespace Jwc.Funz
         /// <summary>
         /// Registers the given service by providing a factory delegate to instantiate it.
         /// </summary>
-        /// <param name="factory">
-        /// The factory delegate to initialize new instances of the service when needed.
-        /// </param>
-        /// <typeparam name="TService">
-        /// The service type to register.
-        /// </typeparam>
-        /// <typeparam name="TArg">
-        /// First argument that should be passed to the factory delegate to create the instace.
-        /// </typeparam>
+        /// <typeparam name="TService">The service type to register.</typeparam>
+        /// <typeparam name="TArg">First argument that should be passed to the factory delegate to create the instace.</typeparam>
+        /// <param name="factory">The factory delegate to initialize new instances of the service when needed.</param>
         /// <returns>
         /// The registration object to perform further configuration via its fluent interface.
         /// </returns>
@@ -105,15 +102,9 @@ namespace Jwc.Funz
         /// <summary>
         /// Registers the given service by providing a factory delegate to instantiate it.
         /// </summary>
-        /// <param name="key">
-        /// A key used to differenciate this service registration.
-        /// </param>
-        /// <param name="factory">
-        /// The factory delegate to initialize new instances of the service when needed.
-        /// </param>
-        /// <typeparam name="TService">
-        /// The service type to register.
-        /// </typeparam>
+        /// <typeparam name="TService">The service type to register.</typeparam>
+        /// <param name="key">A key used to differenciate this service registration.</param>
+        /// <param name="factory">The factory delegate to initialize new instances of the service when needed.</param>
         /// <returns>
         /// The registration object to perform further configuration via its fluent interface.
         /// </returns>
@@ -125,18 +116,10 @@ namespace Jwc.Funz
         /// <summary>
         /// Registers the given service by providing a factory delegate to instantiate it.
         /// </summary>
-        /// <param name="key">
-        /// A key used to differenciate this service registration.
-        /// </param>
-        /// <param name="factory">
-        /// The factory delegate to initialize new instances of the service when needed.
-        /// </param>
-        /// <typeparam name="TService">
-        /// The service type to register.
-        /// </typeparam>
-        /// <typeparam name="TArg">
-        /// First argument that should be passed to the factory delegate to create the instace.
-        /// </typeparam>
+        /// <typeparam name="TService">The service type to register.</typeparam>
+        /// <typeparam name="TArg">First argument that should be passed to the factory delegate to create the instace.</typeparam>
+        /// <param name="key">A key used to differenciate this service registration.</param>
+        /// <param name="factory">The factory delegate to initialize new instances of the service when needed.</param>
         /// <returns>
         /// The registration object to perform further configuration via its fluent interface.
         /// </returns>
@@ -148,9 +131,7 @@ namespace Jwc.Funz
         /// <summary>
         /// Resolves the given service by type, without passing any arguments for its construction.
         /// </summary>
-        /// <typeparam name="TService">
-        /// Type of the service to retrieve.
-        /// </typeparam>
+        /// <typeparam name="TService">The type of the service to retrieve.</typeparam>
         /// <returns>
         /// The resolved service instance.
         /// </returns>
@@ -162,15 +143,9 @@ namespace Jwc.Funz
         /// <summary>
         /// Resolves the given service by type, without passing any arguments for its construction.
         /// </summary>
-        /// <param name="arg">
-        /// The first argument to pass to the factory delegate that may create the instace.
-        /// </param>
-        /// <typeparam name="TService">
-        /// Type of the service to retrieve.
-        /// </typeparam>
-        /// <typeparam name="TArg">
-        /// Type of the first argument.
-        /// </typeparam>
+        /// <typeparam name="TService">The type of the service to retrieve.</typeparam>
+        /// <typeparam name="TArg">The type of the first argument.</typeparam>
+        /// <param name="arg">The first argument to pass to the factory delegate that may create the instace.</param>
         /// <returns>
         /// The resolved service instance.
         /// </returns>
@@ -182,12 +157,8 @@ namespace Jwc.Funz
         /// <summary>
         /// Resolves the given service by type and key, without passing arguments for its initialization.
         /// </summary>
-        /// <param name="key">
-        /// The key of the service to retrieve.
-        /// </param>
-        /// <typeparam name="TService">
-        /// Type of the service to retrieve.
-        /// </typeparam>
+        /// <typeparam name="TService">The type of the service to retrieve.</typeparam>
+        /// <param name="key">The key of the service to retrieve.</param>
         /// <returns>
         /// The resolved service instance.
         /// </returns>
@@ -199,18 +170,10 @@ namespace Jwc.Funz
         /// <summary>
         /// Resolves the given service by type and key, without passing arguments for its initialization.
         /// </summary>
-        /// <param name="key">
-        /// The key of the service to retrieve.
-        /// </param>
-        /// <param name="arg">
-        /// The first argument to pass to the factory delegate that may create the instace.
-        /// </param>
-        /// <typeparam name="TService">
-        /// Type of the service to retrieve.
-        /// </typeparam>
-        /// <typeparam name="TArg">
-        /// Type of the first argument.
-        /// </typeparam>
+        /// <typeparam name="TService">The type of the service to retrieve.</typeparam>
+        /// <typeparam name="TArg">The type of the first argument.</typeparam>
+        /// <param name="key">The key of the service to retrieve.</param>
+        /// <param name="arg">The first argument to pass to the factory delegate that may create the instace.</param>
         /// <returns>
         /// The resolved service instance.
         /// </returns>
@@ -223,9 +186,7 @@ namespace Jwc.Funz
         /// Tries to resolve the given service by type, without passing any arguments for its construction.
         /// If the service is not registered, it will return a default value of the type.
         /// </summary>
-        /// <typeparam name="TService">
-        /// Type of the service to retrieve.
-        /// </typeparam>
+        /// <typeparam name="TService">The type of the service to retrieve.</typeparam>
         /// <returns>
         /// The resolved service instance.
         /// </returns>
@@ -238,15 +199,9 @@ namespace Jwc.Funz
         /// Tries to resolve the given service by type, without passing any arguments for its construction.
         /// If the service is not registered, it will return a default value of the type.
         /// </summary>
-        /// <param name="arg">
-        /// The first argument to pass to the factory delegate that may create the instace.
-        /// </param>
-        /// <typeparam name="TService">
-        /// Type of the service to retrieve.
-        /// </typeparam>
-        /// <typeparam name="TArg">
-        /// Type of the first argument.
-        /// </typeparam>
+        /// <typeparam name="TService">The type of the service to retrieve.</typeparam>
+        /// <typeparam name="TArg">The type of the first argument.</typeparam>
+        /// <param name="arg">The first argument to pass to the factory delegate that may create the instace.</param>
         /// <returns>
         /// The resolved service instance.
         /// </returns>
@@ -259,12 +214,8 @@ namespace Jwc.Funz
         /// Tries to resolve the given service by type and key, without passing arguments for its initialization.
         /// If the service is not registered, it will return a default value of the type.
         /// </summary>
-        /// <param name="key">
-        /// The key of the service to retrieve.
-        /// </param>
-        /// <typeparam name="TService">
-        /// Type of the service to retrieve.
-        /// </typeparam>
+        /// <typeparam name="TService">The type of the service to retrieve.</typeparam>
+        /// <param name="key">The key of the service to retrieve.</param>
         /// <returns>
         /// The resolved service instance.
         /// </returns>
@@ -277,18 +228,12 @@ namespace Jwc.Funz
         /// Tries to resolve the given service by type and key, without passing arguments for its initialization.
         /// If the service is not registered, it will return a default value of the type.
         /// </summary>
-        /// <param name="key">
-        /// The key of the service to retrieve.
-        /// </param>
+        /// <typeparam name="TService">The type of the service to retrieve.</typeparam>
+        /// <typeparam name="TArg">The type of the first argument.</typeparam>
+        /// <param name="key">The key of the service to retrieve.</param>
         /// <param name="arg">
         /// The first argument to pass to the factory delegate that may create the instace.
         /// </param>
-        /// <typeparam name="TService">
-        /// Type of the service to retrieve.
-        /// </typeparam>
-        /// <typeparam name="TArg">
-        /// Type of the first argument.
-        /// </typeparam>
         /// <returns>
         /// The resolved service instance.
         /// </returns>
@@ -300,9 +245,7 @@ namespace Jwc.Funz
         /// <summary>
         /// Resolves the given factory by type, without passing any arguments for its construction.
         /// </summary>
-        /// <typeparam name="TService">
-        /// Type of the service to retrieve.
-        /// </typeparam>
+        /// <typeparam name="TService">The type of the service to retrieve.</typeparam>
         /// <returns>
         /// The resolved service factory.
         /// </returns>
@@ -314,12 +257,8 @@ namespace Jwc.Funz
         /// <summary>
         /// Resolves the given factory by type, without passing any arguments for its construction.
         /// </summary>
-        /// <typeparam name="TService">
-        /// Type of the service to retrieve.
-        /// </typeparam>
-        /// <typeparam name="TArg">
-        /// Type of the first argument.
-        /// </typeparam>
+        /// <typeparam name="TService">The type of the service to retrieve.</typeparam>
+        /// <typeparam name="TArg">The type of the first argument.</typeparam>
         /// <returns>
         /// The resolved service factory.
         /// </returns>
@@ -331,12 +270,8 @@ namespace Jwc.Funz
         /// <summary>
         /// Resolves the given factory by type and key, without passing arguments for its initialization.
         /// </summary>
-        /// <param name="key">
-        /// The key of the service to retrieve.
-        /// </param>
-        /// <typeparam name="TService">
-        /// Type of the service to retrieve.
-        /// </typeparam>
+        /// <typeparam name="TService">The type of the service to retrieve.</typeparam>
+        /// <param name="key">The key of the service to retrieve.</param>
         /// <returns>
         /// The resolved service factory.
         /// </returns>
@@ -348,15 +283,9 @@ namespace Jwc.Funz
         /// <summary>
         /// Resolves the given factory by type and key, without passing arguments for its initialization.
         /// </summary>
-        /// <param name="key">
-        /// The key of the service to retrieve.
-        /// </param>
-        /// <typeparam name="TService">
-        /// Type of the service to retrieve.
-        /// </typeparam>
-        /// <typeparam name="TArg">
-        /// Type of the first argument.
-        /// </typeparam>
+        /// <typeparam name="TService">The type of the service to retrieve.</typeparam>
+        /// <typeparam name="TArg">The type of the first argument.</typeparam>
+        /// <param name="key">The key of the service to retrieve.</param>
         /// <returns>
         /// The resolved service factory.
         /// </returns>
@@ -368,20 +297,24 @@ namespace Jwc.Funz
         /// <summary>
         /// Determines whether this container can resolve a service of the type or not.
         /// </summary>
-        /// <typeparam name="TService">Type of the service to retrieve.</typeparam>
-        /// <returns>The result whether this container can resolve.</returns>
+        /// <typeparam name="TService">The type of the service to retrieve.</typeparam>
+        /// <returns>
+        /// The result whether this container can resolve.
+        /// </returns>
         public bool CanResolve<TService>()
         {
             var serviceKey = new ServiceKey(typeof(Func<Container, TService>), _noKey);
             return GetRegistration<Func<Container, TService>, TService>(serviceKey, false) != null;
         }
-        
+
         /// <summary>
         /// Determines whether this container can resolve a service of the type or not.
         /// </summary>
-        /// <typeparam name="TService">Type of the service to retrieve.</typeparam>
+        /// <typeparam name="TService">The type of the service to retrieve.</typeparam>
         /// <typeparam name="TArg">The type of the first argument.</typeparam>
-        /// <returns>The result whether this container can resolve.</returns>
+        /// <returns>
+        /// The result whether this container can resolve.
+        /// </returns>
         public bool CanResolve<TService, TArg>()
         {
             var serviceKey = new ServiceKey(typeof(Func<Container, TArg, TService>), _noKey);
