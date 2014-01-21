@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using Jwc.AutoFixture.Xunit;
 using Xunit;
 
 namespace Jwc.Funz
