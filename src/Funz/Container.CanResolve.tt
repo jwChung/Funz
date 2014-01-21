@@ -23,6 +23,9 @@ for (var typeCount = 2; typeCount <= GenericTypeMax - 2; typeCount++)
         /// <returns>
         /// The result whether this container can resolve.
         /// </returns>
+		[System.Diagnostics.CodeAnalysis.SuppressMessage(
+            "Microsoft.Design",
+            "CA1004:GenericMethodsShouldProvideTypeParameter")]
 		[DebuggerStepThrough]
         public bool CanResolve<TService, <#=typeList#>>()
         {
@@ -36,6 +39,9 @@ for (var typeCount = 2; typeCount <= GenericTypeMax - 2; typeCount++)
         /// <returns>
         /// The result whether this container can resolve.
         /// </returns>
+		[System.Diagnostics.CodeAnalysis.SuppressMessage(
+            "Microsoft.Design",
+            "CA1004:GenericMethodsShouldProvideTypeParameter")]
 		[DebuggerStepThrough]
         public bool CanResolveKeyed<TService, <#=typeList#>>(object key)
         {

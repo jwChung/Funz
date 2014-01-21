@@ -14,6 +14,9 @@ namespace Jwc.Funz
         /// <returns>
         /// The result whether this container can resolve.
         /// </returns>
+		[System.Diagnostics.CodeAnalysis.SuppressMessage(
+            "Microsoft.Design",
+            "CA1004:GenericMethodsShouldProvideTypeParameter")]
 		[DebuggerStepThrough]
         public bool CanResolve<TService, TArg1, TArg2>()
         {
@@ -27,6 +30,9 @@ namespace Jwc.Funz
         /// <returns>
         /// The result whether this container can resolve.
         /// </returns>
+		[System.Diagnostics.CodeAnalysis.SuppressMessage(
+            "Microsoft.Design",
+            "CA1004:GenericMethodsShouldProvideTypeParameter")]
 		[DebuggerStepThrough]
         public bool CanResolveKeyed<TService, TArg1, TArg2>(object key)
         {
@@ -40,6 +46,9 @@ namespace Jwc.Funz
         /// <returns>
         /// The result whether this container can resolve.
         /// </returns>
+		[System.Diagnostics.CodeAnalysis.SuppressMessage(
+            "Microsoft.Design",
+            "CA1004:GenericMethodsShouldProvideTypeParameter")]
 		[DebuggerStepThrough]
         public bool CanResolve<TService, TArg1, TArg2, TArg3>()
         {
@@ -53,6 +62,9 @@ namespace Jwc.Funz
         /// <returns>
         /// The result whether this container can resolve.
         /// </returns>
+		[System.Diagnostics.CodeAnalysis.SuppressMessage(
+            "Microsoft.Design",
+            "CA1004:GenericMethodsShouldProvideTypeParameter")]
 		[DebuggerStepThrough]
         public bool CanResolveKeyed<TService, TArg1, TArg2, TArg3>(object key)
         {
@@ -66,6 +78,9 @@ namespace Jwc.Funz
         /// <returns>
         /// The result whether this container can resolve.
         /// </returns>
+		[System.Diagnostics.CodeAnalysis.SuppressMessage(
+            "Microsoft.Design",
+            "CA1004:GenericMethodsShouldProvideTypeParameter")]
 		[DebuggerStepThrough]
         public bool CanResolve<TService, TArg1, TArg2, TArg3, TArg4>()
         {
@@ -79,6 +94,9 @@ namespace Jwc.Funz
         /// <returns>
         /// The result whether this container can resolve.
         /// </returns>
+		[System.Diagnostics.CodeAnalysis.SuppressMessage(
+            "Microsoft.Design",
+            "CA1004:GenericMethodsShouldProvideTypeParameter")]
 		[DebuggerStepThrough]
         public bool CanResolveKeyed<TService, TArg1, TArg2, TArg3, TArg4>(object key)
         {
@@ -92,6 +110,9 @@ namespace Jwc.Funz
         /// <returns>
         /// The result whether this container can resolve.
         /// </returns>
+		[System.Diagnostics.CodeAnalysis.SuppressMessage(
+            "Microsoft.Design",
+            "CA1004:GenericMethodsShouldProvideTypeParameter")]
 		[DebuggerStepThrough]
         public bool CanResolve<TService, TArg1, TArg2, TArg3, TArg4, TArg5>()
         {
@@ -105,6 +126,9 @@ namespace Jwc.Funz
         /// <returns>
         /// The result whether this container can resolve.
         /// </returns>
+		[System.Diagnostics.CodeAnalysis.SuppressMessage(
+            "Microsoft.Design",
+            "CA1004:GenericMethodsShouldProvideTypeParameter")]
 		[DebuggerStepThrough]
         public bool CanResolveKeyed<TService, TArg1, TArg2, TArg3, TArg4, TArg5>(object key)
         {
@@ -118,6 +142,9 @@ namespace Jwc.Funz
         /// <returns>
         /// The result whether this container can resolve.
         /// </returns>
+		[System.Diagnostics.CodeAnalysis.SuppressMessage(
+            "Microsoft.Design",
+            "CA1004:GenericMethodsShouldProvideTypeParameter")]
 		[DebuggerStepThrough]
         public bool CanResolve<TService, TArg1, TArg2, TArg3, TArg4, TArg5, TArg6>()
         {
@@ -131,6 +158,9 @@ namespace Jwc.Funz
         /// <returns>
         /// The result whether this container can resolve.
         /// </returns>
+		[System.Diagnostics.CodeAnalysis.SuppressMessage(
+            "Microsoft.Design",
+            "CA1004:GenericMethodsShouldProvideTypeParameter")]
 		[DebuggerStepThrough]
         public bool CanResolveKeyed<TService, TArg1, TArg2, TArg3, TArg4, TArg5, TArg6>(object key)
         {
@@ -144,6 +174,9 @@ namespace Jwc.Funz
         /// <returns>
         /// The result whether this container can resolve.
         /// </returns>
+		[System.Diagnostics.CodeAnalysis.SuppressMessage(
+            "Microsoft.Design",
+            "CA1004:GenericMethodsShouldProvideTypeParameter")]
 		[DebuggerStepThrough]
         public bool CanResolve<TService, TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7>()
         {
@@ -157,6 +190,9 @@ namespace Jwc.Funz
         /// <returns>
         /// The result whether this container can resolve.
         /// </returns>
+		[System.Diagnostics.CodeAnalysis.SuppressMessage(
+            "Microsoft.Design",
+            "CA1004:GenericMethodsShouldProvideTypeParameter")]
 		[DebuggerStepThrough]
         public bool CanResolveKeyed<TService, TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7>(object key)
         {
@@ -170,6 +206,9 @@ namespace Jwc.Funz
         /// <returns>
         /// The result whether this container can resolve.
         /// </returns>
+		[System.Diagnostics.CodeAnalysis.SuppressMessage(
+            "Microsoft.Design",
+            "CA1004:GenericMethodsShouldProvideTypeParameter")]
 		[DebuggerStepThrough]
         public bool CanResolve<TService, TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8>()
         {
@@ -183,6 +222,9 @@ namespace Jwc.Funz
         /// <returns>
         /// The result whether this container can resolve.
         /// </returns>
+		[System.Diagnostics.CodeAnalysis.SuppressMessage(
+            "Microsoft.Design",
+            "CA1004:GenericMethodsShouldProvideTypeParameter")]
 		[DebuggerStepThrough]
         public bool CanResolveKeyed<TService, TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8>(object key)
         {
@@ -196,6 +238,9 @@ namespace Jwc.Funz
         /// <returns>
         /// The result whether this container can resolve.
         /// </returns>
+		[System.Diagnostics.CodeAnalysis.SuppressMessage(
+            "Microsoft.Design",
+            "CA1004:GenericMethodsShouldProvideTypeParameter")]
 		[DebuggerStepThrough]
         public bool CanResolve<TService, TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9>()
         {
@@ -209,6 +254,9 @@ namespace Jwc.Funz
         /// <returns>
         /// The result whether this container can resolve.
         /// </returns>
+		[System.Diagnostics.CodeAnalysis.SuppressMessage(
+            "Microsoft.Design",
+            "CA1004:GenericMethodsShouldProvideTypeParameter")]
 		[DebuggerStepThrough]
         public bool CanResolveKeyed<TService, TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9>(object key)
         {
@@ -222,6 +270,9 @@ namespace Jwc.Funz
         /// <returns>
         /// The result whether this container can resolve.
         /// </returns>
+		[System.Diagnostics.CodeAnalysis.SuppressMessage(
+            "Microsoft.Design",
+            "CA1004:GenericMethodsShouldProvideTypeParameter")]
 		[DebuggerStepThrough]
         public bool CanResolve<TService, TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10>()
         {
@@ -235,6 +286,9 @@ namespace Jwc.Funz
         /// <returns>
         /// The result whether this container can resolve.
         /// </returns>
+		[System.Diagnostics.CodeAnalysis.SuppressMessage(
+            "Microsoft.Design",
+            "CA1004:GenericMethodsShouldProvideTypeParameter")]
 		[DebuggerStepThrough]
         public bool CanResolveKeyed<TService, TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10>(object key)
         {
@@ -248,6 +302,9 @@ namespace Jwc.Funz
         /// <returns>
         /// The result whether this container can resolve.
         /// </returns>
+		[System.Diagnostics.CodeAnalysis.SuppressMessage(
+            "Microsoft.Design",
+            "CA1004:GenericMethodsShouldProvideTypeParameter")]
 		[DebuggerStepThrough]
         public bool CanResolve<TService, TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11>()
         {
@@ -261,6 +318,9 @@ namespace Jwc.Funz
         /// <returns>
         /// The result whether this container can resolve.
         /// </returns>
+		[System.Diagnostics.CodeAnalysis.SuppressMessage(
+            "Microsoft.Design",
+            "CA1004:GenericMethodsShouldProvideTypeParameter")]
 		[DebuggerStepThrough]
         public bool CanResolveKeyed<TService, TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11>(object key)
         {
@@ -274,6 +334,9 @@ namespace Jwc.Funz
         /// <returns>
         /// The result whether this container can resolve.
         /// </returns>
+		[System.Diagnostics.CodeAnalysis.SuppressMessage(
+            "Microsoft.Design",
+            "CA1004:GenericMethodsShouldProvideTypeParameter")]
 		[DebuggerStepThrough]
         public bool CanResolve<TService, TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12>()
         {
@@ -287,6 +350,9 @@ namespace Jwc.Funz
         /// <returns>
         /// The result whether this container can resolve.
         /// </returns>
+		[System.Diagnostics.CodeAnalysis.SuppressMessage(
+            "Microsoft.Design",
+            "CA1004:GenericMethodsShouldProvideTypeParameter")]
 		[DebuggerStepThrough]
         public bool CanResolveKeyed<TService, TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12>(object key)
         {
@@ -300,6 +366,9 @@ namespace Jwc.Funz
         /// <returns>
         /// The result whether this container can resolve.
         /// </returns>
+		[System.Diagnostics.CodeAnalysis.SuppressMessage(
+            "Microsoft.Design",
+            "CA1004:GenericMethodsShouldProvideTypeParameter")]
 		[DebuggerStepThrough]
         public bool CanResolve<TService, TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13>()
         {
@@ -313,6 +382,9 @@ namespace Jwc.Funz
         /// <returns>
         /// The result whether this container can resolve.
         /// </returns>
+		[System.Diagnostics.CodeAnalysis.SuppressMessage(
+            "Microsoft.Design",
+            "CA1004:GenericMethodsShouldProvideTypeParameter")]
 		[DebuggerStepThrough]
         public bool CanResolveKeyed<TService, TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13>(object key)
         {
@@ -326,6 +398,9 @@ namespace Jwc.Funz
         /// <returns>
         /// The result whether this container can resolve.
         /// </returns>
+		[System.Diagnostics.CodeAnalysis.SuppressMessage(
+            "Microsoft.Design",
+            "CA1004:GenericMethodsShouldProvideTypeParameter")]
 		[DebuggerStepThrough]
         public bool CanResolve<TService, TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, TArg14>()
         {
@@ -339,6 +414,9 @@ namespace Jwc.Funz
         /// <returns>
         /// The result whether this container can resolve.
         /// </returns>
+		[System.Diagnostics.CodeAnalysis.SuppressMessage(
+            "Microsoft.Design",
+            "CA1004:GenericMethodsShouldProvideTypeParameter")]
 		[DebuggerStepThrough]
         public bool CanResolveKeyed<TService, TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, TArg14>(object key)
         {

@@ -301,6 +301,9 @@ namespace Jwc.Funz
         /// <returns>
         /// The result whether this container can resolve.
         /// </returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage(
+            "Microsoft.Design",
+            "CA1004:GenericMethodsShouldProvideTypeParameter")]
         public bool CanResolve<TService>()
         {
             var serviceKey = new ServiceKey(typeof(Func<Container, TService>), _noKey);
@@ -315,6 +318,9 @@ namespace Jwc.Funz
         /// <returns>
         /// The result whether this container can resolve.
         /// </returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage(
+            "Microsoft.Design",
+            "CA1004:GenericMethodsShouldProvideTypeParameter")]
         public bool CanResolve<TService, TArg>()
         {
             var serviceKey = new ServiceKey(typeof(Func<Container, TArg, TService>), _noKey);
@@ -329,6 +335,9 @@ namespace Jwc.Funz
         /// <returns>
         /// The result whether this container can resolve.
         /// </returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage(
+            "Microsoft.Design",
+            "CA1004:GenericMethodsShouldProvideTypeParameter")]
         public bool CanResolveKeyed<TService>(object key)
         {
             var serviceKey = new ServiceKey(typeof(Func<Container, TService>), key);
@@ -344,6 +353,9 @@ namespace Jwc.Funz
         /// <returns>
         /// The result whether this container can resolve.
         /// </returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage(
+            "Microsoft.Design",
+            "CA1004:GenericMethodsShouldProvideTypeParameter")]
         public bool CanResolveKeyed<TService, TArg>(object key)
         {
             var serviceKey = new ServiceKey(typeof(Func<Container, TArg, TService>), key);
