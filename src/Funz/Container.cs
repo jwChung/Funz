@@ -39,12 +39,6 @@ namespace Jwc.Funz
         {
         }
 
-        /// <summary>
-        /// Prevents a default instance of the <see cref="Container"/> class from being created.
-        /// </summary>
-        /// <param name="parent">The parent.</param>
-        /// <param name="scope">The scope.</param>
-        /// <exception cref="System.ArgumentNullException">scope</exception>
         private Container(Container parent, object scope)
         {
             if (scope == null)
