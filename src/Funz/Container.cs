@@ -322,7 +322,7 @@ namespace Jwc.Funz
         }
 
         /// <summary>
-        /// Determines whether this container can resolve a keyed service of the type or not.
+        /// Determines whether this container can resolve a service of the type with the key or not.
         /// </summary>
         /// <typeparam name="TService">The type of the service to retrieve.</typeparam>
         /// <param name="key">The key of the service to retrieve.</param>
@@ -336,7 +336,7 @@ namespace Jwc.Funz
         }
 
         /// <summary>
-        /// Determines whether this container can resolve a keyed service of the type or not.
+        /// Determines whether this container can resolve a service of the type with the key or not.
         /// </summary>
         /// <typeparam name="TService">The type of the service to retrieve.</typeparam>
         /// <typeparam name="TArg">The type of the first argument.</typeparam>

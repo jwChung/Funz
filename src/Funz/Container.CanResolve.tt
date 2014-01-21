@@ -1,0 +1,53 @@
+﻿<#@ Template Debug="false" HostSpecific="false" Language="C#" #>
+<#@ Output Extension=".cs" #>
+<#@ Assembly Name="System.Core" #>
+<#@ Import Namespace="System.Linq" #>
+using System;
+using System.Diagnostics;
+
+namespace Jwc.Funz
+{
+    public partial class Container
+    {
+        /* Contain just the typed overloads that are just pass-through to the real implementations.
+         * They all have DebuggerStepThrough to ease debugging. */
+
+<#
+for (var typeCount = 2; typeCount <= GenericTypeMax - 2; typeCount++)
+{
+    var typeList = GetGenericList(typeCount, "TArg{0}");
+    var argumentList = GetGenericList(typeCount, "TArg{0} arg{0}");
+    var valueList = GetGenericList(typeCount, "arg{0}");
+#>
+        /// <summary>
+        /// Determines whether this container can resolve a service of the type or not.
+        /// </summary>
+        /// <returns>
+        /// The result whether this container can resolve.
+        /// </returns>
+		[DebuggerStepThrough]
+        public bool CanResolve<TService, <#=typeList#>>()
+        {
+            var serviceKey = new ServiceKey(typeof(Func<Container, <#=typeList#>, TService>), _noKey);
+            return GetRegistration<Func<Container, <#=typeList#>, TService>, TService>(serviceKey, false) != null;
+        }
+
+		/// <summary>
+        /// Determines whether this container can resolve a service of the type with the key or not.
+        /// </summary>
+        /// <returns>
+        /// The result whether this container can resolve.
+        /// </returns>
+		[DebuggerStepThrough]
+        public bool CanResolveKeyed<TService, <#=typeList#>>(object key)
+        {
+            var serviceKey = new ServiceKey(typeof(Func<Container, <#=typeList#>, TService>), key);
+            return GetRegistration<Func<Container, <#=typeList#>, TService>, TService>(serviceKey, false) != null;
+        }
+
+<#
+}
+#>
+    }
+}
+<#@ Include File="Helpers.tt" #>

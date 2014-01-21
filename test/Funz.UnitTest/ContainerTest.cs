@@ -1726,6 +1726,60 @@ namespace Jwc.Funz
             Assert.True(actual, "CanResolve");
         }
 
+        [Spec]
+        public void CanResolveNonRegisteredServiceIfCreatedByTemplateReturnsFalse(
+            Container sut)
+        {
+            // Fixture setup
+            // Exercise system
+            var actual = sut.CanResolve<Bar, object, int, string>();
+
+            // Verify outcome
+            Assert.False(actual, "CanResolve");
+        }
+
+        [Spec]
+        public void CanResolveRegisteredServiceIfCreatedByTemplateReturnsTrue(
+            Container sut)
+        {
+            // Fixture setup
+            sut.Register<Bar, object, int, string>((c, o, i, s) => new Bar(o, i, s));
+
+            // Exercise system
+            var actual = sut.CanResolve<Bar, object, int, string>();
+
+            // Verify outcome
+            Assert.True(actual, "CanResolve");
+        }
+
+        [Spec]
+        public void CanResolveKeyedNonRegisteredServiceIfCreatedByTemplateReturnsFalse(
+            Container sut,
+            object key)
+        {
+            // Fixture setup
+            // Exercise system
+            var actual = sut.CanResolveKeyed<Bar, object, int, string>(key);
+
+            // Verify outcome
+            Assert.False(actual, "CanResolve");
+        }
+
+        [Spec]
+        public void CanResolveKeyedRegisteredServiceIfCreatedByTemplateReturnsTrue(
+            Container sut,
+            object key)
+        {
+            // Fixture setup
+            sut.Register<Bar, object, int, string>(key, (c, o, i, s) => new Bar(o, i, s));
+
+            // Exercise system
+            var actual = sut.CanResolveKeyed<Bar, object, int, string>(key);
+
+            // Verify outcome
+            Assert.True(actual, "CanResolve");
+        }
+
         private class PublicMethodDataAttribute : DataAttribute
         {
             public override IEnumerable<object[]> GetData(MethodInfo methodUnderTest, Type[] parameterTypes)

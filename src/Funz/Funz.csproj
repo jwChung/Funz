@@ -54,6 +54,11 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
+    <Compile Include="Container.CanResolve.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Container.CanResolve.tt</DependentUpon>
+    </Compile>
     <Compile Include="Container.TryResolve.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -93,6 +98,10 @@
       <DependentUpon>Container.cs</DependentUpon>
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>Container.LazyResolve.cs</LastGenOutput>
+    </None>
+    <None Include="Container.CanResolve.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>Container.CanResolve.cs</LastGenOutput>
     </None>
     <None Include="Container.TryResolve.tt">
       <DependentUpon>Container.cs</DependentUpon>
