@@ -3,20 +3,20 @@ using Jwc.AutoFixture.Xunit;
 
 namespace Jwc.Funz
 {
-    public class ExplicitSpecAttribute : SpecAttribute
+    public class SlowSpecAttribute : SpecAttribute
     {
-        private readonly Run _run;
+        private readonly RunOn _runOn;
 
-        public ExplicitSpecAttribute(Run run)
+        public SlowSpecAttribute(RunOn runOn)
         {
-            _run = run;
+            _runOn = runOn;
         }
 
-        public Run Run
+        public RunOn RunOn
         {
             get
             {
-                return _run;
+                return _runOn;
             }
         }
 
@@ -24,15 +24,15 @@ namespace Jwc.Funz
         {
             get
             {
-#if EXPLICITLY
+#if CI
                 return base.Skip;
 #else
-                switch (Run)
+                switch (RunOn)
                 {
-                    case Run.Skip:
+                    case RunOn.CI:
                         return "Run explicitly as this test is slow.";
 
-                    case Run.Explicitly:
+                    case RunOn.Explicit:
                         return base.Skip;
 
                     default:

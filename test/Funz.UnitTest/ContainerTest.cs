@@ -402,7 +402,7 @@ namespace Jwc.Funz
             Assert.Equal(expected, actual);
         }
 
-        [ExplicitSpec(Run.Skip)]
+        [SlowSpec(RunOn.CI)]
         public void ResolveServiceReusedWithinContainerDoesNotThrowOutOfMemoryException(
             Container sut)
         {

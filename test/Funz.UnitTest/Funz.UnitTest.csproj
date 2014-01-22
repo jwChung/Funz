@@ -72,8 +72,8 @@
     <Compile Include="ParameterPropertyMatcher.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ResolutionExceptionTest.cs" />
-    <Compile Include="Run.cs" />
-    <Compile Include="ExplicitSpecAttribute.cs" />
+    <Compile Include="RunOn.cs" />
+    <Compile Include="SlowSpecAttribute.cs" />
     <Compile Include="Scenario.cs" />
     <Compile Include="VersionSpecAttribute.cs" />
   </ItemGroup>
