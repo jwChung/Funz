@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Reflection;
 using Xunit;
 
 namespace Jwc.Funz
@@ -348,19 +349,36 @@ namespace Jwc.Funz
         }
 
         [VersionSpec(0, 2, 0)]
-        public void ContainerVisitorCanProvideOtherFunction(
+        public void ContainerVisitorCanBeUsedToResolveService(
             Container container,
             BatchRegistration batch,
             FooBuilder builder)
         {
             // Fixture setup
             container.Accept(batch);
-            
+
             // Exercise system
             var actual = container.Accept(builder).Result;
 
             // Verify outcome
             Assert.IsType<Foo>(actual);
+            Assert.IsType<Bar>(actual.Bar);
+        }
+
+        [VersionSpec(0, 2, 0)]
+        public void ContainerVisitorCanUsedToRegisterType(
+            Container container)
+        {
+            // Fixture setup
+            container.Accept(new BatchRegistration());
+            container.Accept(new TypeRegistration<Baz, IBaz>()).Result.ReusedWithinContainer();
+
+            // Exercise sysetm
+            var actual = container.Resolve<IBaz>();
+
+            // Verify outcome
+            Assert.IsType<Baz>(actual);
+            Assert.IsType<Foo>(actual.Foo);
             Assert.IsType<Bar>(actual.Bar);
         }
 
@@ -424,6 +442,13 @@ namespace Jwc.Funz
             IFoo Foo { get; set; }
         }
 
+        public interface IBaz
+        {
+            IFoo Foo { get; }
+
+            IBar Bar { get; }
+        }
+
         public class Foo : IFoo
         {
             public IBar Bar
@@ -439,6 +464,38 @@ namespace Jwc.Funz
             {
                 get;
                 set;
+            }
+        }
+
+        public class Baz : IBaz
+        {
+            private readonly IFoo _foo;
+            private readonly IBar _bar;
+
+            public Baz()
+            {
+            }
+
+            public Baz(IFoo foo, IBar bar)
+            {
+                _foo = foo;
+                _bar = bar;
+            }
+
+            public IFoo Foo
+            {
+                get
+                {
+                    return _foo;
+                }
+            }
+
+            public IBar Bar
+            {
+                get
+                {
+                    return _bar;
+                }
             }
         }
 
@@ -531,6 +588,53 @@ namespace Jwc.Funz
                 var bar = container.Resolve<IBar>();
                 bar.Foo = foo;
                 return new BarBuilder(bar);
+            }
+        }
+
+        public class TypeRegistration<TFrom, TTo> : IContainerVisitor<IRegistration> where TFrom : TTo
+        {
+            private readonly MethodInfo _resolveMethod =
+                typeof(Container).GetMethods().Single(m => m.Name == "Resolve" && m.GetParameters().Length == 0);
+            private readonly IRegistration _registration;
+
+            public TypeRegistration()
+            {
+            }
+
+            private TypeRegistration(IRegistration registration)
+            {
+                _registration = registration;
+            }
+
+            public IRegistration Result
+            {
+                get
+                {
+                    return _registration;
+                }
+            }
+
+            public IContainerVisitor<IRegistration> Visit(Container container)
+            {
+                var constructor = GetGreedyConstructor();
+                IRegistration registration = container.Register<TTo>(c =>
+                {
+                    var arguments = constructor.GetParameters().Select(p => Resolve(c, p.ParameterType)).ToArray();
+                    return (TTo)constructor.Invoke(arguments);
+                });
+
+                return new TypeRegistration<TFrom, TTo>(registration);
+            }
+
+            private ConstructorInfo GetGreedyConstructor()
+            {
+                return typeof(TFrom).GetConstructors()
+                    .OrderByDescending(m => m.GetParameters().Length).First();
+            }
+
+            private object Resolve(Container container, Type serviceType)
+            {
+                return _resolveMethod.MakeGenericMethod(serviceType).Invoke(container, new object[0]);
             }
         }
     }
