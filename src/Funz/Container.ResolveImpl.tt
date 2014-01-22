@@ -23,10 +23,10 @@ for (var typeCount = 2; typeCount <= GenericTypeMax - 2; typeCount++)
 #>
         private TService ResolveImpl<TService, <#=typeList#>>(object key, bool throws, <#=argumentList#>)
         {
-		    var serviceKey = new ServiceKey(typeof(Func<Container, <#=typeList#>, TService>), key);
+            var serviceKey = new ServiceKey(typeof(Func<Container, <#=typeList#>, TService>), key);
             var registration = GetRegistration<Func<Container, <#=typeList#>, TService>, TService>(serviceKey, throws);
             if (registration == null)
-			    return default(TService);
+                return default(TService);
 
             if (registration.HasService)
                 return registration.Service;
