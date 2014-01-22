@@ -407,7 +407,7 @@ namespace Jwc.Funz
         }
 
         [VersionSpec(0, 3, 0)]
-        public void CanResolveNotRegisteredServideReturnsFalse(
+        public void CanResolveUnregisteredServideReturnsFalse(
             Container container)
         {
             // Fixture setup

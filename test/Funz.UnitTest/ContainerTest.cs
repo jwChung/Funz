@@ -633,7 +633,7 @@ namespace Jwc.Funz
         }
 
         [Spec]
-        public void TryResolveNotRegisteredServiceReturnsDefaultValue(
+        public void TryResolveUnregisteredServiceReturnsDefaultValue(
             Container sut)
         {
             // Fixture setup
@@ -659,7 +659,7 @@ namespace Jwc.Funz
         }
 
         [Spec]
-        public void TryResolveNotRegisteredServiceWithArgumentReturnsDefaultValue(
+        public void TryResolveUnregisteredServiceWithArgumentReturnsDefaultValue(
             Container sut,
             string stringValue)
         {
@@ -687,7 +687,7 @@ namespace Jwc.Funz
         }
 
         [Spec]
-        public void TryResolveNotRegisteredKeyedServiceReturnsDefaultValue(
+        public void TryResolveUnregisteredKeyedServiceReturnsDefaultValue(
             Container sut,
             object key)
         {
@@ -715,7 +715,7 @@ namespace Jwc.Funz
         }
 
         [Spec]
-        public void TryResolveNotRegisteredKeyedServiceWithArgumentReturnsDefaultValue(
+        public void TryResolveUnregisteredKeyedServiceWithArgumentReturnsDefaultValue(
             Container sut,
             object key,
             string stringValue)
@@ -745,7 +745,7 @@ namespace Jwc.Funz
         }
 
         [Spec]
-        public void LazyResolveNotRegisteredServiceThrows(
+        public void LazyResolveUnregisteredServiceThrows(
             Container sut)
         {
             // Fixture setup
@@ -777,7 +777,7 @@ namespace Jwc.Funz
         }
 
         [Spec]
-        public void LazyResolveNotRegisteredServiceWithArgumentThrows(
+        public void LazyResolveUnregisteredServiceWithArgumentThrows(
             Container sut,
             string argument)
         {
@@ -813,7 +813,7 @@ namespace Jwc.Funz
         }
 
         [Spec]
-        public void LazyResolveNotRegisteredKeyedServiceThrows(
+        public void LazyResolveUnregisteredKeyedServiceThrows(
             Container sut,
             object key)
         {
@@ -848,7 +848,7 @@ namespace Jwc.Funz
         }
 
         [Spec]
-        public void LazyResolveNotRegisteredKeyedServiceWithArgumentThrows(
+        public void LazyResolveUnregisteredKeyedServiceWithArgumentThrows(
             Container sut,
             object key,
             string argument)
@@ -1155,7 +1155,7 @@ namespace Jwc.Funz
         }
 
         [Spec]
-        public void TryResolveCreatedByTemplateIfNotRegisteredReturnsNull(
+        public void TryResolveCreatedByTemplateIfUnregisteredReturnsNull(
             DerivedContainer sut,
             object arg1,
             int arg2,
@@ -1229,7 +1229,7 @@ namespace Jwc.Funz
         }
 
         [Spec]
-        public void TryResolveKeyedCreatedByTemplateIfNotRegisteredReturnsNull(
+        public void TryResolveKeyedCreatedByTemplateIfUnregisteredReturnsNull(
             DerivedContainer sut,
             object key,
             object arg1,
@@ -1619,7 +1619,7 @@ namespace Jwc.Funz
         }
 
         [Spec]
-        public void CanResolveNonRegisteredServiceReturnsFalse(
+        public void CanResolveUnregisteredServiceReturnsFalse(
             Container sut)
         {
             // Fixture setup
@@ -1645,7 +1645,7 @@ namespace Jwc.Funz
         }
 
         [Spec]
-        public void CanResolveNonRegisteredServiceWithArgumentReturnsFalse(
+        public void CanResolveUnregisteredServiceWithArgumentReturnsFalse(
             Container sut)
         {
             // Fixture setup
@@ -1671,7 +1671,7 @@ namespace Jwc.Funz
         }
 
         [Spec]
-        public void CanResolveKeyedNonRegisteredServiceReturnsFalse(
+        public void CanResolveKeyedUnregisteredServiceReturnsFalse(
             Container sut,
             object key)
         {
@@ -1699,7 +1699,7 @@ namespace Jwc.Funz
         }
 
         [Spec]
-        public void CanResolveKeyedNonRegisteredServiceWithArgumentReturnsFalse(
+        public void CanResolveKeyedUnregisteredServiceWithArgumentReturnsFalse(
             Container sut,
             object key)
         {
@@ -1727,7 +1727,7 @@ namespace Jwc.Funz
         }
 
         [Spec]
-        public void CanResolveNonRegisteredServiceIfCreatedByTemplateReturnsFalse(
+        public void CanResolveUnregisteredServiceIfCreatedByTemplateReturnsFalse(
             Container sut)
         {
             // Fixture setup
@@ -1753,7 +1753,7 @@ namespace Jwc.Funz
         }
 
         [Spec]
-        public void CanResolveKeyedNonRegisteredServiceIfCreatedByTemplateReturnsFalse(
+        public void CanResolveKeyedUnregisteredServiceIfCreatedByTemplateReturnsFalse(
             Container sut,
             object key)
         {
