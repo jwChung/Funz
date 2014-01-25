@@ -617,7 +617,7 @@ namespace Jwc.Funz
             public IContainerVisitor<IRegistration> Visit(Container container)
             {
                 var constructor = GetGreedyConstructor();
-                IRegistration registration = container.Register<TTo>(c =>
+                IRegistration registration = container.Register(c =>
                 {
                     var arguments = constructor.GetParameters().Select(p => Resolve(c, p.ParameterType)).ToArray();
                     return (TTo)constructor.Invoke(arguments);
@@ -626,7 +626,7 @@ namespace Jwc.Funz
                 return new TypeRegistration<TFrom, TTo>(registration);
             }
 
-            private ConstructorInfo GetGreedyConstructor()
+            private static ConstructorInfo GetGreedyConstructor()
             {
                 return typeof(TFrom).GetConstructors()
                     .OrderByDescending(m => m.GetParameters().Length).First();
