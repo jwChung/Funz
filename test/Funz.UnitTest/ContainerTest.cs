@@ -1873,7 +1873,6 @@ namespace Jwc.Funz
 
         private class Dummy
         {
-#pragma warning disable once UnusedAutoPropertyAccessor.Local
             public string Content { get; set; }
 
             public void Generate(int size)
