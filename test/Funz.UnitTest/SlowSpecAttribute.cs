@@ -24,21 +24,21 @@ namespace Jwc.Funz
         {
             get
             {
-#if CI
-                return base.Skip;
-#else
                 switch (RunOn)
                 {
                     case RunOn.CI:
+#if CI
+                        return null;
+#else
                         return "Run explicitly as this test is slow.";
+#endif
 
-                    case RunOn.Explicit:
-                        return base.Skip;
+                    case RunOn.Local:
+                        return null;
 
                     default:
                         throw new ArgumentOutOfRangeException();
                 }
-#endif
             }
             set
             {

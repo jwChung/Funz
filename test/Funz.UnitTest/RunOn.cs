@@ -4,6 +4,6 @@
     {
         CI,
 
-        Explicit
+        Local
     }
 }
