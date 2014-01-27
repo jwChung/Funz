@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using Jwc.AutoFixture.Idioms;
 using Jwc.AutoFixture.Xunit;
-using Moq;
 using Xunit;
 
 namespace Jwc.Funz
@@ -32,9 +31,9 @@ namespace Jwc.Funz
             IContainerVisitor<int>[] returnedVisitors)
         {
             // Fixture setup
-            Mock.Get(visitors[0]).Setup(x => x.Visit(container)).Returns(returnedVisitors[0]);
-            Mock.Get(visitors[1]).Setup(x => x.Visit(container)).Returns(returnedVisitors[1]);
-            Mock.Get(visitors[2]).Setup(x => x.Visit(container)).Returns(returnedVisitors[2]);
+            visitors[0].ToMock().Setup(x => x.Visit(container)).Returns(returnedVisitors[0]);
+            visitors[1].ToMock().Setup(x => x.Visit(container)).Returns(returnedVisitors[1]);
+            visitors[2].ToMock().Setup(x => x.Visit(container)).Returns(returnedVisitors[2]);
             
             // Exercise system
             var actual = sut.Visit(container);
@@ -64,9 +63,9 @@ namespace Jwc.Funz
             string[] expected)
         {
             // Fixture setup
-            Mock.Get(visitors[0]).SetupGet(x => x.Result).Returns(expected[0]);
-            Mock.Get(visitors[1]).SetupGet(x => x.Result).Returns(expected[1]);
-            Mock.Get(visitors[2]).SetupGet(x => x.Result).Returns(expected[2]);
+            visitors[0].ToMock().SetupGet(x => x.Result).Returns(expected[0]);
+            visitors[1].ToMock().SetupGet(x => x.Result).Returns(expected[1]);
+            visitors[2].ToMock().SetupGet(x => x.Result).Returns(expected[2]);
 
             // Exercise system
             var actual = sut.Result;

@@ -7,7 +7,6 @@ using System.Threading;
 using Jwc.AutoFixture;
 using Jwc.AutoFixture.Idioms;
 using Jwc.AutoFixture.Xunit;
-using Moq;
 using Ploeh.AutoFixture;
 using Xunit;
 using Xunit.Extensions;
@@ -1587,7 +1586,7 @@ namespace Jwc.Funz
             IContainerVisitor<object> expected)
         {
             // Fixture setup
-            Mock.Get(visitor).Setup(x => x.Visit(sut)).Returns(expected);
+            visitor.ToMock().Setup(x => x.Visit(sut)).Returns(expected);
 
             // Exercise system
             var actual = sut.Accept(visitor);
