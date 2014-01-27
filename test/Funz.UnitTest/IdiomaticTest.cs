@@ -12,17 +12,14 @@ namespace Jwc.Funz
 {
     public abstract class IdiomaticTest<TSUT>
     {
-        private const BindingFlags _bindingFlags =
-            BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public | BindingFlags.DeclaredOnly;
-
         public virtual MemberCollection<TSUT> GetGuardMembers()
         {
-            return new MemberCollection<TSUT>(_bindingFlags);
+            return new MemberCollection<TSUT>();
         }
 
         public virtual MemberCollection<TSUT> GetInitializedMembers()
         {
-            return new MemberCollection<TSUT>(_bindingFlags);
+            return new MemberCollection<TSUT>();
         }
     }
 
