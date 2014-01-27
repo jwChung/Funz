@@ -157,6 +157,7 @@ $RECYCLE.BIN/
 # NuGet
 packages/*
 !packages/repositories.config
+!packages/AutoFixture.Contrib.3.0.0-pre*
 .nuget/NuGet.exe
 
 # Build
