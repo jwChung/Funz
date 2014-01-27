@@ -54,8 +54,6 @@
              Targets="Build;"
              Properties="Configuration=Release;
                          DefineConstants=TRACE,CI;
-                         SignAssembly=$(SignAssembly);
-                         AssemblyOriginatorKeyFile=..\..\build\PrivateKey.snk;
                          ">
       <Output TaskParameter="TargetOutputs" ItemName="TestAssemblies" />
     </MSBuild>
