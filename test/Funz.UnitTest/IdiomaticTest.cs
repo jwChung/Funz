@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using Jwc.AutoFixture;
 using Jwc.AutoFixture.Idioms;
 using Jwc.AutoFixture.Xunit;
 using Ploeh.AutoFixture;
