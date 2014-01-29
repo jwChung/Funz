@@ -62,7 +62,7 @@ namespace Jwc.Funz
             {
                 return Activator.CreateInstance<TTestClass>()
                     .GetGuardMembers()
-                    .Select(m => new object[] { m.ToClosedGeneric() });
+                    .Select(m => new object[] { m });
             }
         }
 
@@ -72,7 +72,7 @@ namespace Jwc.Funz
             {
                 return Activator.CreateInstance<TTestClass>()
                     .GetInitializedMembers()
-                    .Select(m => new object[] { m.ToClosedGeneric() });
+                    .Select(m => new object[] { m });
             }
         }
     }

@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/10/nuspec.xsd">
   <metadata>
     <id>AutoFixture.Contrib</id>
-    <version>3.0.0-pre02</version>
+    <version>3.0.0-pre03</version>
     <title>AutoFixture.Contrib</title>
     <authors>Jin-Wook Chung</authors>
     <owners>Jin-Wook Chung</owners>
