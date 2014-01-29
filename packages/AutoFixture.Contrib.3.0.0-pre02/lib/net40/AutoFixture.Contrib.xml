@@ -4,6 +4,71 @@
         <name>AutoFixture.Contrib</name>
     </assembly>
     <members>
+        <member name="T:Jwc.AutoFixture.AutoGenericExtensions">
+            <summary>
+            Provides extenson methods to convert unclosed generic reflection meta data
+            to closed generic automatically.
+            </summary>
+        </member>
+        <member name="M:Jwc.AutoFixture.AutoGenericExtensions.ToClosedGeneric(System.Reflection.MemberInfo)">
+            <summary>
+            Converts a unclosed generic member to closed generic.
+            If the member is non generic or already closed generic, this method will just return it.
+            </summary>
+            <param name="member">A member to convert to closed generic.</param>
+            <returns>A closed generic member.</returns>
+            <exception cref="T:System.ArgumentNullException">
+            Thrown if a member is null.
+            </exception>
+            <exception cref="T:System.NotSupportedException">
+            This method supports only reflection meta data about type, constructor, property and method.
+            For other meta data, the exception will be thrown.
+            </exception>
+        </member>
+        <member name="M:Jwc.AutoFixture.AutoGenericExtensions.ToClosedGeneric(System.Type)">
+            <summary>
+            Converts a unclosed generic type to closed generic.
+            If the type is non generic or already closed generic, this method will just return it.
+            </summary>
+            <param name="type">A type to convert to closed generic.</param>
+            <returns>A closed generic type.</returns>
+            <exception cref="T:System.ArgumentNullException">
+            Thrown if a type is null.
+            </exception>
+        </member>
+        <member name="M:Jwc.AutoFixture.AutoGenericExtensions.ToClosedGeneric(System.Reflection.ConstructorInfo)">
+            <summary>
+            Converts a unclosed generic constructor to closed generic.
+            If the type is non generic or already closed generic, this method will just return it.
+            </summary>
+            <param name="constructor">A constructor to convert to closed generic.</param>
+            <returns>A closed generic constructor.</returns>
+            <exception cref="T:System.ArgumentNullException">
+            Thrown if a constructor is null.
+            </exception>
+        </member>
+        <member name="M:Jwc.AutoFixture.AutoGenericExtensions.ToClosedGeneric(System.Reflection.PropertyInfo)">
+            <summary>
+            Converts a unclosed generic property to closed generic.
+            If the type is non generic or already closed generic, this method will just return it.
+            </summary>
+            <param name="property">A property to convert to closed generic.</param>
+            <returns>A closed generic property.</returns>
+            <exception cref="T:System.ArgumentNullException">
+            Thrown if a property is null.
+            </exception>
+        </member>
+        <member name="M:Jwc.AutoFixture.AutoGenericExtensions.ToClosedGeneric(System.Reflection.MethodInfo)">
+            <summary>
+            Converts a unclosed generic method to closed generic.
+            If the type is non generic or already closed generic, this method will just return it.
+            </summary>
+            <param name="method">A method to convert to closed generic.</param>
+            <returns>A closed generic method.</returns>
+            <exception cref="T:System.ArgumentNullException">
+            Thrown if a method is null.
+            </exception>
+        </member>
         <member name="T:Jwc.AutoFixture.AutoMoq.AutoMoqCustomization">
             <summary>
             Enables auto-mocking with Moq.

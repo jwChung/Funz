@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using Jwc.AutoFixture;
 using Jwc.AutoFixture.Idioms;
 using Jwc.AutoFixture.Xunit;
 using Ploeh.AutoFixture;
@@ -61,7 +62,7 @@ namespace Jwc.Funz
             {
                 return Activator.CreateInstance<TTestClass>()
                     .GetGuardMembers()
-                    .Select(m => new object[] { m });
+                    .Select(m => new object[] { m.ToClosedGeneric() });
             }
         }
 
@@ -71,7 +72,7 @@ namespace Jwc.Funz
             {
                 return Activator.CreateInstance<TTestClass>()
                     .GetInitializedMembers()
-                    .Select(m => new object[] { m });
+                    .Select(m => new object[] { m.ToClosedGeneric() });
             }
         }
     }
