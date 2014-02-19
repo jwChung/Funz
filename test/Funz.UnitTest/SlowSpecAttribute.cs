@@ -14,10 +14,7 @@ namespace Jwc.Funz
 
         public RunOn RunOn
         {
-            get
-            {
-                return _runOn;
-            }
+            get { return _runOn; }
         }
 
         public override string Skip
@@ -40,10 +37,7 @@ namespace Jwc.Funz
                         throw new ArgumentOutOfRangeException();
                 }
             }
-            set
-            {
-                throw new NotSupportedException();
-            }
+            set { throw new NotSupportedException(); }
         }
     }
 }

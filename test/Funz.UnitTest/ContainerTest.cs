@@ -30,7 +30,7 @@ namespace Jwc.Funz
 
         [Spec]
         public void RegisterServiceWithSameKeyManyTimeDoesNotThrow(
-             Container sut)
+            Container sut)
         {
             sut.Register(c => new Foo());
             Assert.DoesNotThrow(() => sut.Register(c => new Foo()));
@@ -328,7 +328,7 @@ namespace Jwc.Funz
         {
             // Fixture setup
             sut.Register(c => new Dummy()).ReusedWithinContainer();
-            
+
             // Exercise system & Verify outcome
             Assert.DoesNotThrow(() =>
             {
@@ -941,7 +941,7 @@ namespace Jwc.Funz
             string arg3)
         {
             sut.Register<Bar, object, int, string>((c, o, i, s) => new Bar(o, i, s));
-            
+
             var actual = sut.LazyResolve<Bar, object, int, string>().Invoke(arg1, arg2, arg3);
 
             Assert.Equal(arg1, actual.Arg1);
@@ -1184,7 +1184,6 @@ namespace Jwc.Funz
                 return new object();
             });
 
-
             Assert.Throws<ResolutionException>(() => sut.Resolve<Foo>());
             sut.Register(c => new Foo());
             sut.Register(c => new object());
@@ -1263,7 +1262,7 @@ namespace Jwc.Funz
 
                 // Verify outcome
                 sut.Dispose();
-                Assert.Equal(threads.Length * 100, StaticDisposable.Count);
+                Assert.Equal(threads.Length*100, StaticDisposable.Count);
             }
             finally
             {
@@ -1487,10 +1486,7 @@ namespace Jwc.Funz
 
             public string Arg
             {
-                get
-                {
-                    return _arg;
-                }
+                get { return _arg; }
             }
         }
 
@@ -1509,36 +1505,23 @@ namespace Jwc.Funz
 
             public object Arg1
             {
-                get
-                {
-                    return _arg1;
-                }
+                get { return _arg1; }
             }
 
             public int Arg2
             {
-                get
-                {
-                    return _arg2;
-                }
+                get { return _arg2; }
             }
 
             public string Arg3
             {
-                get
-                {
-                    return _arg3;
-                }
+                get { return _arg3; }
             }
         }
 
         public class Disposable : IDisposable
         {
-            public int Count
-            {
-                get;
-                set;
-            }
+            public int Count { get; set; }
 
             public void Dispose()
             {
@@ -1552,17 +1535,13 @@ namespace Jwc.Funz
 
             public void Generate(int size)
             {
-                Content = new string('X', size * 3000);
+                Content = new string('X', size*3000);
             }
         }
 
         public class DerivedContainer : Container
         {
-            public bool Disposing
-            {
-                get;
-                set;
-            }
+            public bool Disposing { get; set; }
 
             protected override void Dispose(bool disposing)
             {
@@ -1576,14 +1555,8 @@ namespace Jwc.Funz
 
             public static int Count
             {
-                get
-                {
-                    return _count;
-                }
-                set
-                {
-                    _count = value;
-                }
+                get { return _count; }
+                set { _count = value; }
             }
 
             public void Dispose()

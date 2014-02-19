@@ -5,7 +5,7 @@ using Xunit;
 
 namespace Jwc.Funz
 {
-    public class CompositeContainerVisitorTest 
+    public class CompositeContainerVisitorTest
         : IdiomaticTest<CompositeContainerVisitor<object>, CompositeContainerVisitorTest>
     {
         public override MemberCollection<CompositeContainerVisitor<object>> GetInitializedMembers()
@@ -30,7 +30,7 @@ namespace Jwc.Funz
             visitors[0].ToMock().Setup(x => x.Visit(container)).Returns(returnedVisitors[0]);
             visitors[1].ToMock().Setup(x => x.Visit(container)).Returns(returnedVisitors[1]);
             visitors[2].ToMock().Setup(x => x.Visit(container)).Returns(returnedVisitors[2]);
-            
+
             var actual = sut.Visit(container);
 
             var result = Assert.IsType<CompositeContainerVisitor<int>>(actual);

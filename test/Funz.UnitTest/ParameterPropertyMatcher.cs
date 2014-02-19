@@ -47,10 +47,7 @@ namespace Jwc.Funz
 
             public override string Value
             {
-                get
-                {
-                    return _value;
-                }
+                get { return _value; }
             }
 
             public override IReflectionVisitor<string> Visit(PropertyInfoElement propertyInfoElement)
@@ -79,10 +76,7 @@ namespace Jwc.Funz
 
             public override Type Value
             {
-                get
-                {
-                    return _value;
-                }
+                get { return _value; }
             }
 
             public override IReflectionVisitor<Type> Visit(PropertyInfoElement propertyInfoElement)

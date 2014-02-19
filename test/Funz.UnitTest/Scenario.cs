@@ -451,20 +451,12 @@ namespace Jwc.Funz
 
         public class Foo : IFoo
         {
-            public IBar Bar
-            {
-                get;
-                set;
-            }
+            public IBar Bar { get; set; }
         }
 
         public class Bar : IBar
         {
-            public IFoo Foo
-            {
-                get;
-                set;
-            }
+            public IFoo Foo { get; set; }
         }
 
         public class Baz : IBaz
@@ -484,28 +476,18 @@ namespace Jwc.Funz
 
             public IFoo Foo
             {
-                get
-                {
-                    return _foo;
-                }
+                get { return _foo; }
             }
 
             public IBar Bar
             {
-                get
-                {
-                    return _bar;
-                }
+                get { return _bar; }
             }
         }
 
         public class Disposable : IDisposable
         {
-            public bool Disposed
-            {
-                get;
-                private set;
-            }
+            public bool Disposed { get; private set; }
 
             public void Dispose()
             {
@@ -517,10 +499,7 @@ namespace Jwc.Funz
         {
             public object Result
             {
-                get
-                {
-                    return null;
-                }
+                get { return null; }
             }
 
             public IContainerVisitor<object> Visit(Container container)
@@ -546,10 +525,7 @@ namespace Jwc.Funz
 
             public IFoo Result
             {
-                get
-                {
-                    return _result;
-                }
+                get { return _result; }
             }
 
             public IContainerVisitor<IFoo> Visit(Container container)
@@ -576,10 +552,7 @@ namespace Jwc.Funz
 
             public IBar Result
             {
-                get
-                {
-                    return _result;
-                }
+                get { return _result; }
             }
 
             public IContainerVisitor<IBar> Visit(Container container)
@@ -595,6 +568,7 @@ namespace Jwc.Funz
         {
             private readonly MethodInfo _resolveMethod =
                 typeof(Container).GetMethods().Single(m => m.Name == "Resolve" && m.GetParameters().Length == 0);
+
             private readonly IRegistration _registration;
 
             public TypeRegistration()
@@ -608,10 +582,7 @@ namespace Jwc.Funz
 
             public IRegistration Result
             {
-                get
-                {
-                    return _registration;
-                }
+                get { return _registration; }
             }
 
             public IContainerVisitor<IRegistration> Visit(Container container)

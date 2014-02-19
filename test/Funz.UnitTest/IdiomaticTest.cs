@@ -23,7 +23,7 @@ namespace Jwc.Funz
         }
     }
 
-    public abstract class IdiomaticTest<TSUT, TTestClass> 
+    public abstract class IdiomaticTest<TSUT, TTestClass>
         : IdiomaticTest<TSUT> where TTestClass : IdiomaticTest<TSUT>
     {
         [Spec]

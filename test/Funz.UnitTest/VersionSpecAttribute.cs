@@ -17,26 +17,17 @@ namespace Jwc.Funz
 
         public int Major
         {
-            get
-            {
-                return _major;
-            }
+            get { return _major; }
         }
 
         public int Minor
         {
-            get
-            {
-                return _minor;
-            }
+            get { return _minor; }
         }
 
         public int Patch
         {
-            get
-            {
-                return _patch;
-            }
+            get { return _patch; }
         }
     }
 }
