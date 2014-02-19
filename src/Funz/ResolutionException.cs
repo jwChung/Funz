@@ -10,14 +10,14 @@ namespace Jwc.Funz
     public class ResolutionException : Exception
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="ResolutionException"/> class.
+        /// Initializes a new instance of the <see cref="ResolutionException" /> class.
         /// </summary>
         public ResolutionException()
         {
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ResolutionException"/> class
+        /// Initializes a new instance of the <see cref="ResolutionException" /> class
         /// with a message.
         /// </summary>
         /// <param name="message">The exception message.</param>
@@ -28,7 +28,7 @@ namespace Jwc.Funz
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ResolutionException"/> class
+        /// Initializes a new instance of the <see cref="ResolutionException" /> class
         /// with a message and an inner exception.
         /// </summary>
         /// <param name="message">The exception message.</param>
@@ -43,7 +43,7 @@ namespace Jwc.Funz
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ResolutionException"/> class.
+        /// Initializes a new instance of the <see cref="ResolutionException" /> class.
         /// </summary>
         protected ResolutionException(
             SerializationInfo info,

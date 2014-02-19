@@ -3,7 +3,7 @@
 namespace Jwc.Funz
 {
     /// <summary>
-    /// Fluent API that allows specifying the owner of instances 
+    /// Fluent API that allows specifying the owner of instances
     /// created from a registration.
     /// </summary>
     [EditorBrowsable(EditorBrowsableState.Never)]

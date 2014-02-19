@@ -13,7 +13,7 @@ namespace Jwc.Funz
         private readonly IContainerVisitor<TResult>[] _visitors;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="CompositeContainerVisitor{TResult}"/> class
+        /// Initializes a new instance of the <see cref="CompositeContainerVisitor{TResult}" /> class
         /// with visitors to compose.
         /// </summary>
         /// <param name="visitors">The visitors to compose.</param>
@@ -21,7 +21,7 @@ namespace Jwc.Funz
         {
             if (visitors == null)
                 throw new ArgumentNullException("visitors");
-            
+
             _visitors = visitors;
         }
 
@@ -30,10 +30,7 @@ namespace Jwc.Funz
         /// </summary>
         public IEnumerable<TResult> Result
         {
-            get
-            {
-                return _visitors.Select(v => v.Result);
-            }
+            get { return _visitors.Select(v => v.Result); }
         }
 
         /// <summary>
@@ -44,10 +41,7 @@ namespace Jwc.Funz
             "CA1006:DoNotNestGenericTypesInMemberSignatures")]
         public IEnumerable<IContainerVisitor<TResult>> Visitors
         {
-            get
-            {
-                return _visitors;
-            }
+            get { return _visitors; }
         }
 
         /// <summary>

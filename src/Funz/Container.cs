@@ -16,8 +16,10 @@ namespace Jwc.Funz
         private static readonly object _noKey = new object();
 
         private readonly ContainerCollection _children = new ContainerCollection();
+
         private readonly IDictionary<ServiceKey, Registration> _registry =
             new ConcurrentDictionary<ServiceKey, Registration>();
+
         private readonly Container _parent;
         private readonly object _scope;
         private volatile bool _disposed;
@@ -389,7 +391,7 @@ namespace Jwc.Funz
 
         /// <summary>
         /// Disposes the container and all instances owned by it, as well as all child containers
-        ///	created through <see cref="CreateChild()"/>.
+        /// created through <see cref="CreateChild()" />.
         /// </summary>
         public void Dispose()
         {
@@ -415,7 +417,7 @@ namespace Jwc.Funz
 
         /// <summary>
         /// Disposes the container and all instances owned by it, as well as all child containers
-        ///	created through <see cref="CreateChild()"/>.
+        /// created through <see cref="CreateChild()" />.
         /// </summary>
         /// <param name="disposing">
         /// Indicates whether managed resources are included to be disposed.
@@ -690,18 +692,12 @@ namespace Jwc.Funz
 
             public Type FactoryType
             {
-                get
-                {
-                    return _factoryType;
-                }
+                get { return _factoryType; }
             }
 
             public object Key
             {
-                get
-                {
-                    return _key;
-                }
+                get { return _key; }
             }
 
             private bool Equals(ServiceKey other)
@@ -727,7 +723,7 @@ namespace Jwc.Funz
             {
                 unchecked
                 {
-                    return (FactoryType.GetHashCode() * 397) ^ Key.GetHashCode();
+                    return (FactoryType.GetHashCode()*397) ^ Key.GetHashCode();
                 }
             }
         }
@@ -745,18 +741,12 @@ namespace Jwc.Funz
 
             protected ReusedScope ReusedScope
             {
-                get
-                {
-                    return _reusedScope;
-                }
+                get { return _reusedScope; }
             }
 
             public bool CanDispose
             {
-                get
-                {
-                    return _canDispose;
-                }
+                get { return _canDispose; }
             }
 
             public IOwned ReusedWithinNone()
@@ -828,18 +818,12 @@ namespace Jwc.Funz
 
             public TFunc Factory
             {
-                get
-                {
-                    return _factory;
-                }
+                get { return _factory; }
             }
 
             public TService Service
             {
-                get
-                {
-                    return _service;
-                }
+                get { return _service; }
                 set
                 {
                     if (!ReusedScope.CanSave)
@@ -852,18 +836,12 @@ namespace Jwc.Funz
 
             public bool HasService
             {
-                get
-                {
-                    return _hasService;
-                }
+                get { return _hasService; }
             }
 
             public Container Container
             {
-                get
-                {
-                    return _container;
-                }
+                get { return _container; }
             }
 
             protected override void Dispose(bool disposing)
@@ -882,16 +860,9 @@ namespace Jwc.Funz
 
         private abstract class ReusedScope
         {
-            public abstract bool CanSave
-            {
-                get;
-            }
+            public abstract bool CanSave { get; }
 
-            public Registration Registration
-            {
-                protected get;
-                set;
-            }
+            public Registration Registration { protected get; set; }
 
             public abstract Registration<TFunc, TService> Clone<TFunc, TService>(
                 Container container, ServiceKey serviceKey);
@@ -901,10 +872,7 @@ namespace Jwc.Funz
         {
             public override bool CanSave
             {
-                get
-                {
-                    return false;
-                }
+                get { return false; }
             }
 
             public override Registration<TFunc, TService> Clone<TFunc, TService>(
@@ -918,10 +886,7 @@ namespace Jwc.Funz
         {
             public override bool CanSave
             {
-                get
-                {
-                    return true;
-                }
+                get { return true; }
             }
 
             [System.Diagnostics.CodeAnalysis.SuppressMessage(
@@ -951,10 +916,7 @@ namespace Jwc.Funz
         {
             public override bool CanSave
             {
-                get
-                {
-                    return true;
-                }
+                get { return true; }
             }
 
             public override Registration<TFunc, TService> Clone<TFunc, TService>(
@@ -977,10 +939,7 @@ namespace Jwc.Funz
 
             public override bool CanSave
             {
-                get
-                {
-                    return _canSave;
-                }
+                get { return _canSave; }
             }
 
             [System.Diagnostics.CodeAnalysis.SuppressMessage(

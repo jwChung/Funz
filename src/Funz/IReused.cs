@@ -9,7 +9,7 @@ namespace Jwc.Funz
     public interface IReused : IFluentInterface
     {
         /// <summary>
-        /// Specifies each request to resolve the dependency will result in a new 
+        /// Specifies each request to resolve the dependency will result in a new
         /// instance being returned.
         /// </summary>
         /// <return>
@@ -18,8 +18,8 @@ namespace Jwc.Funz
         IOwned ReusedWithinNone();
 
         /// <summary>
-        /// Specifies instances are reused only at the given container. Descendent 
-        /// containers do not reuse parent container instances and get  
+        /// Specifies instances are reused only at the given container. Descendent
+        /// containers do not reuse parent container instances and get
         /// a new instance at their level.
         /// </summary>
         /// <return>
@@ -28,7 +28,7 @@ namespace Jwc.Funz
         IOwned ReusedWithinContainer();
 
         /// <summary>
-        /// Specifies instances are reused within a container hierarchy. Instances 
+        /// Specifies instances are reused within a container hierarchy. Instances
         /// are created (if necessary) in the container where the registration
         /// was performed, and are reused by all descendent containers.
         /// </summary>
@@ -36,7 +36,6 @@ namespace Jwc.Funz
         /// The fluent API instance about how to specifying the owner of instances.
         /// </return>
         IOwned ReusedWithinHierarchy();
-
 
         /// <summary>
         /// Specifies instances are reused within the given scope. To reuse instainces,
