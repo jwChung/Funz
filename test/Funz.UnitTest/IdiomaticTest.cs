@@ -32,9 +32,6 @@ namespace Jwc.Funz
             MemberInfo member,
             GuardClauseAssertion assertion)
         {
-            // Fixture setup
-            // Exercise system
-            // Verify outcome
             assertion.Verify(member);
         }
 
@@ -50,8 +47,7 @@ namespace Jwc.Funz
                 EqualityComparer<object>.Default,
                 new ParameterPropertyMatcher());
 
-            // Exercise system
-            // Verify outcome
+            // Exercise system & Verify outcome
             assertion.Verify(member);
         }
 

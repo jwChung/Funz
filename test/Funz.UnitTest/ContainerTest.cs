@@ -25,9 +25,6 @@ namespace Jwc.Funz
         public void SutIsDisposable(
             Container sut)
         {
-            // Fixture setup
-            // Exercise system
-            // Verify outcome
             Assert.IsAssignableFrom<IDisposable>(sut);
         }
 
@@ -35,11 +32,7 @@ namespace Jwc.Funz
         public void RegisterServiceWithSameKeyManyTimeDoesNotThrow(
              Container sut)
         {
-            // Fixture setup
             sut.Register(c => new Foo());
-
-            // Exercise system
-            // Verify outcome
             Assert.DoesNotThrow(() => sut.Register(c => new Foo()));
         }
 
@@ -47,15 +40,12 @@ namespace Jwc.Funz
         public void ResolveUnregisteredServiceThrows(
             Container sut)
         {
-            // Fixture setup
             var expected = string.Format(
                 "The service type '{0}' was not registered.",
                 typeof(Foo));
 
-            // Exercise system
             var e = Assert.Throws<ResolutionException>(() => sut.Resolve<Foo>());
 
-            // Verify outcome
             Assert.Equal(expected, e.Message);
         }
 
@@ -64,16 +54,13 @@ namespace Jwc.Funz
             Container sut,
             string stringArg)
         {
-            // Fixture setup
             var expected = string.Format(
                 "The service type '{0}' with the argument(s) '{1}' was not registered.",
                 typeof(Foo),
                 "System.String");
 
-            // Exercise system
             var e = Assert.Throws<ResolutionException>(() => sut.Resolve<Foo, string>(stringArg));
 
-            // Verify outcome
             Assert.Equal(expected, e.Message);
         }
 
@@ -82,17 +69,14 @@ namespace Jwc.Funz
             Container sut,
             object key)
         {
-            // Fixture setup
             sut.Register(c => new Foo());
             var expected = string.Format(
                 "The service type '{0}' with the key '{1}' was not registered.",
                 typeof(Foo),
                 key);
 
-            // Exercise system
             var e = Assert.Throws<ResolutionException>(() => sut.ResolveKeyed<Foo>(key));
 
-            // Verify outcome
             Assert.Equal(expected, e.Message);
         }
 
@@ -102,17 +86,14 @@ namespace Jwc.Funz
             object key,
             string stringArg)
         {
-            // Fixture setup
             var expected = string.Format(
                 "The service type '{0}' with the key '{1}' and the argument(s) '{2}' was not registered.",
                 typeof(Foo),
                 key,
                 "System.String");
 
-            // Exercise system
             var e = Assert.Throws<ResolutionException>(() => sut.ResolveKeyed<Foo, string>(key, stringArg));
 
-            // Verify outcome
             Assert.Equal(expected, e.Message);
         }
 
@@ -120,13 +101,8 @@ namespace Jwc.Funz
         public void ResolveServiceReturnsCorrectInstance(
             Container sut)
         {
-            // Fixture setup
             sut.Register(c => new Foo());
-
-            // Exercise system
             var actual = sut.Resolve<Foo>();
-
-            // Verify outcome
             Assert.NotNull(actual);
         }
 
@@ -142,8 +118,7 @@ namespace Jwc.Funz
             sut.Register(c => intValue);
             sut.Register(c => stringValue);
 
-            // Exercise system
-            // Verify outcome
+            // Exercise system & Verify outcome
             Assert.Equal(fooValue, sut.Resolve<Foo>());
             Assert.Equal(intValue, sut.Resolve<int>());
             Assert.Equal(stringValue, sut.Resolve<string>());
@@ -154,15 +129,12 @@ namespace Jwc.Funz
             Container sut,
             string stringValue)
         {
-            // Fixture setup
             sut.Register(c => new Foo());
             sut.Register<Foo, string>((c, s) => new Foo(s));
 
-            // Exercise system
             var actual1 = sut.Resolve<Foo>();
             var actual2 = sut.Resolve<Foo, string>(stringValue);
 
-            // Verify outcome
             Assert.NotNull(actual1);
             Assert.Equal(stringValue, actual2.Arg);
         }
@@ -171,14 +143,11 @@ namespace Jwc.Funz
         public void ResolveServiceOnContainerReturnsSharedInstance(
             Container sut)
         {
-            // Fixture setup
             sut.Register(c => new Foo());
             var expected = sut.Resolve<Foo>();
 
-            // Exercise system
             var actual = sut.Resolve<Foo>();
 
-            // Verify outcome
             Assert.Equal(expected, actual);
         }
 
@@ -186,15 +155,12 @@ namespace Jwc.Funz
         public void ResolveServiceOnChildReturnsSharedInstanceOnContainer(
             Container sut)
         {
-            // Fixture setup
             sut.Register(c => new Foo());
             var child = sut.CreateChild();
             var expected = sut.Resolve<Foo>();
 
-            // Exercise system
             var actual = child.Resolve<Foo>();
 
-            // Verify outcome
             Assert.Equal(expected, actual);
         }
 
@@ -203,14 +169,11 @@ namespace Jwc.Funz
             Container sut,
             string stringValue)
         {
-            // Fixture setup
             sut.Register(c => stringValue);
             sut.Register(c => new Foo(c.Resolve<string>()));
 
-            // Exercise system
             var actual = sut.Resolve<Foo>();
 
-            // Verify outcome
             Assert.Equal(stringValue, actual.Arg);
         }
 
@@ -219,13 +182,8 @@ namespace Jwc.Funz
             Container sut,
             object key)
         {
-            // Fixture setup
             sut.Register(key, c => new Foo());
-
-            // Exercise system
             var actual = sut.ResolveKeyed<Foo>(key);
-
-            // Verify outcome
             Assert.NotNull(actual);
         }
 
@@ -234,13 +192,8 @@ namespace Jwc.Funz
             Container sut,
             string stringValue)
         {
-            // Fixture setup
             sut.Register<Foo, string>((c, s) => new Foo(s));
-
-            // Exercise system
             var actual = sut.Resolve<Foo, string>(stringValue);
-
-            // Verify outcome
             Assert.Equal(stringValue, actual.Arg);
         }
 
@@ -250,13 +203,8 @@ namespace Jwc.Funz
             string key,
             string stringValue)
         {
-            // Fixture setup
             sut.Register<Foo, string>(key, (c, s) => new Foo(s));
-
-            // Exercise system
             var actual = sut.ResolveKeyed<Foo, string>(key, stringValue);
-
-            // Verify outcome
             Assert.Equal(stringValue, actual.Arg);
         }
 
@@ -264,14 +212,11 @@ namespace Jwc.Funz
         public void ResolveServiceReusedWithinNoneOnContainerReturnsNonSharedInstance(
             Container sut)
         {
-            // Fixture setup
             sut.Register(c => new Foo()).ReusedWithinNone();
             var expected = sut.Resolve<Foo>();
 
-            // Exercise system
             var actual = sut.Resolve<Foo>();
 
-            // Verify outcome
             Assert.NotEqual(expected, actual);
         }
 
@@ -279,15 +224,12 @@ namespace Jwc.Funz
         public void ResolveServiceReusedWithinNoneOnChildReturnsNonSharedInstance(
             Container sut)
         {
-            // Fixture setup
             sut.Register(c => new Foo()).ReusedWithinNone();
             var child = sut.CreateChild();
             var expected = child.Resolve<Foo>();
 
-            // Exercise system
             var actual = child.Resolve<Foo>();
 
-            // Verify outcome
             Assert.NotEqual(expected, actual);
         }
 
@@ -295,15 +237,12 @@ namespace Jwc.Funz
         public void ResolveServiceReusedWithinNoneOnContainerReturnsNonSharedInstanceOnChild(
             Container sut)
         {
-            // Fixture setup
             sut.Register(c => new Foo()).ReusedWithinNone();
             var child = sut.CreateChild();
             var expected = child.Resolve<Foo>();
 
-            // Exercise system
             var actual = sut.Resolve<Foo>();
 
-            // Verify outcome
             Assert.NotEqual(expected, actual);
         }
 
@@ -311,14 +250,11 @@ namespace Jwc.Funz
         public void ResolveServiceReusedWithinContainerOnContainerReturnsSharedInstance(
             Container sut)
         {
-            // Fixture setup
             sut.Register(c => new Foo()).ReusedWithinContainer();
             var expected = sut.Resolve<Foo>();
 
-            // Exercise system
             var actual = sut.Resolve<Foo>();
 
-            // Verify outcome
             Assert.Equal(expected, actual);
         }
 
@@ -326,15 +262,12 @@ namespace Jwc.Funz
         public void ResolveServiceReusedWithinContainerOnChildReturnsSharedInstance(
             Container sut)
         {
-            // Fixture setup
             sut.Register(c => new Foo()).ReusedWithinContainer();
             var child = sut.CreateChild();
             var expected = child.Resolve<Foo>();
 
-            // Exercise system
             var actual = child.Resolve<Foo>();
 
-            // Verify outcome
             Assert.Equal(expected, actual);
         }
 
@@ -342,15 +275,12 @@ namespace Jwc.Funz
         public void ResolveServiceReusedWithinContainerOnContainerReturnsNonSharedInstanceOnChild(
             Container sut)
         {
-            // Fixture setup
             sut.Register(c => new Foo()).ReusedWithinContainer();
             var child = sut.CreateChild();
             var expected = child.Resolve<Foo>();
 
-            // Exercise system
             var actual = sut.Resolve<Foo>();
 
-            // Verify outcome
             Assert.NotEqual(expected, actual);
         }
 
@@ -358,14 +288,11 @@ namespace Jwc.Funz
         public void ResolveServiceReusedWithinHierarchyOnContainerReturnsSharedInstance(
             Container sut)
         {
-            // Fixture setup
             sut.Register(c => new Foo()).ReusedWithinHierarchy();
             var expected = sut.Resolve<Foo>();
 
-            // Exercise system
             var actual = sut.Resolve<Foo>();
 
-            // Verify outcome
             Assert.Equal(expected, actual);
         }
 
@@ -373,15 +300,12 @@ namespace Jwc.Funz
         public void ResolveServiceReusedWithinContainerOnContainerReturnsSharedInstanceOnChild(
             Container sut)
         {
-            // Fixture setup
             sut.Register(c => new Foo()).ReusedWithinHierarchy();
             var child = sut.CreateChild();
             var expected = child.Resolve<Foo>();
 
-            // Exercise system
             var actual = sut.Resolve<Foo>();
 
-            // Verify outcome
             Assert.Equal(expected, actual);
         }
 
@@ -389,15 +313,12 @@ namespace Jwc.Funz
         public void ResolveServiceReusedWithinContainerOnChildReturnsSharedInstanceOnContainer(
             Container sut)
         {
-            // Fixture setup
             sut.Register(c => new Foo()).ReusedWithinHierarchy();
             var child = sut.CreateChild();
             var expected = sut.Resolve<Foo>();
 
-            // Exercise system
             var actual = child.Resolve<Foo>();
 
-            // Verify outcome
             Assert.Equal(expected, actual);
         }
 
@@ -408,8 +329,7 @@ namespace Jwc.Funz
             // Fixture setup
             sut.Register(c => new Dummy()).ReusedWithinContainer();
             
-            // Exercise system
-            // Verify outcome
+            // Exercise system & Verify outcome
             Assert.DoesNotThrow(() =>
             {
                 const int iteration = 1000;
@@ -429,14 +349,11 @@ namespace Jwc.Funz
             Container sut,
             object scope)
         {
-            // Fixture setup
             sut.Register(c => new Foo()).ReusedWithin(scope);
             var expected = sut.Resolve<Foo>();
 
-            // Exercise system
             var actual = sut.Resolve<Foo>();
 
-            // Verify outcome
             Assert.NotEqual(expected, actual);
         }
 
@@ -445,14 +362,11 @@ namespace Jwc.Funz
             [Inject] object scope,
             [Build] Container sut)
         {
-            // Fixture setup
             sut.Register(c => new Foo()).ReusedWithin(scope);
             var expected = sut.Resolve<Foo>();
 
-            // Exercise system
             var actual = sut.Resolve<Foo>();
 
-            // Verify outcome
             Assert.Equal(expected, actual);
         }
 
@@ -461,15 +375,12 @@ namespace Jwc.Funz
             object scope,
             Container sut)
         {
-            // Fixture setup
             sut.Register(c => new Foo()).ReusedWithin(scope);
             var child = sut.CreateChild(scope);
             var expected = sut.Resolve<Foo>();
 
-            // Exercise system
             var actual = child.Resolve<Foo>();
 
-            // Verify outcome
             Assert.NotEqual(expected, actual);
         }
 
@@ -478,16 +389,13 @@ namespace Jwc.Funz
             string scope,
             Container sut)
         {
-            // Fixture setup
             sut.Register(c => new Foo()).ReusedWithin(scope);
             var child = sut.CreateChild(scope);
             var grandChild = child.CreateChild();
             var expected = grandChild.Resolve<Foo>();
 
-            // Exercise system
             var actual = child.Resolve<Foo>();
 
-            // Verify outcome
             Assert.Equal(expected, actual);
         }
 
@@ -496,16 +404,13 @@ namespace Jwc.Funz
             string scope,
             Container sut)
         {
-            // Fixture setup
             sut.Register(c => new Foo()).ReusedWithin(scope);
             var child = sut.CreateChild(scope);
             var grandChild = child.CreateChild(scope);
             var expected = child.Resolve<Foo>();
 
-            // Exercise system
             var actual = grandChild.Resolve<Foo>();
 
-            // Verify outcome
             Assert.NotEqual(expected, actual);
         }
 
@@ -514,14 +419,11 @@ namespace Jwc.Funz
             Container sut,
             string argument)
         {
-            // Fixture setup
             sut.Register<Foo, string>((c, s) => new Foo()).ReusedWithinNone();
             var expected = sut.Resolve<Foo, string>(argument);
 
-            // Exercise system
             var actual = sut.Resolve<Foo, string>(argument);
 
-            // Verify outcome
             Assert.NotEqual(expected, actual);
         }
 
@@ -530,14 +432,11 @@ namespace Jwc.Funz
             Container sut,
             object key)
         {
-            // Fixture setup
             sut.Register(key, c => new Foo()).ReusedWithinNone();
             var expected = sut.ResolveKeyed<Foo>(key);
 
-            // Exercise system
             var actual = sut.ResolveKeyed<Foo>(key);
 
-            // Verify outcome
             Assert.NotEqual(expected, actual);
         }
 
@@ -547,14 +446,11 @@ namespace Jwc.Funz
             object key,
             string argument)
         {
-            // Fixture setup
             sut.Register<Foo, string>(key, (c, s) => new Foo(s)).ReusedWithinNone();
             var expected = sut.ResolveKeyed<Foo, string>(key, argument);
 
-            // Exercise system
             var actual = sut.ResolveKeyed<Foo, string>(key, argument);
 
-            // Verify outcome
             Assert.NotEqual(expected, actual);
         }
 
@@ -563,14 +459,11 @@ namespace Jwc.Funz
             Container sut,
             string argument)
         {
-            // Fixture setup
             sut.Register<Foo, string>((c, s) => new Foo()).OwnedByContainer();
             var expected = sut.Resolve<Foo, string>(argument);
 
-            // Exercise system
             var actual = sut.Resolve<Foo, string>(argument);
 
-            // Verify outcome
             Assert.Equal(expected, actual);
         }
 
@@ -579,14 +472,11 @@ namespace Jwc.Funz
             Container sut,
             object key)
         {
-            // Fixture setup
             sut.Register(key, c => new Foo()).OwnedByContainer();
             var expected = sut.ResolveKeyed<Foo>(key);
 
-            // Exercise system
             var actual = sut.ResolveKeyed<Foo>(key);
 
-            // Verify outcome
             Assert.Equal(expected, actual);
         }
 
@@ -596,38 +486,26 @@ namespace Jwc.Funz
             object key,
             string stringValue)
         {
-            // Fixture setup
             sut.Register<Foo, string>(key, (c, s) => new Foo(s)).OwnedByContainer();
             var expected = sut.ResolveKeyed<Foo, string>(key, stringValue);
 
-            // Exercise system
             var actual = sut.ResolveKeyed<Foo, string>(key, stringValue);
 
-            // Verify outcome
             Assert.Equal(expected, actual);
         }
 
         [Spec]
         public void ResolveContainerServiceReturnsSutItself(Container sut)
         {
-            // Fixture setup
-            // Exercise system
             var actual = sut.Resolve<Container>();
-
-            // Verify outcome
             Assert.Equal(sut, actual);
         }
 
         [Spec]
         public void ResolveContainerServiceOnChildReturnsChildItself(Container sut)
         {
-            // Fixture setup
             var child = sut.CreateChild();
-
-            // Exercise system
             var actual = child.Resolve<Container>();
-
-            // Verify outcome
             Assert.Equal(child, actual);
         }
 
@@ -635,11 +513,7 @@ namespace Jwc.Funz
         public void TryResolveUnregisteredServiceReturnsDefaultValue(
             Container sut)
         {
-            // Fixture setup
-            // Exercise system
             var actual = sut.TryResolve<Foo>();
-
-            // Verify outcome
             Assert.Null(actual);
         }
 
@@ -647,13 +521,8 @@ namespace Jwc.Funz
         public void TryResolveRegisteredServiceReturnsCorrectInstance(
             Container sut)
         {
-            // Fixture setup
             sut.Register(c => new Foo());
-
-            // Exercise system
             var actual = sut.TryResolve<Foo>();
-
-            // Verify outcome
             Assert.NotNull(actual);
         }
 
@@ -662,11 +531,7 @@ namespace Jwc.Funz
             Container sut,
             string stringValue)
         {
-            // Fixture setup
-            // Exercise system
             var actual = sut.TryResolve<Foo, string>(stringValue);
-
-            // Verify outcome
             Assert.Null(actual);
         }
 
@@ -675,13 +540,8 @@ namespace Jwc.Funz
             Container sut,
             string stringValue)
         {
-            // Fixture setup
             sut.Register<Foo, string>((c, s) => new Foo(s));
-
-            // Exercise system
             var actual = sut.TryResolve<Foo, string>(stringValue);
-
-            // Verify outcome
             Assert.Equal(stringValue, actual.Arg);
         }
 
@@ -690,11 +550,7 @@ namespace Jwc.Funz
             Container sut,
             object key)
         {
-            // Fixture setup
-            // Exercise system
             var actual = sut.TryResolveKeyed<Foo>(key);
-
-            // Verify outcome
             Assert.Null(actual);
         }
 
@@ -703,13 +559,8 @@ namespace Jwc.Funz
             Container sut,
             object key)
         {
-            // Fixture setup
             sut.Register(key, c => new Foo());
-
-            // Exercise system
             var actual = sut.TryResolveKeyed<Foo>(key);
-
-            // Verify outcome
             Assert.NotNull(actual);
         }
 
@@ -719,11 +570,7 @@ namespace Jwc.Funz
             object key,
             string stringValue)
         {
-            // Fixture setup
-            // Exercise system
             var actual = sut.TryResolveKeyed<Foo, string>(key, stringValue);
-
-            // Verify outcome
             Assert.Null(actual);
         }
 
@@ -733,13 +580,8 @@ namespace Jwc.Funz
             object key,
             string stringValue)
         {
-            // Fixture setup
             sut.Register<Foo, string>(key, (c, s) => new Foo(s));
-
-            // Exercise system
             var actual = sut.TryResolveKeyed<Foo, string>(key, stringValue);
-
-            // Verify outcome
             Assert.Equal(stringValue, actual.Arg);
         }
 
@@ -747,15 +589,12 @@ namespace Jwc.Funz
         public void LazyResolveUnregisteredServiceThrows(
             Container sut)
         {
-            // Fixture setup
             var expected = string.Format(
                 "The service type '{0}' was not registered.",
                 typeof(Foo));
 
-            // Exercise system
             var e = Assert.Throws<ResolutionException>(() => sut.LazyResolve<Foo>().Invoke());
 
-            // Verify outcome
             Assert.Equal(expected, e.Message);
         }
 
@@ -763,14 +602,11 @@ namespace Jwc.Funz
         public void LazyResolveRegisteredServiceReturnsCorrectFactory(
             Container sut)
         {
-            // Fixture setup
             sut.Register(c => new Foo()).ReusedWithinNone();
             var expected = sut.LazyResolve<Foo>().Invoke();
 
-            // Exercise system
             var actual = sut.LazyResolve<Foo>().Invoke();
 
-            // Verify outcome
             Assert.NotNull(actual);
             Assert.NotSame(expected, actual);
         }
@@ -780,16 +616,13 @@ namespace Jwc.Funz
             Container sut,
             string argument)
         {
-            // Fixture setup
             var expected = string.Format(
                 "The service type '{0}' with the argument(s) '{1}' was not registered.",
                 typeof(Foo),
                 "System.String");
 
-            // Exercise system
             var e = Assert.Throws<ResolutionException>(() => sut.LazyResolve<Foo, string>().Invoke(argument));
 
-            // Verify outcome
             Assert.Equal(expected, e.Message);
         }
 
@@ -798,14 +631,11 @@ namespace Jwc.Funz
             Container sut,
             string argument)
         {
-            // Fixture setup
             sut.Register<Foo, string>((c, s) => new Foo(s)).ReusedWithinNone();
             var expected = sut.LazyResolve<Foo, string>().Invoke(argument);
 
-            // Exercise system
             var actual = sut.LazyResolve<Foo, string>().Invoke(argument);
 
-            // Verify outcome
             Assert.NotNull(actual);
             Assert.NotSame(expected, actual);
             Assert.Equal(argument, actual.Arg);
@@ -816,16 +646,13 @@ namespace Jwc.Funz
             Container sut,
             object key)
         {
-            // Fixture setup
             var expected = string.Format(
                 "The service type '{0}' with the key '{1}' was not registered.",
                 typeof(Foo),
                 key);
 
-            // Exercise system
             var e = Assert.Throws<ResolutionException>(() => sut.LazyResolveKeyed<Foo>(key).Invoke());
 
-            // Verify outcome
             Assert.Equal(expected, e.Message);
         }
 
@@ -834,14 +661,11 @@ namespace Jwc.Funz
             Container sut,
             object key)
         {
-            // Fixture setup
             sut.Register(key, c => new Foo()).ReusedWithinNone();
             var expected = sut.LazyResolveKeyed<Foo>(key).Invoke();
 
-            // Exercise system
             var actual = sut.LazyResolveKeyed<Foo>(key).Invoke();
 
-            // Verify outcome
             Assert.NotNull(actual);
             Assert.NotSame(expected, actual);
         }
@@ -852,17 +676,14 @@ namespace Jwc.Funz
             object key,
             string argument)
         {
-            // Fixture setup
             var expected = string.Format(
                 "The service type '{0}' with the key '{1}' and the argument(s) '{2}' was not registered.",
                 typeof(Foo),
                 key,
                 "System.String");
 
-            // Exercise system
             var e = Assert.Throws<ResolutionException>(() => sut.LazyResolveKeyed<Foo, string>(key).Invoke(argument));
 
-            // Verify outcome
             Assert.Equal(expected, e.Message);
         }
 
@@ -872,14 +693,11 @@ namespace Jwc.Funz
             object key,
             string argument)
         {
-            // Fixture setup
             sut.Register<Foo, string>(key, (c, s) => new Foo(s)).ReusedWithinNone();
             var expected = sut.LazyResolveKeyed<Foo, string>(key).Invoke(argument);
 
-            // Exercise system
             var actual = sut.LazyResolveKeyed<Foo, string>(key).Invoke(argument);
 
-            // Verify outcome
             Assert.NotNull(actual);
             Assert.NotSame(expected, actual);
             Assert.Equal(argument, actual.Arg);
@@ -889,13 +707,8 @@ namespace Jwc.Funz
         public void CreateChildReturnsCorrectContainer(
             Container sut)
         {
-            // Fixture setup
             sut.Register(c => new Foo());
-
-            // Exercise system
             var actual = sut.CreateChild();
-
-            // Verify outcome
             Assert.NotNull(actual.Resolve<Foo>());
         }
 
@@ -904,13 +717,10 @@ namespace Jwc.Funz
             object scope,
             Container sut)
         {
-            // Fixture setup
             sut.Register(c => new Foo());
 
-            // Exercise system
             var actual = sut.CreateChild(scope);
 
-            // Verify outcome
             Assert.NotNull(actual.Resolve<Foo>());
             Assert.Equal(scope, actual.Scope);
         }
@@ -919,15 +729,12 @@ namespace Jwc.Funz
         public void DisposeDisposesServices(
             Container sut)
         {
-            // Fixture setup
             sut.Register(c => new Disposable()).ReusedWithinContainer();
             var disposable1 = sut.Resolve<Disposable>();
             var disposable2 = sut.Resolve<Disposable>();
 
-            // Exercise system
             sut.Dispose();
 
-            // Verify outcome
             Assert.Equal(1, disposable1.Count);
             Assert.Equal(1, disposable2.Count);
         }
@@ -936,15 +743,12 @@ namespace Jwc.Funz
         public void DisposeManyTimeDisposesOnlyOnce(
             Container sut)
         {
-            // Fixture setup
             sut.Register(c => new Disposable());
             var disposable = sut.Resolve<Disposable>();
 
-            // Exercise system
             sut.Dispose();
             sut.Dispose();
 
-            // Verify outcome
             Assert.Equal(1, disposable.Count);
         }
 
@@ -974,15 +778,12 @@ namespace Jwc.Funz
         public void DisposeDoesNotDisposeServicesOwnedByExternal(
             Container sut)
         {
-            // Fixture setup
             sut.Register(c => new Disposable()).ReusedWithinContainer().OwnedByExternal();
             var disposable1 = sut.Resolve<Disposable>();
             var disposable2 = sut.Resolve<Disposable>();
 
-            // Exercise system
             sut.Dispose();
 
-            // Verify outcome
             Assert.Equal(0, disposable1.Count);
             Assert.Equal(0, disposable2.Count);
         }
@@ -991,15 +792,12 @@ namespace Jwc.Funz
         public void DisposeDisposesServicesOwnedByContainer(
             Container sut)
         {
-            // Fixture setup
             sut.Register(c => new Disposable()).ReusedWithinContainer().OwnedByContainer();
             var disposable1 = sut.Resolve<Disposable>();
             var disposable2 = sut.Resolve<Disposable>();
 
-            // Exercise system
             sut.Dispose();
 
-            // Verify outcome
             Assert.Equal(1, disposable1.Count);
             Assert.Equal(1, disposable2.Count);
         }
@@ -1008,15 +806,12 @@ namespace Jwc.Funz
         public void DisposeDoesNotDisposeServicesOwnedByExternalOnChild(
             Container sut)
         {
-            // Fixture setup
             sut.Register(c => new Disposable()).ReusedWithinContainer().OwnedByExternal();
             var child = sut.CreateChild();
             var disposable = child.Resolve<Disposable>();
 
-            // Exercise system
             sut.Dispose();
 
-            // Verify outcome
             Assert.Equal(0, disposable.Count);
         }
 
@@ -1025,15 +820,12 @@ namespace Jwc.Funz
             object scope,
             Container sut)
         {
-            // Fixture setup
             sut.Register(c => new Disposable()).ReusedWithin(scope).OwnedByExternal();
             var child = sut.CreateChild(scope);
             var disposable = child.Resolve<Disposable>();
 
-            // Exercise system
             sut.Dispose();
 
-            // Verify outcome
             Assert.Equal(0, disposable.Count);
         }
 
@@ -1044,14 +836,11 @@ namespace Jwc.Funz
             Container sut,
             IFixture fixture)
         {
-            // Fixture setup
             var arugments = method.GetParameters().Select(p => fixture.Create((object)p.ParameterType)).ToArray();
             sut.Dispose();
 
-            // Exercise system
             var e = Assert.Throws<TargetInvocationException>(() => method.Invoke(sut, arugments));
 
-            // Verify outcome
             Assert.IsType<ObjectDisposedException>(e.InnerException);
         }
 
@@ -1059,15 +848,12 @@ namespace Jwc.Funz
         public void DisposeWithFalseDisposingDoesNotDispose(
             DerivedContainer sut)
         {
-            // Fixture setup
             sut.Register(c => new Disposable()).ReusedWithinContainer();
             var disposable = sut.Resolve<Disposable>();
             sut.Disposing = false;
 
-            // Exercise system
             sut.Dispose();
 
-            // Verify outcome
             Assert.Equal(0, disposable.Count);
         }
 
@@ -1075,17 +861,14 @@ namespace Jwc.Funz
         public void DisposeWithDisposingTwiceDoesNotDispose(
             DerivedContainer sut)
         {
-            // Fixture setup
             sut.Register(c => new Disposable()).ReusedWithinContainer();
             var disposable = sut.Resolve<Disposable>();
             sut.Disposing = false;
             sut.Dispose();
             sut.Disposing = true;
 
-            // Exercise system
             sut.Dispose();
 
-            // Verify outcome
             Assert.Equal(0, disposable.Count);
         }
 
@@ -1093,11 +876,7 @@ namespace Jwc.Funz
         public void LazyResolveWithNullKeyThrows(
             DerivedContainer sut)
         {
-            // Fixture setup
-            // Exercise system
             var e = Assert.Throws<ArgumentNullException>(() => sut.LazyResolveKeyed<Foo>(null).Invoke());
-
-            // Verify outcome
             Assert.Equal("key", e.ParamName);
         }
 
@@ -1106,12 +885,8 @@ namespace Jwc.Funz
             DerivedContainer sut,
             string argument)
         {
-            // Fixture setup
-            // Exercise system
             var e = Assert.Throws<ArgumentNullException>(
                 () => sut.LazyResolveKeyed<Foo, string>(null).Invoke(argument));
-
-            // Verify outcome
             Assert.Equal("key", e.ParamName);
         }
 
@@ -1122,13 +897,10 @@ namespace Jwc.Funz
             int arg2,
             string arg3)
         {
-            // Fixture setup
             sut.Register<Bar, object, int, string>((c, o, i, s) => new Bar(o, i, s));
 
-            // Exercise system
             var actual = sut.Resolve<Bar, object, int, string>(arg1, arg2, arg3);
 
-            // Verify outcome
             Assert.Equal(arg1, actual.Arg1);
             Assert.Equal(arg2, actual.Arg2);
             Assert.Equal(arg3, actual.Arg3);
@@ -1141,13 +913,10 @@ namespace Jwc.Funz
             int arg2,
             string arg3)
         {
-            // Fixture setup
             sut.Register<Bar, object, int, string>((c, o, i, s) => new Bar(o, i, s));
 
-            // Exercise system
             var actual = sut.TryResolve<Bar, object, int, string>(arg1, arg2, arg3);
 
-            // Verify outcome
             Assert.Equal(arg1, actual.Arg1);
             Assert.Equal(arg2, actual.Arg2);
             Assert.Equal(arg3, actual.Arg3);
@@ -1160,11 +929,7 @@ namespace Jwc.Funz
             int arg2,
             string arg3)
         {
-            // Fixture setup
-            // Exercise system
             var actual = sut.TryResolve<Bar, object, int, string>(arg1, arg2, arg3);
-
-            // Verify outcome
             Assert.Null(actual);
         }
 
@@ -1175,13 +940,10 @@ namespace Jwc.Funz
             int arg2,
             string arg3)
         {
-            // Fixture setup
             sut.Register<Bar, object, int, string>((c, o, i, s) => new Bar(o, i, s));
-
-            // Exercise system
+            
             var actual = sut.LazyResolve<Bar, object, int, string>().Invoke(arg1, arg2, arg3);
 
-            // Verify outcome
             Assert.Equal(arg1, actual.Arg1);
             Assert.Equal(arg2, actual.Arg2);
             Assert.Equal(arg3, actual.Arg3);
@@ -1195,13 +957,10 @@ namespace Jwc.Funz
             int arg2,
             string arg3)
         {
-            // Fixture setup
             sut.Register<Bar, object, int, string>(key, (c, o, i, s) => new Bar(o, i, s));
 
-            // Exercise system
             var actual = sut.ResolveKeyed<Bar, object, int, string>(key, arg1, arg2, arg3);
 
-            // Verify outcome
             Assert.Equal(arg1, actual.Arg1);
             Assert.Equal(arg2, actual.Arg2);
             Assert.Equal(arg3, actual.Arg3);
@@ -1215,13 +974,10 @@ namespace Jwc.Funz
             int arg2,
             string arg3)
         {
-            // Fixture setup
             sut.Register<Bar, object, int, string>(key, (c, o, i, s) => new Bar(o, i, s));
 
-            // Exercise system
             var actual = sut.TryResolveKeyed<Bar, object, int, string>(key, arg1, arg2, arg3);
 
-            // Verify outcome
             Assert.Equal(arg1, actual.Arg1);
             Assert.Equal(arg2, actual.Arg2);
             Assert.Equal(arg3, actual.Arg3);
@@ -1235,11 +991,7 @@ namespace Jwc.Funz
             int arg2,
             string arg3)
         {
-            // Fixture setup
-            // Exercise system
             var actual = sut.TryResolveKeyed<Bar, object, int, string>(key, arg1, arg2, arg3);
-
-            // Verify outcome
             Assert.Null(actual);
         }
 
@@ -1251,13 +1003,10 @@ namespace Jwc.Funz
             int arg2,
             string arg3)
         {
-            // Fixture setup
             sut.Register<Bar, object, int, string>(key, (c, o, i, s) => new Bar(o, i, s));
 
-            // Exercise system
             var actual = sut.LazyResolveKeyed<Bar, object, int, string>(key).Invoke(arg1, arg2, arg3);
 
-            // Verify outcome
             Assert.Equal(arg1, actual.Arg1);
             Assert.Equal(arg2, actual.Arg2);
             Assert.Equal(arg3, actual.Arg3);
@@ -1274,10 +1023,8 @@ namespace Jwc.Funz
                 return new Foo();
             });
 
-            // Exercise system
+            // Exercise system & Verify outcome
             var e = Assert.Throws<ResolutionException>(() => sut.Resolve<Foo>());
-
-            // Verify outcome
             Assert.Equal(
                 "The service type 'Jwc.Funz.ContainerTest+Foo' was registered recursively.",
                 e.Message);
@@ -1295,10 +1042,8 @@ namespace Jwc.Funz
                 return new Foo();
             });
 
-            // Exercise system
+            // Exercise system & Verify outcome
             var e = Assert.Throws<ResolutionException>(() => sut.ResolveKeyed<Foo>(key));
-
-            // Verify outcome
             Assert.Equal(
                 "The service type 'Jwc.Funz.ContainerTest+Foo' with the key 'System.Object' " +
                 "was registered recursively.",
@@ -1317,10 +1062,8 @@ namespace Jwc.Funz
                 return new Foo(s);
             });
 
-            // Exercise system
+            // Exercise system & Verify outcome
             var e = Assert.Throws<ResolutionException>(() => sut.Resolve<Foo, string>(argument));
-
-            // Verify outcome
             Assert.Equal(
                 "The service type 'Jwc.Funz.ContainerTest+Foo' with the argument(s) " +
                 "'System.String' was registered recursively.",
@@ -1340,10 +1083,8 @@ namespace Jwc.Funz
                 return new Foo(s);
             });
 
-            // Exercise system
+            // Exercise system & Verify outcome
             var e = Assert.Throws<ResolutionException>(() => sut.ResolveKeyed<Foo, string>(key, argument));
-
-            // Verify outcome
             Assert.Equal(
                 "The service type 'Jwc.Funz.ContainerTest+Foo' with the key 'System.Object' " +
                 "and the argument(s) 'System.String' was registered recursively.",
@@ -1373,10 +1114,8 @@ namespace Jwc.Funz
                 return new Bar(null, 0, string.Empty);
             });
 
-            // Exercise system
+            // Exercise system & Verify outcome
             var e = Assert.Throws<ResolutionException>(() => sut.Resolve<Foo>());
-
-            // Verify outcome
             Assert.Equal(
                 "The service type 'Jwc.Funz.ContainerTest+Foo' was registered recursively.",
                 e.Message);
@@ -1396,10 +1135,8 @@ namespace Jwc.Funz
                 return new Bar(o, i, s);
             });
 
-            // Exercise system
+            // Exercise system & Verify outcome
             var e = Assert.Throws<ResolutionException>(() => sut.Resolve<Bar, object, int, string>(arg1, arg2, arg3));
-
-            // Verify outcome
             Assert.Equal(
                 "The service type 'Jwc.Funz.ContainerTest+Bar' with the argument(s) " +
                 "'System.Object, System.Int32, System.String' was registered recursively.",
@@ -1421,11 +1158,9 @@ namespace Jwc.Funz
                 return new Bar(o, i, s);
             });
 
-            // Exercise system
+            // Exercise system & Verify outcome
             var e = Assert.Throws<ResolutionException>(
                 () => sut.ResolveKeyed<Bar, object, int, string>(key, arg1, arg2, arg3));
-
-            // Verify outcome
             Assert.Equal(
                 "The service type 'Jwc.Funz.ContainerTest+Bar' with the key 'System.Object' and the argument(s) " +
                 "'System.Object, System.Int32, System.String' was registered recursively.",
@@ -1585,13 +1320,8 @@ namespace Jwc.Funz
             IContainerVisitor<object> visitor,
             IContainerVisitor<object> expected)
         {
-            // Fixture setup
             visitor.ToMock().Setup(x => x.Visit(sut)).Returns(expected);
-
-            // Exercise system
             var actual = sut.Accept(visitor);
-
-            // Verify outcome
             Assert.Equal(expected, actual);
         }
 
@@ -1621,11 +1351,7 @@ namespace Jwc.Funz
         public void CanResolveUnregisteredServiceReturnsFalse(
             Container sut)
         {
-            // Fixture setup
-            // Exercise system
             var actual = sut.CanResolve<Foo>();
-
-            // Verify outcome
             Assert.False(actual, "CanResolve");
         }
 
@@ -1633,13 +1359,8 @@ namespace Jwc.Funz
         public void CanResolveRegisteredServiceReturnsTrue(
             Container sut)
         {
-            // Fixture setup
             sut.Register(c => new Foo());
-
-            // Exercise system
             var actual = sut.CanResolve<Foo>();
-
-            // Verify outcome
             Assert.True(actual, "CanResolve");
         }
 
@@ -1647,11 +1368,7 @@ namespace Jwc.Funz
         public void CanResolveUnregisteredServiceWithArgumentReturnsFalse(
             Container sut)
         {
-            // Fixture setup
-            // Exercise system
             var actual = sut.CanResolve<Foo, string>();
-
-            // Verify outcome
             Assert.False(actual, "CanResolve");
         }
 
@@ -1659,13 +1376,8 @@ namespace Jwc.Funz
         public void CanResolveRegisteredServiceWithArgumentReturnsTrue(
             Container sut)
         {
-            // Fixture setup
             sut.Register<Foo, string>((c, s) => new Foo(s));
-
-            // Exercise system
             var actual = sut.CanResolve<Foo, string>();
-
-            // Verify outcome
             Assert.True(actual, "CanResolve");
         }
 
@@ -1674,11 +1386,7 @@ namespace Jwc.Funz
             Container sut,
             object key)
         {
-            // Fixture setup
-            // Exercise system
             var actual = sut.CanResolveKeyed<Foo>(key);
-
-            // Verify outcome
             Assert.False(actual, "CanResolve");
         }
 
@@ -1687,13 +1395,8 @@ namespace Jwc.Funz
             Container sut,
             object key)
         {
-            // Fixture setup
             sut.Register(key, c => new Foo());
-
-            // Exercise system
             var actual = sut.CanResolveKeyed<Foo>(key);
-
-            // Verify outcome
             Assert.True(actual, "CanResolve");
         }
 
@@ -1702,11 +1405,7 @@ namespace Jwc.Funz
             Container sut,
             object key)
         {
-            // Fixture setup
-            // Exercise system
             var actual = sut.CanResolveKeyed<Foo, string>(key);
-
-            // Verify outcome
             Assert.False(actual, "CanResolve");
         }
 
@@ -1715,13 +1414,8 @@ namespace Jwc.Funz
             Container sut,
             object key)
         {
-            // Fixture setup
             sut.Register<Foo, string>(key, (c, s) => new Foo(s));
-
-            // Exercise system
             var actual = sut.CanResolveKeyed<Foo, string>(key);
-
-            // Verify outcome
             Assert.True(actual, "CanResolve");
         }
 
@@ -1729,11 +1423,7 @@ namespace Jwc.Funz
         public void CanResolveUnregisteredServiceIfCreatedByTemplateReturnsFalse(
             Container sut)
         {
-            // Fixture setup
-            // Exercise system
             var actual = sut.CanResolve<Bar, object, int, string>();
-
-            // Verify outcome
             Assert.False(actual, "CanResolve");
         }
 
@@ -1741,13 +1431,8 @@ namespace Jwc.Funz
         public void CanResolveRegisteredServiceIfCreatedByTemplateReturnsTrue(
             Container sut)
         {
-            // Fixture setup
             sut.Register<Bar, object, int, string>((c, o, i, s) => new Bar(o, i, s));
-
-            // Exercise system
             var actual = sut.CanResolve<Bar, object, int, string>();
-
-            // Verify outcome
             Assert.True(actual, "CanResolve");
         }
 
@@ -1756,11 +1441,7 @@ namespace Jwc.Funz
             Container sut,
             object key)
         {
-            // Fixture setup
-            // Exercise system
             var actual = sut.CanResolveKeyed<Bar, object, int, string>(key);
-
-            // Verify outcome
             Assert.False(actual, "CanResolve");
         }
 
@@ -1769,13 +1450,8 @@ namespace Jwc.Funz
             Container sut,
             object key)
         {
-            // Fixture setup
             sut.Register<Bar, object, int, string>(key, (c, o, i, s) => new Bar(o, i, s));
-
-            // Exercise system
             var actual = sut.CanResolveKeyed<Bar, object, int, string>(key);
-
-            // Verify outcome
             Assert.True(actual, "CanResolve");
         }
 
