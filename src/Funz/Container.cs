@@ -27,8 +27,7 @@ namespace Jwc.Funz
         /// <summary>
         /// Initializes a new instance of the <see cref="Container" /> class.
         /// </summary>
-        public Container()
-            : this(new object())
+        public Container() : this(CreateScope())
         {
         }
 
@@ -363,7 +362,7 @@ namespace Jwc.Funz
         /// </returns>
         public Container CreateChild()
         {
-            return CreateChild(new object());
+            return CreateChild(CreateScope());
         }
 
         /// <summary>
@@ -413,6 +412,17 @@ namespace Jwc.Funz
             ThrowExceptionIfDisposed();
 
             return visitor.Visit(this);
+        }
+
+        /// <summary>
+        /// Returns a <see cref="System.String" /> that represents this instance.
+        /// </summary>
+        /// <returns>
+        /// A <see cref="System.String" /> that represents this instance.
+        /// </returns>
+        public override string ToString()
+        {
+            return Scope.ToString();
         }
 
         /// <summary>
@@ -541,7 +551,7 @@ namespace Jwc.Funz
         private void ThrowExceptionIfDisposed()
         {
             if (_disposed)
-                throw new ObjectDisposedException(ToString());
+                throw new ObjectDisposedException("Jwc.Funz.Container");
         }
 
         private static void ThrowNotRegistered(ServiceKey serviceKey)
@@ -620,6 +630,11 @@ namespace Jwc.Funz
                 serviceType,
                 serviceKey.Key,
                 string.Join(", ", argumentTypes.Select(x => x.FullName))));
+        }
+
+        private static string CreateScope()
+        {
+            return "Container" + Guid.NewGuid().ToString("N");
         }
 
         private class ContainerCollection : IEnumerable<Container>

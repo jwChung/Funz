@@ -3,6 +3,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Text.RegularExpressions;
 using System.Threading;
 using Jwc.AutoFixture;
 using Jwc.AutoFixture.Idioms;
@@ -1452,6 +1453,56 @@ namespace Jwc.Funz
             sut.Register<Bar, object, int, string>(key, (c, o, i, s) => new Bar(o, i, s));
             var actual = sut.CanResolveKeyed<Bar, object, int, string>(key);
             Assert.True(actual, "CanResolve");
+        }
+
+        [Spec]
+        public void ScopeIsString(
+            Container sut)
+        {
+            var actual = sut.Scope;
+            Assert.IsType<string>(actual);
+        }
+
+        [Spec]
+        public void ScopeIsUnique(
+            IFixture fixture)
+        {
+            var actual = Enumerable.Range(0, 10).Select(i => fixture.Create<Container>().Scope);
+            Assert.Equal(10, actual.Distinct().Count());
+        }
+
+        [Spec]
+        public void ScopeIsCorrectFormat(
+            Container sut)
+        {
+            var actual = sut.Scope;
+            Assert.True(Regex.IsMatch(actual.ToString(), "Container[0-9a-f]{32}"), "format");
+        }
+
+        [Spec]
+        public void ToStringReturnsScopeString(
+            [Inject(As = typeof(object))] string scope,
+            [Build] Container sut)
+        {
+            var actual = sut.ToString();
+            Assert.Equal(scope, actual);
+        }
+
+        [Spec]
+        public void ScopeOfChildIsCorrectFormat(
+            Container sut)
+        {
+            var child = sut.CreateChild();
+            var actual = child.Scope;
+            Assert.True(Regex.IsMatch(actual.ToString(), "Container[0-9a-f]{32}"), "format");
+        }
+
+        [Spec]
+        public void ScopeOfChildIsUnique(
+            Container sut)
+        {
+            var actual = Enumerable.Range(0, 10).Select(i => sut.CreateChild().Scope);
+            Assert.Equal(10, actual.Distinct().Count());
         }
 
         private class PublicMethodDataAttribute : DataAttribute
