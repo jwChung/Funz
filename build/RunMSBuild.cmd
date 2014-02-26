@@ -5,7 +5,7 @@ if ERRORLEVEL 1 goto MissingMSBuildRegistry
 for /f "skip=2 tokens=2,*" %%A in ('reg.exe query "%RegPath%" /v MSBuildToolsPath') do SET MSBUILDDIR=%%B
 IF NOT EXIST %MSBUILDDIR%nul goto MissingMSBuildToolsPath
 IF NOT EXIST %MSBUILDDIR%msbuild.exe goto MissingMSBuildExe
-"%MSBUILDDIR%msbuild.exe" %1
+"%MSBUILDDIR%msbuild.exe" %*
 goto:eof
 
 :MissingMSBuildRegistry
