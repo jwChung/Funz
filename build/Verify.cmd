@@ -1,3 +1,3 @@
 @ECHO OFF
 cd build
-BuildFunz /v:normal /maxcpucount /nodeReuse:false /t:Verify
+"%ProgramFiles(x86)%\MSBuild\12.0\bin\amd64\MSBuild.exe" Funz.proj /v:normal /maxcpucount /nodeReuse:false %*
