@@ -1,3 +1,9 @@
 @ECHO OFF
-cd build
-"%ProgramFiles(x86)%\MSBuild\12.0\bin\amd64\MSBuild.exe" Funz.proj /v:normal /maxcpucount /nodeReuse:false %*
+CD build
+IF "%VS120COMNTOOLS%"=="" (
+    SET VsVersionProperty=""
+) ELSE (
+    SET VsVersionProperty="/p:VisualStudioVersion=12.0"
+)
+
+"%windir%\Microsoft.NET\Framework\v4.0.30319\MSBuild" Funz.proj /v:normal /maxcpucount /nodeReuse:false %VsVersionProperty% %*
