@@ -11,4 +11,4 @@ using System.Runtime.InteropServices;
 [assembly: NeutralResourcesLanguage("en-US")]
 [assembly: AssemblyProduct("")]
 [assembly: AssemblyVersion("0.4.0")]
-[assembly: AssemblyInformationalVersion("0.4.0-pre01")]
+[assembly: AssemblyInformationalVersion("0.4.0-pre02")]
