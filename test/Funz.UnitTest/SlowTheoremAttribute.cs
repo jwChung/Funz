@@ -3,11 +3,11 @@ using Jwc.AutoFixture.Xunit;
 
 namespace Jwc.Funz
 {
-    public class SlowSpecAttribute : SpecAttribute
+    public class SlowTheoremAttribute : TheoremAttribute
     {
         private readonly RunOn _runOn;
 
-        public SlowSpecAttribute(RunOn runOn)
+        public SlowTheoremAttribute(RunOn runOn)
         {
             _runOn = runOn;
         }

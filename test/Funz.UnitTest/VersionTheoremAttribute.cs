@@ -2,13 +2,13 @@
 
 namespace Jwc.Funz
 {
-    public class VersionSpecAttribute : SpecAttribute
+    public class VersionTheoremAttribute : TheoremAttribute
     {
         private readonly int _major;
         private readonly int _minor;
         private readonly int _patch;
 
-        public VersionSpecAttribute(int major, int minor, int patch)
+        public VersionTheoremAttribute(int major, int minor, int patch)
         {
             _major = major;
             _minor = minor;

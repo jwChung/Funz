@@ -39,7 +39,7 @@
   <ItemGroup>
     <Reference Include="AutoFixture.Contrib, Version=3.0.0.0, Culture=neutral, PublicKeyToken=db4e4bc25029966c, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\packages\AutoFixture.Contrib.3.0.0-pre05\lib\net40\AutoFixture.Contrib.dll</HintPath>
+      <HintPath>..\..\packages\AutoFixture.Contrib.3.0.0-pre07\lib\net40\AutoFixture.Contrib.dll</HintPath>
     </Reference>
     <Reference Include="Moq, Version=4.2.1312.1622, Culture=neutral, PublicKeyToken=69f491c39445e920, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -75,9 +75,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ResolutionExceptionTest.cs" />
     <Compile Include="RunOn.cs" />
-    <Compile Include="SlowSpecAttribute.cs" />
+    <Compile Include="SlowTheoremAttribute.cs" />
     <Compile Include="Scenario.cs" />
-    <Compile Include="VersionSpecAttribute.cs" />
+    <Compile Include="VersionTheoremAttribute.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

@@ -7,7 +7,7 @@ namespace Jwc.Funz
 {
     public class Scenario
     {
-        [VersionSpec(0, 1, 0)]
+        [VersionTheorem(0, 1, 0)]
         public void ResolveRegisteredServiceReturnsCorrectInstance(
             Container container)
         {
@@ -21,7 +21,7 @@ namespace Jwc.Funz
             Assert.IsType<Foo>(actual);
         }
 
-        [VersionSpec(0, 1, 0)]
+        [VersionTheorem(0, 1, 0)]
         public void ResolveUnregisteredServiceThrowsResolutionException(
             Container container)
         {
@@ -32,7 +32,7 @@ namespace Jwc.Funz
             Assert.Throws<ResolutionException>(() => container.Resolve<IBar>());
         }
 
-        [VersionSpec(0, 1, 0)]
+        [VersionTheorem(0, 1, 0)]
         public void TryResolveUnregisteredServiceReturnsDefaultValue(
             Container container)
         {
@@ -46,7 +46,7 @@ namespace Jwc.Funz
             Assert.Equal(0, actual2);
         }
 
-        [VersionSpec(0, 1, 0)]
+        [VersionTheorem(0, 1, 0)]
         public void LazyResolveServiceReturnsFactory(
             Container container)
         {
@@ -60,7 +60,7 @@ namespace Jwc.Funz
             Assert.IsType<Foo>(actual.Invoke());
         }
 
-        [VersionSpec(0, 1, 0)]
+        [VersionTheorem(0, 1, 0)]
         public void ResolveKeyedServiceReturnsDifferentInstanceFromUnkeyed(
             Container container,
             Foo foo1,
@@ -79,7 +79,7 @@ namespace Jwc.Funz
             Assert.NotEqual(expected, actual);
         }
 
-        [VersionSpec(0, 1, 0)]
+        [VersionTheorem(0, 1, 0)]
         public void ResolveOnChildReturnsCorrectInstance(
             Container container)
         {
@@ -94,7 +94,7 @@ namespace Jwc.Funz
             Assert.IsType<Foo>(actual);
         }
 
-        [VersionSpec(0, 1, 0)]
+        [VersionTheorem(0, 1, 0)]
         public void ResolveServiceReusedWithinNoneAlwayReturnsNewInstance(
             Container container)
         {
@@ -109,7 +109,7 @@ namespace Jwc.Funz
             Assert.NotSame(expected, actual);
         }
 
-        [VersionSpec(0, 1, 0)]
+        [VersionTheorem(0, 1, 0)]
         public void ResolveServiceReusedWithinContainerReturnsSharedInstance(
             Container container)
         {
@@ -124,7 +124,7 @@ namespace Jwc.Funz
             Assert.Same(expected, actual);
         }
 
-        [VersionSpec(0, 1, 0)]
+        [VersionTheorem(0, 1, 0)]
         public void ResolveServiceReusedWithinContainerReturnsNonSharedInstanceWithChild(
             Container container)
         {
@@ -140,7 +140,7 @@ namespace Jwc.Funz
             Assert.NotSame(expected, actual);
         }
 
-        [VersionSpec(0, 1, 0)]
+        [VersionTheorem(0, 1, 0)]
         public void ResolveServiceReusedWithinContainerOnChildReturnsSharedInstance(
             Container container)
         {
@@ -156,7 +156,7 @@ namespace Jwc.Funz
             Assert.Same(expected, actual);
         }
 
-        [VersionSpec(0, 1, 0)]
+        [VersionTheorem(0, 1, 0)]
         public void ResolveServiceReusedWithinHierarchyReturnsSharedInstanceWithChildAndGrandChild(
             Container container)
         {
@@ -175,7 +175,7 @@ namespace Jwc.Funz
             Assert.Same(expected2, actual);
         }
 
-        [VersionSpec(0, 1, 0)]
+        [VersionTheorem(0, 1, 0)]
         public void ResolveServieReusedWithinScopeReturnsNonSharedInstanceWithDifferentScope(
             Container container,
             string scope)
@@ -192,7 +192,7 @@ namespace Jwc.Funz
             Assert.NotSame(expected, actual);
         }
 
-        [VersionSpec(0, 1, 0)]
+        [VersionTheorem(0, 1, 0)]
         public void ResolveServieReusedWithinScopeReturnsSharedInstanceWithSameScope(
             Container container)
         {
@@ -207,7 +207,7 @@ namespace Jwc.Funz
             Assert.Same(expected, actual);
         }
 
-        [VersionSpec(0, 1, 0)]
+        [VersionTheorem(0, 1, 0)]
         public void ResolveServieReusedWithinScopeReturnsSharedInstanceWithSameScopedChild(
             Container container)
         {
@@ -223,7 +223,7 @@ namespace Jwc.Funz
             Assert.Same(expected, actual);
         }
 
-        [VersionSpec(0, 1, 0)]
+        [VersionTheorem(0, 1, 0)]
         public void ResolveServieReusedWithinScopeReturnsNonSharedInstanceWithDifferentScopedChild(
             Container container,
             int scope)
@@ -240,7 +240,7 @@ namespace Jwc.Funz
             Assert.NotSame(expected, actual);
         }
 
-        [VersionSpec(0, 1, 0)]
+        [VersionTheorem(0, 1, 0)]
         public void ContainerHasReusedWithinHierarchyOptionAsDefault(
             Container container)
         {
@@ -256,7 +256,7 @@ namespace Jwc.Funz
             Assert.Same(expected, actual);
         }
 
-        [VersionSpec(0, 1, 0)]
+        [VersionTheorem(0, 1, 0)]
         public void DisposeReusedInstanceCorrectlyDisposes(
             Container container)
         {
@@ -271,7 +271,7 @@ namespace Jwc.Funz
             Assert.True(service.Disposed, "Disposed");
         }
 
-        [VersionSpec(0, 1, 0)]
+        [VersionTheorem(0, 1, 0)]
         public void DisposeNonReusedInstanceDoesNotDispose(
             Container container)
         {
@@ -286,7 +286,7 @@ namespace Jwc.Funz
             Assert.False(service.Disposed, "Disposed");
         }
 
-        [VersionSpec(0, 1, 0)]
+        [VersionTheorem(0, 1, 0)]
         public void DisposeReusedInstanceOwnedByExternalDoesNotDispose(
             Container container)
         {
@@ -301,7 +301,7 @@ namespace Jwc.Funz
             Assert.False(service.Disposed, "Disposed");
         }
 
-        [VersionSpec(0, 1, 0)]
+        [VersionTheorem(0, 1, 0)]
         public void DisposeAlsoDisposesChildContainer(
             Container container)
         {
@@ -317,7 +317,7 @@ namespace Jwc.Funz
             Assert.True(service.Disposed, "Disposed");
         }
 
-        [VersionSpec(0, 1, 1)]
+        [VersionTheorem(0, 1, 1)]
         public void ResolveRecursiveServiceThrowsResolutionException(
             Container container)
         {
@@ -331,7 +331,7 @@ namespace Jwc.Funz
             Assert.Throws<ResolutionException>(() => container.Resolve<IBar>());
         }
 
-        [VersionSpec(0, 2, 0)]
+        [VersionTheorem(0, 2, 0)]
         public void ContainerVisitorCanBeUsedToBatchRegistrations(
             Container container,
             BatchRegistration batch)
@@ -348,7 +348,7 @@ namespace Jwc.Funz
             Assert.IsType<Bar>(actual2);
         }
 
-        [VersionSpec(0, 2, 0)]
+        [VersionTheorem(0, 2, 0)]
         public void ContainerVisitorCanBeUsedToResolveService(
             Container container,
             BatchRegistration batch,
@@ -365,7 +365,7 @@ namespace Jwc.Funz
             Assert.IsType<Bar>(actual.Bar);
         }
 
-        [VersionSpec(0, 2, 0)]
+        [VersionTheorem(0, 2, 0)]
         public void ContainerVisitorCanUsedToRegisterType(
             Container container)
         {
@@ -382,7 +382,7 @@ namespace Jwc.Funz
             Assert.IsType<Bar>(actual.Bar);
         }
 
-        [VersionSpec(0, 2, 0)]
+        [VersionTheorem(0, 2, 0)]
         public void CompositeContainerVisitorCorrectlyComposesVisitors(
             Container container,
             BatchRegistration batch,
@@ -406,7 +406,7 @@ namespace Jwc.Funz
             Assert.Same(bar, foo.Bar);
         }
 
-        [VersionSpec(0, 3, 0)]
+        [VersionTheorem(0, 3, 0)]
         public void CanResolveUnregisteredServiceReturnsFalse(
             Container container)
         {
@@ -418,7 +418,7 @@ namespace Jwc.Funz
             Assert.False(actual, "CanResolve");
         }
 
-        [VersionSpec(0, 3, 0)]
+        [VersionTheorem(0, 3, 0)]
         public void CanResolveRegisteredServiceReturnsTrue(
             Container container)
         {

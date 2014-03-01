@@ -13,14 +13,14 @@ namespace Jwc.Funz
             return base.GetInitializedMembers().Exclude(x => x.Result);
         }
 
-        [Spec]
+        [Theorem]
         public void SutIsContainerVisitorOfEnumerable(
             CompositeContainerVisitor<string> sut)
         {
             Assert.IsAssignableFrom<IContainerVisitor<IEnumerable<string>>>(sut);
         }
 
-        [Spec]
+        [Theorem]
         public void VisitMakesAllVisitorsVisitContainer(
             [Inject] IContainerVisitor<int>[] visitors,
             [Build] CompositeContainerVisitor<int> sut,
@@ -37,7 +37,7 @@ namespace Jwc.Funz
             Assert.Equal(returnedVisitors, result.Visitors);
         }
 
-        [Spec]
+        [Theorem]
         public void VisitReturnsNewInstance(
             CompositeContainerVisitor<int> sut,
             Container container)
@@ -46,7 +46,7 @@ namespace Jwc.Funz
             Assert.NotEqual(sut, actual);
         }
 
-        [Spec]
+        [Theorem]
         public void ResultReturnsEnumerableOfVisitorResult(
             [Inject] IContainerVisitor<string>[] visitors,
             [Build] CompositeContainerVisitor<string> sut,

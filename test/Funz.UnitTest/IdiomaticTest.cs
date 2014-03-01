@@ -26,7 +26,7 @@ namespace Jwc.Funz
     public abstract class IdiomaticTest<TSUT, TTestClass>
         : IdiomaticTest<TSUT> where TTestClass : IdiomaticTest<TSUT>
     {
-        [Spec]
+        [Theorem]
         [PropertyData("GuardMemberData")]
         public void SutHasAppropriateGuards(
             MemberInfo member,
@@ -35,7 +35,7 @@ namespace Jwc.Funz
             assertion.Verify(member);
         }
 
-        [Spec]
+        [Theorem]
         [PropertyData("InitializedMemberData")]
         public void SutHasCorrectInitializedMembers(
             MemberInfo member,
