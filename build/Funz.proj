@@ -27,6 +27,7 @@
           RestoreNuGetVersion;
           NuGetPush;
           DeleteNupkgFiles;
+          GitTagging;
           " />
 
   <Target Name="MakePrivateKeyFile">
@@ -118,6 +119,11 @@
       <NupkgFiles Include="*.nupkg" />
     </ItemGroup>
     <Delete Files="@(NupkgFiles)" />
+  </Target>
+
+  <Target Name="GitTagging">
+    <Exec Command="git tag $(SemanticVersion)" />
+    <Exec Command="git push --tags --repo https://$(GitHubAccount)@github.com/jwChung/Funz.git" />
   </Target>
 
   <UsingTask TaskName="MakePrivateKeyFile"
