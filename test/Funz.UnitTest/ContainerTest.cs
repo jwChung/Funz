@@ -1521,8 +1521,14 @@ namespace Jwc.Funz
                     | BindingFlags.Instance
                     | BindingFlags.DeclaredOnly;
 
+                var methods = typeof(Container)
+                    .GetMethods(bindingFlags)
+                    .Where(m => !m.Name.StartsWith("LazyResolve"))
+                    .Cast<MemberInfo>()
+                    .ToArray();
+
                 return new MemberCollection<Container>(new MemberEnumerable<Container>(BindingFlags.Default))
-                    .Apply(new MemberAddition(typeof(Container).GetMethods(bindingFlags).Where(m => !m.Name.StartsWith("LazyResolve")).Cast<MemberInfo>().ToArray()))
+                    .Apply(new MemberAddition(methods))
                     .Remove(new Methods<Container>().Select(x => x.Dispose()))
                     .Select(m => new object[] { m.MakeAutoGeneric() });
             }
