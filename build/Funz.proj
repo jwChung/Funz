@@ -123,7 +123,7 @@
 
   <Target Name="GitTagging">
     <Exec Command="git tag $(SemanticVersion)" />
-    <Exec Command="git push --tags --repo https://$(GitHubAccount)@github.com/jwChung/Funz.git" />
+    <Exec Command="git push --quiet --tags --repo https://$(GitHubAccount)@github.com/jwChung/Funz.git" />
   </Target>
 
   <UsingTask TaskName="MakePrivateKeyFile"
