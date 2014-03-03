@@ -6,8 +6,9 @@ using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Threading;
 using Jwc.AutoFixture;
-using Jwc.AutoFixture.Idioms;
+using Jwc.AutoFixture.Reflections;
 using Jwc.AutoFixture.Xunit;
+using Ploeh.Albedo;
 using Ploeh.AutoFixture;
 using Xunit;
 using Xunit.Extensions;
@@ -18,8 +19,13 @@ namespace Jwc.Funz
     {
         public override MemberCollection<Container> GetGuardMembers()
         {
-            return base.GetGuardMembers()
-                .Exclude(t => t.GetMethods().Where(m => m.Name.StartsWith("LazyResolve")));
+            MemberInfo[] members = typeof(Container)
+                .GetMethods()
+                .Where(m => m.Name.StartsWith("LazyResolve"))
+                .Cast<MemberInfo>()
+                .ToArray();
+
+            return base.GetGuardMembers().Apply(new MemberSubtraction(members));
         }
 
         [Theorem]
@@ -1515,9 +1521,9 @@ namespace Jwc.Funz
                     | BindingFlags.Instance
                     | BindingFlags.DeclaredOnly;
 
-                return new MemberCollection<Container>(BindingFlags.Default)
-                    .Include(t => t.GetMethods(bindingFlags).Where(m => !m.Name.StartsWith("LazyResolve")))
-                    .Exclude(x => x.Dispose())
+                return new MemberCollection<Container>(new MemberEnumerable<Container>(BindingFlags.Default))
+                    .Apply(new MemberAddition(typeof(Container).GetMethods(bindingFlags).Where(m => !m.Name.StartsWith("LazyResolve")).Cast<MemberInfo>().ToArray()))
+                    .Remove(new Methods<Container>().Select(x => x.Dispose()))
                     .Select(m => new object[] { m.MakeAutoGeneric() });
             }
         }

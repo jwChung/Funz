@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
-using Jwc.AutoFixture.Idioms;
+using Jwc.AutoFixture.Reflections;
 using Jwc.AutoFixture.Xunit;
+using Ploeh.Albedo;
 using Xunit;
 
 namespace Jwc.Funz
@@ -10,7 +11,8 @@ namespace Jwc.Funz
     {
         public override MemberCollection<CompositeContainerVisitor<object>> GetInitializedMembers()
         {
-            return base.GetInitializedMembers().Exclude(x => x.Result);
+            return base.GetInitializedMembers().Remove(
+                new Properties<CompositeContainerVisitor<object>>().Select(x => x.Result));
         }
 
         [Theorem]
