@@ -101,6 +101,7 @@
       <NugetPackages Include="@(NuGetFiles->'%(RelativeDir)%(Filename).$(SemanticVersion).nupkg')" />
     </ItemGroup>
     <Exec Command="$(NuGetPath) push %(NugetPackages.Identity) $(SetApiKey)" />
+    <Exec Command="$(NuGetPath) delete %(NuGetFiles.Filename) $(SemanticVersion) $(SetApiKey) -NonInteractive" Condition="$(SemanticVersion.Contains('-'))" />
     <OnError ExecuteTargets="DeleteNupkgFiles" />
   </Target>
 
