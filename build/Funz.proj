@@ -96,6 +96,7 @@
       <Output TaskParameter="ReleaseNotes" PropertyName="ReleaseNotes" />
     </GetReleaseNotes>
     <XmlPoke XmlInputPath="%(NuGetFiles.FullPath)" Query="//metadata/releaseNotes" Value="$(ReleaseNotes)" />
+    <OnError ExecuteTargets="RestoreNuGetVersion" />
   </Target>
 
   <Target Name="NuGetPack">
