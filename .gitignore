@@ -160,4 +160,7 @@ packages/*
 .nuget/NuGet.exe
 
 # Build
-build/PublishToLocal.cmd
+build/*.snk
+build/*.cmd
+!build/CI.cmd
+!build/Verify.cmd
