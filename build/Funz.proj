@@ -147,7 +147,7 @@
   </Target>
 
   <Target Name="GitTagging">
-    <Exec Command="git tag $(SemanticVersion)" />
+    <Exec Command="git tag -a -F ReleaseNotes.txt $(SemanticVersion)" />
     <Exec Command="git push --quiet --tags --repo https://$(GitHubAccount)@github.com/jwChung/Funz.git" />
   </Target>
 
