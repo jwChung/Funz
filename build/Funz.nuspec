@@ -8,6 +8,7 @@
     <description>Funz is a variation of Funq to provide some features.</description>
     <projectUrl>https://github.com/jwChung/Funz</projectUrl>
     <licenseUrl>https://github.com/jwChung/Funz/blob/master/LICENCE.md</licenseUrl>
+    <releaseNotes>releaseNotes</releaseNotes>
   </metadata>
   <files>
     <file src="..\src\Funz\bin\Release\Funz.dll" target="lib\net40" />
