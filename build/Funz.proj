@@ -17,6 +17,9 @@
           RestoreReleaseNotes;
           NuGetPushToLocal;
           DeleteNupkgFiles;
+          CreateReleaseNotes;
+          GitTagging;
+          DeleteReleaseNotes;
           " />
   
   <Target Name="Publish" DependsOnTargets="
@@ -140,19 +143,22 @@
     <Delete Files="@(NupkgFiles)" />
   </Target>
 
-  <Target Name="CreateReleaseNotes">
+  <Target Name="CreateReleaseNotes" Condition="!$(SemanticVersion.Contains('-'))">
     <WriteLinesToFile
         File="ReleaseNotes.txt"
         Lines="$(ReleaseNotes)"
         Overwrite="true"/>
   </Target>
 
-  <Target Name="GitTagging">
+  <Target Name="GitTagging" Condition="!$(SemanticVersion.Contains('-'))">
+    <Exec Command='git config --global user.name "Jin-Wook Chung"' />
+    <Exec Command='git config --global user.email "jwChung@hotmail.com"' />
     <Exec Command="git tag -a -F ReleaseNotes.txt $(SemanticVersion)" />
     <Exec Command="git push --quiet --tags --repo https://$(GitHubAccount)@github.com/jwChung/Funz.git" />
+    <OnError ExecuteTargets="DeleteReleaseNotes" />
   </Target>
 
-  <Target Name="DeleteReleaseNotes">
+  <Target Name="DeleteReleaseNotes" Condition="!$(SemanticVersion.Contains('-'))">
     <Delete Files="ReleaseNotes.txt" />
   </Target>
 
