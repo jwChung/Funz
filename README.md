@@ -21,7 +21,7 @@ Release notes
 To see release notes, run the following command.
 
 ```
-$ git log --decorate --grep "Incremented"
+$ git tag -l -n100
 ```
 
 [Funq]: http://funq.codeplex.com/
