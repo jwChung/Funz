@@ -11,8 +11,10 @@
           DeleteKeyFiles;
           UnitTest;
           NuGetVersioning;
+          NuGetReleaseNotes;
           NuGetPack;
           RestoreNuGetVersion;
+          RestoreReleaseNotes;
           NuGetPushToLocal;
           DeleteNupkgFiles;
           " />
@@ -23,11 +25,15 @@
           DeleteKeyFiles;
           UnitTest;
           NuGetVersioning;
+          NuGetReleaseNotes;
           NuGetPack;
           RestoreNuGetVersion;
+          RestoreReleaseNotes;
           NuGetPush;
           DeleteNupkgFiles;
+          CreateReleaseNotes;
           GitTagging;
+          DeleteReleaseNotes;
           " />
 
   <Target Name="MakePrivateKeyFile">
@@ -85,6 +91,13 @@
     <XmlPoke XmlInputPath="%(NuGetFiles.FullPath)" Query="//metadata/version" Value="$(SemanticVersion)" />
   </Target>
 
+  <Target Name="NuGetReleaseNotes">
+    <GetReleaseNotes CommonAssemblyInfo="CommonAssemblyInfo.cs">
+      <Output TaskParameter="ReleaseNotes" PropertyName="ReleaseNotes" />
+    </GetReleaseNotes>
+    <XmlPoke XmlInputPath="%(NuGetFiles.FullPath)" Query="//metadata/releaseNotes" Value="$(ReleaseNotes)" />
+  </Target>
+
   <Target Name="NuGetPack">
     <PropertyGroup>
       <NuGetPath>..\.nuget\NuGet.exe</NuGetPath>
@@ -94,6 +107,10 @@
 
   <Target Name="RestoreNuGetVersion">
     <XmlPoke XmlInputPath="%(NuGetFiles.FullPath)" Query="//metadata/version" Value="0.0.0" />
+  </Target>
+
+  <Target Name="RestoreReleaseNotes">
+    <XmlPoke XmlInputPath="%(NuGetFiles.FullPath)" Query="//metadata/releaseNotes" Value="releaseNotes" />
   </Target>
 
   <Target Name="NuGetPush">
@@ -122,9 +139,20 @@
     <Delete Files="@(NupkgFiles)" />
   </Target>
 
+  <Target Name="CreateReleaseNotes">
+    <WriteLinesToFile
+        File="ReleaseNotes.txt"
+        Lines="$(ReleaseNotes)"
+        Overwrite="true"/>
+  </Target>
+
   <Target Name="GitTagging">
     <Exec Command="git tag $(SemanticVersion)" />
     <Exec Command="git push --quiet --tags --repo https://$(GitHubAccount)@github.com/jwChung/Funz.git" />
+  </Target>
+
+  <Target Name="DeleteReleaseNotes">
+    <Delete Files="ReleaseNotes.txt" />
   </Target>
 
   <UsingTask TaskName="MakePrivateKeyFile"
@@ -182,4 +210,71 @@
     </Task>
   </UsingTask>
 
+  <UsingTask TaskName="GetReleaseNotes"
+            TaskFactory="CodeTaskFactory"
+            AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.v4.0.dll" >
+    <ParameterGroup>
+      <CommonAssemblyInfo ParameterType="System.String" Required="true" />
+      <ReleaseNotes ParameterType="System.String" Output="true" />
+    </ParameterGroup>
+    <Task>
+      <Using Namespace="System" />
+      <Using Namespace="System.IO" />
+      <Using Namespace="System.Linq" />
+      <Using Namespace="System.Text" />
+      <Using Namespace="System.Text.RegularExpressions" />
+      <Code Type="Fragment" Language="cs">
+        <![CDATA[
+        try
+        {
+            var input = File.ReadAllText(CommonAssemblyInfo, Encoding.UTF8);
+            var match = Regex.Match(input, @"/\*([\S\s]*?)\*/");
+
+            if (!match.Success)
+            {
+                ReleaseNotes = string.Empty;
+                return true;
+            }
+
+            var targetString = match.Result("$1");
+
+            var lines = targetString.Split(
+                new[] { Environment.NewLine },
+                StringSplitOptions.None)
+                .SkipWhile(l => l.TrimStart(' ', '*') == string.Empty)
+                .Reverse().SkipWhile(l => l.TrimStart(' ', '*') == string.Empty).Reverse();
+
+            if (!lines.Any())
+            {
+                ReleaseNotes = string.Empty;
+                return true;
+            }
+
+            var builder = new StringBuilder();
+            var firstLine = lines.First();
+            var indentation = 0;
+            foreach (var ch in firstLine)
+            {
+                if (ch == '*') indentation++;
+                else if (ch == ' ')indentation++;
+                else break;
+            }
+
+            builder.AppendLine(new string(firstLine.Skip(indentation).ToArray()).TrimEnd());
+
+            foreach (var line in lines.Skip(1))
+                builder.AppendLine(new string(line.Skip(indentation).ToArray()).TrimEnd());
+
+            builder.Remove(builder.Length - Environment.NewLine.Length, Environment.NewLine.Length);
+            ReleaseNotes = builder.ToString();
+        }
+        catch (Exception ex)
+        {
+            Log.LogErrorFromException(ex);
+        }
+      ]]>
+      </Code>
+    </Task>
+  </UsingTask>
+  
 </Project>
