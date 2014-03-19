@@ -1,40 +1,57 @@
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0" DefaultTargets="Verify">
 
-  <Target Name="Verify" DependsOnTargets="
-          Build;
-          UnitTest;
-          " />
+  <Target Name="Verify">
+    <CallTarget Targets="
+      Build;
+      UnitTest;
+      " />
+  </Target>
 
-  <Target Name="PublishToLocal" DependsOnTargets="
-          MakePrivateKeyFile;
-          Build;
-          DeleteKeyFiles;
-          UnitTest;
-          NuGetVersioning;
-          NuGetReleaseNotes;
-          NuGetPack;
-          RestoreNuGetVersion;
-          RestoreReleaseNotes;
-          NuGetPushToLocal;
-          DeleteNupkgFiles;
-          " />
+  <Target Name="LocalDeployment">
+    <CallTarget Targets="
+      NuGetVersioning;
+      NuGetReleaseNotes;
+      NuGetPack;
+      RestoreNuGetVersion;
+      RestoreReleaseNotes;
+      NuGetPushToLocal;
+      DeleteNupkgFiles;
+      " />
+  </Target>
   
-  <Target Name="Publish" DependsOnTargets="
-          MakePrivateKeyFile;
-          Build;
-          DeleteKeyFiles;
-          UnitTest;
-          NuGetVersioning;
-          NuGetReleaseNotes;
-          NuGetPack;
-          RestoreNuGetVersion;
-          RestoreReleaseNotes;
-          NuGetPush;
-          DeleteNupkgFiles;
-          CreateReleaseNotes;
-          GitTagging;
-          DeleteReleaseNotes;
-          " />
+  <Target Name="Build">
+    <CallTarget Targets="
+      MakePrivateKeyFile;
+      Build;
+      DeleteKeyFiles;
+      " />
+  </Target>
+
+  <Target Name="Tests">
+    <CallTarget Targets="
+      UnitTest;
+      " />
+  </Target>
+
+  <Target Name="Deployment" Condition=" '$(APPVEYOR_REPO_BRANCH)' == 'master' and !$(APPVEYOR_REPO_COMMIT_MESSAGE.Contains('Merge pull request #')) ">
+    <CallTarget Targets="
+      NuGetVersioning;
+      NuGetReleaseNotes;
+      NuGetPack;
+      RestoreNuGetVersion;
+      RestoreReleaseNotes;
+      NuGetPush;
+      DeleteNupkgFiles;
+          
+      CreateReleaseNotes;
+      GitTagging;
+      DeleteReleaseNotes;
+      " />
+  </Target>
+
+  <ItemGroup>
+    <TestAssemblies Include="..\test\**\bin\release\*UnitTest.dll" />
+  </ItemGroup>
 
   <Target Name="MakePrivateKeyFile">
     <PropertyGroup>
@@ -55,15 +72,12 @@
                          CodeAnalysisTreatWarningsAsErrors=true;
                          SignAssembly=$(SignAssembly);
                          AssemblyOriginatorKeyFile=..\..\build\PrivateKey.snk;
-                         ">
-    </MSBuild>
+                         "/>
     <MSBuild Projects="@(TestProjects)"
              Targets="Build;"
              Properties="Configuration=Release;
                          DefineConstants=TRACE,CI;
-                         ">
-      <Output TaskParameter="TargetOutputs" ItemName="TestAssemblies" />
-    </MSBuild>
+                         "/>
     <OnError ExecuteTargets="DeleteKeyFiles" />
   </Target>
 
@@ -101,7 +115,7 @@
 
   <Target Name="NuGetPack">
     <PropertyGroup>
-      <NuGetPath>..\.nuget\NuGet.exe</NuGetPath>
+      <NuGetPath>..\packages\NuGet.CommandLine.2.8.0\tools\NuGet.exe</NuGetPath>
     </PropertyGroup>
     <Exec Command="$(NuGetPath) pack %(NuGetFiles.Identity) -Symbols" />
   </Target>
@@ -140,7 +154,7 @@
     <Delete Files="@(NupkgFiles)" />
   </Target>
 
-  <Target Name="CreateReleaseNotes" Condition="!$(SemanticVersion.Contains('-'))">
+  <Target Name="CreateReleaseNotes">
     <WriteLinesToFile
         File="ReleaseNotes.txt"
         Lines="$(ReleaseNotes)"
@@ -155,7 +169,7 @@
     <OnError ExecuteTargets="DeleteReleaseNotes" />
   </Target>
 
-  <Target Name="DeleteReleaseNotes" Condition="!$(SemanticVersion.Contains('-'))">
+  <Target Name="DeleteReleaseNotes">
     <Delete Files="ReleaseNotes.txt" />
   </Target>
 
