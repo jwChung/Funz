@@ -1,0 +1,794 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>AutoFixture.Contrib</name>
+    </assembly>
+    <members>
+        <member name="T:Jwc.AutoFixture.AutoGenericExtensions">
+            <summary>
+            Provides extenson methods to convert unclosed generic reflection meta data
+            to closed generic automatically.
+            </summary>
+        </member>
+        <member name="M:Jwc.AutoFixture.AutoGenericExtensions.MakeAutoGeneric(System.Reflection.MemberInfo)">
+            <summary>
+            Converts a unclosed generic member to closed generic.
+            If the member is non generic or already closed generic, this method will just return it.
+            </summary>
+            <param name="member">A member to convert to closed generic.</param>
+            <returns>A closed generic member.</returns>
+            <exception cref="T:System.ArgumentNullException">
+            Thrown if a member is null.
+            </exception>
+            <exception cref="T:System.NotSupportedException">
+            This method supports only reflection meta data about type, constructor, property and method.
+            For other meta data, the exception will be thrown.
+            </exception>
+        </member>
+        <member name="M:Jwc.AutoFixture.AutoGenericExtensions.MakeAutoGeneric(System.Type)">
+            <summary>
+            Converts a unclosed generic type to closed generic.
+            If the type is non generic or already closed generic, this method will just return it.
+            </summary>
+            <param name="type">A type to convert to closed generic.</param>
+            <returns>A closed generic type.</returns>
+            <exception cref="T:System.ArgumentNullException">
+            Thrown if a type is null.
+            </exception>
+        </member>
+        <member name="M:Jwc.AutoFixture.AutoGenericExtensions.MakeAutoGeneric(System.Reflection.ConstructorInfo)">
+            <summary>
+            Converts a unclosed generic constructor to closed generic.
+            If the type is non generic or already closed generic, this method will just return it.
+            </summary>
+            <param name="constructor">A constructor to convert to closed generic.</param>
+            <returns>A closed generic constructor.</returns>
+            <exception cref="T:System.ArgumentNullException">
+            Thrown if a constructor is null.
+            </exception>
+        </member>
+        <member name="M:Jwc.AutoFixture.AutoGenericExtensions.MakeAutoGeneric(System.Reflection.PropertyInfo)">
+            <summary>
+            Converts a unclosed generic property to closed generic.
+            If the type is non generic or already closed generic, this method will just return it.
+            </summary>
+            <param name="property">A property to convert to closed generic.</param>
+            <returns>A closed generic property.</returns>
+            <exception cref="T:System.ArgumentNullException">
+            Thrown if a property is null.
+            </exception>
+        </member>
+        <member name="M:Jwc.AutoFixture.AutoGenericExtensions.MakeAutoGeneric(System.Reflection.MethodInfo)">
+            <summary>
+            Converts a unclosed generic method to closed generic.
+            If the type is non generic or already closed generic, this method will just return it.
+            </summary>
+            <param name="method">A method to convert to closed generic.</param>
+            <returns>A closed generic method.</returns>
+            <exception cref="T:System.ArgumentNullException">
+            Thrown if a method is null.
+            </exception>
+        </member>
+        <member name="T:Jwc.AutoFixture.AutoMoq.AutoMoqCustomization">
+            <summary>
+            Enables auto-mocking with Moq.
+            </summary>
+        </member>
+        <member name="M:Jwc.AutoFixture.AutoMoq.AutoMoqCustomization.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:Jwc.AutoFixture.AutoMoq.AutoMoqCustomization"/> class.
+            </summary>
+        </member>
+        <member name="M:Jwc.AutoFixture.AutoMoq.AutoMoqCustomization.#ctor(Ploeh.AutoFixture.Kernel.ISpecimenBuilder)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Jwc.AutoFixture.AutoMoq.AutoMoqCustomization"/> class with a
+            <see cref="T:Jwc.AutoFixture.AutoMoq.MockRelay"/>.
+            </summary>
+            <param name="relay">The relay.</param>
+        </member>
+        <member name="M:Jwc.AutoFixture.AutoMoq.AutoMoqCustomization.Customize(Ploeh.AutoFixture.IFixture)">
+            <summary>
+            Customizes a <see cref="T:Ploeh.AutoFixture.IFixture"/> to enable auto-mocking with Moq.
+            </summary>
+            <param name="fixture">The fixture upon which to enable auto-mocking.</param>
+        </member>
+        <member name="P:Jwc.AutoFixture.AutoMoq.AutoMoqCustomization.Relay">
+            <summary>
+            Gets the relay that will be added to <see cref="P:Ploeh.AutoFixture.IFixture.ResidueCollectors"/> when
+            <see cref="M:Jwc.AutoFixture.AutoMoq.AutoMoqCustomization.Customize(Ploeh.AutoFixture.IFixture)"/> is invoked.
+            </summary>
+            <seealso cref="M:Jwc.AutoFixture.AutoMoq.AutoMoqCustomization.#ctor(Ploeh.AutoFixture.Kernel.ISpecimenBuilder)"/>
+        </member>
+        <member name="T:Jwc.AutoFixture.AutoMoq.MockConstructorQuery">
+            <summary>
+            Selects appropriate constructors to create mock instances.
+            </summary>
+        </member>
+        <member name="M:Jwc.AutoFixture.AutoMoq.MockConstructorQuery.SelectMethods(System.Type)">
+            <summary>
+            Selects constructors for the supplied mock type.
+            </summary>
+            <param name="type">The mock type.</param>
+            <returns>
+            Constructors for <paramref name="type"/>.
+            </returns>
+            <remarks>
+            <para>
+            This method only returns constructors if <paramref name="type"/> is a
+            mock type. If not, an empty sequence is returned.
+            </para>
+            <para>
+            If the type is the type of a constructed mock, constructors are
+            returned according to the generic type argument's constructors. If the type is an
+            interface, the mock default constructor is returned. If the type
+            is a class, constructors are returned according to all the public and protected
+            constructors of the underlying type. In this case, the
+            mock constructor that takes a params array is returned 
+            for each underlying constructor, with information about the appropriate parameters for
+            each constructor.
+            </para>
+            </remarks>
+        </member>
+        <member name="T:Jwc.AutoFixture.AutoMoq.MockPostprocessor">
+            <summary>
+            Post-processes a mock instance by setting appropriate default behavioral
+            values.
+            </summary>
+        </member>
+        <member name="M:Jwc.AutoFixture.AutoMoq.MockPostprocessor.#ctor(Ploeh.AutoFixture.Kernel.ISpecimenBuilder)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Jwc.AutoFixture.AutoMoq.MockPostprocessor"/> class with the
+            supplied <see cref="T:Ploeh.AutoFixture.Kernel.ISpecimenBuilder"/>.
+            </summary>
+            <param name="builder">
+            The builder which is expected to create mock instances.
+            </param>
+        </member>
+        <member name="M:Jwc.AutoFixture.AutoMoq.MockPostprocessor.Create(System.Object,Ploeh.AutoFixture.Kernel.ISpecimenContext)">
+            <summary>
+            Modifies a mock instance created by <see cref="P:Jwc.AutoFixture.AutoMoq.MockPostprocessor.Builder"/>.
+            </summary>
+            <param name="request">The request that describes what to create.</param>
+            <param name="context">A context that can be used to create other specimens.</param>
+            <returns>
+            The specimen created by <see cref="P:Jwc.AutoFixture.AutoMoq.MockPostprocessor.Builder"/>. If the instance is a correct
+            mock instance, this instance modifies it before returning it.
+            </returns>
+        </member>
+        <member name="P:Jwc.AutoFixture.AutoMoq.MockPostprocessor.Builder">
+            <summary>
+            Gets the builder decorated by this instance.
+            </summary>
+        </member>
+        <member name="T:Jwc.AutoFixture.AutoMoq.MockRelay">
+            <summary>
+            Relays a request for an interface or an abstract class to a request for a
+            mock of that class.
+            </summary>
+        </member>
+        <member name="M:Jwc.AutoFixture.AutoMoq.MockRelay.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:Jwc.AutoFixture.AutoMoq.MockRelay"/> class.
+            </summary>
+        </member>
+        <member name="M:Jwc.AutoFixture.AutoMoq.MockRelay.#ctor(Ploeh.AutoFixture.Kernel.IRequestSpecification)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Jwc.AutoFixture.AutoMoq.MockRelay"/> class with a specification
+            that determines whether a type should be mocked.
+            </summary>
+            <param name="mockableSpecification">
+            A specification that determines whether a type should be mocked or not.
+            </param>
+        </member>
+        <member name="M:Jwc.AutoFixture.AutoMoq.MockRelay.Create(System.Object,Ploeh.AutoFixture.Kernel.ISpecimenContext)">
+            <summary>
+            Creates a new specimen based on a request.
+            </summary>
+            <param name="request">The request that describes what to create.</param>
+            <param name="context">A context that can be used to create other specimens.</param>
+            <returns>
+            A dynamic mock instance of the requested interface or abstract class if possible;
+            otherwise a <see cref="T:Ploeh.AutoFixture.Kernel.NoSpecimen"/> instance.
+            </returns>
+        </member>
+        <member name="P:Jwc.AutoFixture.AutoMoq.MockRelay.MockableSpecification">
+            <summary>
+            Gets a specification that determines whether a given request should
+            be mocked.
+            </summary>
+            <value>The specification.</value>
+            <remarks>
+            <para>
+            This specification determines whether a given type should be
+            relayed as a request for a mock of the same type. By default it
+            only returns <see langword="true"/> for interfaces and abstract
+            classes, but a different specification can be supplied by using the
+            overloaded constructor that takes an
+            <see cref="T:Ploeh.AutoFixture.Kernel.IRequestSpecification"/> as input. In that case, this
+            property returns the specification supplied to the constructor.
+            </para>
+            </remarks>
+            <seealso cref="M:Jwc.AutoFixture.AutoMoq.MockRelay.#ctor(Ploeh.AutoFixture.Kernel.IRequestSpecification)"/>
+        </member>
+        <member name="T:Jwc.AutoFixture.LazyRelay">
+            <summary>
+            Creates an instance of <see cref="T:System.Lazy`1"/>.
+            </summary>
+        </member>
+        <member name="M:Jwc.AutoFixture.LazyRelay.Create(System.Object,Ploeh.AutoFixture.Kernel.ISpecimenContext)">
+            <summary>
+            Creates a new specimen based on a request.
+            </summary>
+            <param name="request">The request that describes what to create.</param>
+            <param name="context">A context that can be used to create other specimens.</param>
+            <returns>
+            The requested specimen if possible; otherwise a <see cref="T:Ploeh.AutoFixture.Kernel.NoSpecimen"/> instance.
+            </returns>
+            <remarks>
+            <para>
+            The <paramref name="request"/> can be any object, but will often be a
+            <see cref="T:System.Type"/> or other <see cref="T:System.Reflection.MemberInfo"/> instances.
+            </para>
+            <para>
+            Note to implementers: Implementations are expected to return a
+            <see cref="T:Ploeh.AutoFixture.Kernel.NoSpecimen"/> instance if they can't satisfy the request.
+            </para>
+            </remarks>
+        </member>
+        <member name="T:Jwc.AutoFixture.Xunit.BuildAttribute">
+            <summary>
+            An attrbute to represent building a specimen by specified mechanism.
+            </summary>
+        </member>
+        <member name="M:Jwc.AutoFixture.Xunit.BuildAttribute.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:Jwc.AutoFixture.Xunit.BuildAttribute"/> class.
+            </summary>
+        </member>
+        <member name="M:Jwc.AutoFixture.Xunit.BuildAttribute.#ctor(Jwc.AutoFixture.Xunit.BuildOptions)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Jwc.AutoFixture.Xunit.BuildAttribute"/> class
+            with build options.
+            </summary>
+            <param name="buildOptions">A build options indicating how to build a specimen.</param>
+        </member>
+        <member name="P:Jwc.AutoFixture.Xunit.BuildAttribute.BuildOptions">
+            <summary>
+            Gets or sets a value indicating how to build a specimen.
+            </summary>
+        </member>
+        <member name="T:Jwc.AutoFixture.Xunit.BuildOptions">
+            <summary>
+            Specifies the way in which <see cref="T:Jwc.AutoFixture.Xunit.BuildAttribute"/> can build a specimen.
+            </summary>
+        </member>
+        <member name="F:Jwc.AutoFixture.Xunit.BuildOptions.None">
+            <summary>
+            None
+            </summary>
+        </member>
+        <member name="F:Jwc.AutoFixture.Xunit.BuildOptions.AutoProperties">
+            <summary>
+            Enables auto propeties.
+            </summary>
+        </member>
+        <member name="F:Jwc.AutoFixture.Xunit.BuildOptions.Greedy">
+            <summary>
+            Uses the greediest constructor to create a specimen.
+            </summary>
+        </member>
+        <member name="F:Jwc.AutoFixture.Xunit.BuildOptions.FavorInject">
+            <summary>
+            Uses a constructor favoring injected test arguments to create a specimen.
+            </summary>
+        </member>
+        <member name="F:Jwc.AutoFixture.Xunit.BuildOptions.Mocked">
+            <summary>
+            Forces to create a mocked specimen.
+            </summary>
+        </member>
+        <member name="F:Jwc.AutoFixture.Xunit.BuildOptions.Default">
+            <summary>
+            Creates a specimen using a modest constructor favoring injected test arguments,
+            and then enables auto properties.
+            </summary>
+        </member>
+        <member name="T:Jwc.AutoFixture.Xunit.InjectAttribute">
+            <summary>
+            An attrbute to represent injecting depedency to a target.
+            </summary>
+        </member>
+        <member name="M:Jwc.AutoFixture.Xunit.InjectAttribute.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:Jwc.AutoFixture.Xunit.InjectAttribute"/> class.
+            </summary>
+        </member>
+        <member name="M:Jwc.AutoFixture.Xunit.InjectAttribute.#ctor(Jwc.AutoFixture.Xunit.Matches)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Jwc.AutoFixture.Xunit.InjectAttribute"/> class
+            with a <paramref name="matches"/>.
+            </summary>
+        </member>
+        <member name="P:Jwc.AutoFixture.Xunit.InjectAttribute.As">
+            <summary>
+            Gets or sets the <see cref="T:System.Type"/> that the injected parameter value
+            should be mapped to in <see cref="T:Ploeh.AutoFixture.IFixture"/>.
+            </summary>
+        </member>
+        <member name="P:Jwc.AutoFixture.Xunit.InjectAttribute.Matches">
+            <summary>
+            Gets or sets a value indicating the matches that the injected parameter value should be mapped to
+            in <see cref="T:Ploeh.AutoFixture.IFixture"/>.
+            </summary>
+        </member>
+        <member name="T:Jwc.AutoFixture.Xunit.Matches">
+            <summary>
+            Specifies the way in which <see cref="T:Jwc.AutoFixture.Xunit.InjectAttribute"/> can inject a specimen to a target.
+            </summary>
+        </member>
+        <member name="F:Jwc.AutoFixture.Xunit.Matches.None">
+            <summary>
+            None.
+            </summary>
+        </member>
+        <member name="F:Jwc.AutoFixture.Xunit.Matches.Type">
+            <summary>
+            Injects a specimen for a type request.
+            </summary>
+        </member>
+        <member name="F:Jwc.AutoFixture.Xunit.Matches.Parameter">
+            <summary>
+            Injects a specimen for a parameter request.
+            </summary>
+        </member>
+        <member name="F:Jwc.AutoFixture.Xunit.Matches.Property">
+            <summary>
+            Injects a specimen for a property request.
+            </summary>
+        </member>
+        <member name="F:Jwc.AutoFixture.Xunit.Matches.Field">
+            <summary>
+            Injects a specimen for a field request.
+            </summary>
+        </member>
+        <member name="F:Jwc.AutoFixture.Xunit.Matches.SameName">
+            <summary>
+            Injects a specimen to a target only matched with a given name.
+            </summary>
+        </member>
+        <member name="F:Jwc.AutoFixture.Xunit.Matches.Once">
+            <summary>
+            Injects a specimen to a target only once.
+            </summary>
+        </member>
+        <member name="F:Jwc.AutoFixture.Xunit.Matches.Default">
+            <summary>
+            Injects a specimen for a type, a parameter, a property or a field request.
+            </summary>
+        </member>
+        <member name="T:Jwc.AutoFixture.Idioms.MemberCollection">
+            <summary>
+            Represents <see cref="T:System.Reflection.MemberInfo"/> collection to be tested through IdiomaticAssertion.
+            Note that this collection excludes methods as property accessors.
+            </summary>
+        </member>
+        <member name="M:Jwc.AutoFixture.Idioms.MemberCollection.#ctor(System.Type)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Jwc.AutoFixture.Idioms.MemberCollection"/> class.
+            </summary>
+            <param name="targetType">
+            The target type to get <see cref="T:System.Reflection.MemberInfo"/> collection.
+            </param>
+        </member>
+        <member name="M:Jwc.AutoFixture.Idioms.MemberCollection.#ctor(System.Type,System.Reflection.BindingFlags)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Jwc.AutoFixture.Idioms.MemberCollection"/> class.
+            </summary>
+            <param name="targetType">
+            The target type to get <see cref="T:System.Reflection.MemberInfo"/> collection.
+            </param>
+            <param name="bindings">
+            The bindings indicating how to select <see cref="T:System.Reflection.MemberInfo"/> collection.
+            </param>
+        </member>
+        <member name="M:Jwc.AutoFixture.Idioms.MemberCollection.Include(System.Func{System.Type,System.Collections.Generic.IEnumerable{System.Reflection.MemberInfo}})">
+            <summary>
+            Includes members using the <paramref name="membersPicker" />.
+            </summary>
+            <param name="membersPicker">The members picker.</param>
+            <returns>The members included.</returns>
+        </member>
+        <member name="M:Jwc.AutoFixture.Idioms.MemberCollection.Include(System.Reflection.MemberInfo)">
+            <summary>
+            Includes a <paramref name="member" />.
+            </summary>
+            <param name="member">The member to be included.</param>
+            <returns>The members included.</returns>
+        </member>
+        <member name="M:Jwc.AutoFixture.Idioms.MemberCollection.Exclude(System.Func{System.Type,System.Collections.Generic.IEnumerable{System.Reflection.MemberInfo}})">
+            <summary>
+            Excludes members using the <paramref name="membersPicker" />.
+            </summary>
+            <param name="membersPicker">The members picker.</param>
+            <returns>The members excluded.</returns>
+        </member>
+        <member name="M:Jwc.AutoFixture.Idioms.MemberCollection.Exclude(System.Reflection.MemberInfo)">
+            <summary>
+            Excludes a <paramref name="member" />.
+            </summary>
+            <param name="member">The member to be excluded.</param>
+            <returns>The members excluded.</returns>
+        </member>
+        <member name="M:Jwc.AutoFixture.Idioms.MemberCollection.GetEnumerator">
+            <summary>
+            Returns an enumerator that iterates through the collection.
+            </summary>
+            <returns>
+            A <see cref="T:System.Collections.Generic.IEnumerator`1"/> that can be used to iterate
+            through the collection.
+            </returns>
+        </member>
+        <member name="P:Jwc.AutoFixture.Idioms.MemberCollection.TargetType">
+            <summary>
+            Gets a value indicating target type.
+            </summary>
+        </member>
+        <member name="P:Jwc.AutoFixture.Idioms.MemberCollection.Bindings">
+            <summary>
+            Gets a value indicating how to select <see cref="T:System.Reflection.MemberInfo"/> collection.
+            </summary>
+        </member>
+        <member name="T:Jwc.AutoFixture.Idioms.MemberCollection`1">
+            <summary>
+            Represents <see cref="T:System.Reflection.MemberInfo"/> collection of <typeparamref name="T"/>
+            to be tested through IdiomaticAssertion.
+            Note that this collection excludes methods as property accessors.
+            </summary>
+            <typeparam name="T">The target type for idiomatic test.</typeparam>
+        </member>
+        <member name="M:Jwc.AutoFixture.Idioms.MemberCollection`1.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:Jwc.AutoFixture.Idioms.MemberCollection`1"/> class.
+            </summary>
+        </member>
+        <member name="M:Jwc.AutoFixture.Idioms.MemberCollection`1.#ctor(System.Reflection.BindingFlags)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Jwc.AutoFixture.Idioms.MemberCollection`1"/> class.
+            </summary>
+            <param name="bindings">
+            The bindings indicating how to select <see cref="T:System.Reflection.MemberInfo"/> collection.
+            </param>
+        </member>
+        <member name="M:Jwc.AutoFixture.Idioms.MemberCollection`1.Include(System.Func{System.Type,System.Collections.Generic.IEnumerable{System.Reflection.MemberInfo}})">
+            <summary>
+            Includes members using the <paramref name="membersPicker" />.
+            </summary>
+            <param name="membersPicker">The members picker.</param>
+            <returns>The members included.</returns>
+        </member>
+        <member name="M:Jwc.AutoFixture.Idioms.MemberCollection`1.Include(System.Linq.Expressions.Expression{System.Action{`0}})">
+            <summary>
+            Includes the member picked from <paramref name="memberPicker" />.
+            </summary>
+            <param name="memberPicker">The member picker.</param>
+            <returns>The result of members.</returns>
+        </member>
+        <member name="M:Jwc.AutoFixture.Idioms.MemberCollection`1.Include``1(System.Linq.Expressions.Expression{System.Func{`0,``0}})">
+            <summary>
+            Includes the member picked from <paramref name="memberPicker" />.
+            </summary>
+            <param name="memberPicker">The member picker.</param>
+            <typeparam name="TReturn">The type of the member.</typeparam>
+            <returns>The result of members.</returns>
+        </member>
+        <member name="M:Jwc.AutoFixture.Idioms.MemberCollection`1.Include(System.Linq.Expressions.Expression{System.Action})">
+            <summary>
+            Includes the member picked from <paramref name="memberPicker" />.
+            </summary>
+            <param name="memberPicker">The member picker.</param>
+            <returns>The result of members.</returns>
+        </member>
+        <member name="M:Jwc.AutoFixture.Idioms.MemberCollection`1.Include``1(System.Linq.Expressions.Expression{System.Func{``0}})">
+            <summary>
+            Includes the member picked from <paramref name="memberPicker" />.
+            </summary>
+            <param name="memberPicker">The member picker.</param>
+            <typeparam name="TReturn">The type of the member.</typeparam>
+            <returns>The result of members.</returns>
+        </member>
+        <member name="M:Jwc.AutoFixture.Idioms.MemberCollection`1.Exclude(System.Func{System.Type,System.Collections.Generic.IEnumerable{System.Reflection.MemberInfo}})">
+            <summary>
+            Excludes members using the <paramref name="membersPicker" />.
+            </summary>
+            <param name="membersPicker">The members picker.</param>
+            <returns>The members excluded.</returns>
+        </member>
+        <member name="M:Jwc.AutoFixture.Idioms.MemberCollection`1.Exclude(System.Linq.Expressions.Expression{System.Action{`0}})">
+            <summary>
+            Excludes the member picked from <paramref name="memberPicker" />.
+            </summary>
+            <param name="memberPicker">The member picker.</param>
+            <returns>The result of members.</returns>
+        </member>
+        <member name="M:Jwc.AutoFixture.Idioms.MemberCollection`1.Exclude``1(System.Linq.Expressions.Expression{System.Func{`0,``0}})">
+            <summary>
+            Excludes the member picked from <paramref name="memberPicker" />.
+            </summary>
+            <param name="memberPicker">The member picker.</param>
+            <typeparam name="TReturn">The type of the member.</typeparam>
+            <returns>The result of members.</returns>
+        </member>
+        <member name="M:Jwc.AutoFixture.Idioms.MemberCollection`1.Exclude(System.Linq.Expressions.Expression{System.Action})">
+            <summary>
+            Excludes the member picked from <paramref name="memberPicker" />.
+            </summary>
+            <param name="memberPicker">The member picker.</param>
+            <returns>The result of members.</returns>
+        </member>
+        <member name="M:Jwc.AutoFixture.Idioms.MemberCollection`1.Exclude``1(System.Linq.Expressions.Expression{System.Func{``0}})">
+            <summary>
+            Excludes the member picked from <paramref name="memberPicker" />.
+            </summary>
+            <param name="memberPicker">The member picker.</param>
+            <typeparam name="TReturn">The type of the member.</typeparam>
+            <returns>The result of members.</returns>
+        </member>
+        <member name="T:Jwc.AutoFixture.Reflector">
+            <summary>
+            Providers static methods to pick appropriate <see cref="T:System.Reflection.MemberInfo"/>.
+            </summary>
+        </member>
+        <member name="M:Jwc.AutoFixture.Reflector.GetConstructor``1(System.Linq.Expressions.Expression{System.Func{``0}})">
+            <summary>
+            Gets <see cref="T:System.Reflection.ConstructorInfo"/> specified through <paramref name="constructorPicker"/>.
+            </summary>
+            <typeparam name="T">
+            The target type to pick <see cref="T:System.Reflection.ConstructorInfo"/>.
+            </typeparam>
+            <param name="constructorPicker">
+            The picker to express which constructor should be picked.
+            </param>
+            <returns>
+            The picked <see cref="T:System.Reflection.ConstructorInfo"/>.
+            </returns>
+        </member>
+        <member name="M:Jwc.AutoFixture.Reflector.GetProperty``2(System.Linq.Expressions.Expression{System.Func{``0,``1}})">
+            <summary>
+            Gets <see cref="T:System.Reflection.PropertyInfo"/> specified through <paramref name="propertyPicker"/>.
+            </summary>
+            <typeparam name="T">
+            The target type to pick <see cref="T:System.Reflection.PropertyInfo"/>.
+            </typeparam>
+            <typeparam name="TProperty">
+            The type of the picked property.
+            </typeparam>
+            <param name="propertyPicker">
+            The picker to express which property should be picked.
+            </param>
+            <returns>
+            The picked <see cref="T:System.Reflection.PropertyInfo"/>.
+            </returns>
+        </member>
+        <member name="M:Jwc.AutoFixture.Reflector.GetProperty``1(System.Linq.Expressions.Expression{System.Func{``0}})">
+            <summary>
+            Gets <see cref="T:System.Reflection.PropertyInfo"/> specified through <paramref name="propertyPicker"/>.
+            </summary>
+            <typeparam name="TProperty">
+            The type of the picked property.
+            </typeparam>
+            <param name="propertyPicker">
+            The picker to express which property should be picked.
+            </param>
+            <returns>
+            The picked <see cref="T:System.Reflection.PropertyInfo"/>.
+            </returns>
+        </member>
+        <member name="M:Jwc.AutoFixture.Reflector.GetField``2(System.Linq.Expressions.Expression{System.Func{``0,``1}})">
+            <summary>
+            Gets <see cref="T:System.Reflection.FieldInfo"/> specified through <paramref name="fieldPicker"/>.
+            </summary>
+            <typeparam name="T">
+            The target type to pick <see cref="T:System.Reflection.FieldInfo"/>.
+            </typeparam>
+            <typeparam name="TField">
+            The type of the picked property.
+            </typeparam>
+            <param name="fieldPicker">
+            The picker to express which field should be picked.
+            </param>
+            <returns>
+            The picked <see cref="T:System.Reflection.FieldInfo"/>.
+            </returns>
+        </member>
+        <member name="M:Jwc.AutoFixture.Reflector.GetField``1(System.Linq.Expressions.Expression{System.Func{``0}})">
+            <summary>
+            Gets <see cref="T:System.Reflection.FieldInfo"/> specified through <paramref name="fieldPicker"/>.
+            </summary>
+            <typeparam name="TField">
+            The type of the picked property.
+            </typeparam>
+            <param name="fieldPicker">
+            The picker to express which field should be picked.
+            </param>
+            <returns>
+            The picked <see cref="T:System.Reflection.FieldInfo"/>.
+            </returns>
+        </member>
+        <member name="M:Jwc.AutoFixture.Reflector.GetMethod``1(System.Linq.Expressions.Expression{System.Action{``0}})">
+            <summary>
+            Gets <see cref="T:System.Reflection.MethodInfo"/> specified through <paramref name="methodPicker"/>.
+            </summary>
+            <typeparam name="T">
+            The target type to pick <see cref="T:System.Reflection.MethodInfo"/>.
+            </typeparam>
+            <param name="methodPicker">
+            The picker to express which method should be picked.
+            </param>
+            <returns>
+            The picked <see cref="T:System.Reflection.MethodInfo"/>.
+            </returns>
+        </member>
+        <member name="M:Jwc.AutoFixture.Reflector.GetMethod``2(System.Linq.Expressions.Expression{System.Func{``0,``1}})">
+            <summary>
+            Gets <see cref="T:System.Reflection.MethodInfo"/> specified through <paramref name="methodPicker"/>.
+            </summary>
+            <typeparam name="T">
+            The target type to pick <see cref="T:System.Reflection.MethodInfo"/>.
+            </typeparam>
+            <typeparam name="TReturn">The return type of <see cref="T:System.Reflection.MethodInfo"/>.</typeparam>
+            <param name="methodPicker">
+            The picker to express which method should be picked.
+            </param>
+            <returns>
+            The picked <see cref="T:System.Reflection.MethodInfo"/>.
+            </returns>
+        </member>
+        <member name="M:Jwc.AutoFixture.Reflector.GetMethod(System.Linq.Expressions.Expression{System.Action})">
+            <summary>
+            Gets static <see cref="T:System.Reflection.MethodInfo"/> specified through <paramref name="methodPicker"/>.
+            </summary>
+            <param name="methodPicker">
+            The picker to express which method should be picked.
+            </param>
+            <returns>
+            The picked <see cref="T:System.Reflection.MethodInfo"/>.
+            </returns>
+        </member>
+        <member name="M:Jwc.AutoFixture.Reflector.GetMethod``1(System.Linq.Expressions.Expression{System.Func{``0}})">
+            <summary>
+            Gets static <see cref="T:System.Reflection.MethodInfo"/> specified through <paramref name="methodPicker"/>.
+            </summary>
+            <typeparam name="TReturn">The return type of <see cref="T:System.Reflection.MethodInfo"/>.</typeparam>
+            <param name="methodPicker">
+            The picker to express which method should be picked.
+            </param>
+            <returns>
+            The picked <see cref="T:System.Reflection.MethodInfo"/>.
+            </returns>
+        </member>
+        <member name="M:Jwc.AutoFixture.Reflector.GetMember``1(System.Linq.Expressions.Expression{System.Func{``0}})">
+            <summary>
+            Gets <see cref="T:System.Reflection.MemberInfo"/> specified through <paramref name="memberPicker"/>.
+            </summary>
+            <param name="memberPicker">The picker to express which member should be picked.</param>
+            <typeparam name="TReturn">The target type to be returned.</typeparam>
+            <returns>The picked <see cref="T:System.Reflection.MemberInfo"/>.</returns>
+        </member>
+        <member name="M:Jwc.AutoFixture.Reflector.GetMember(System.Linq.Expressions.Expression{System.Action})">
+            <summary>
+            Gets <see cref="T:System.Reflection.MemberInfo"/> specified through <paramref name="memberPicker"/>.
+            </summary>
+            <param name="memberPicker">The picker to express which member should be picked.</param>
+            <returns>The picked <see cref="T:System.Reflection.MemberInfo"/>.</returns>
+        </member>
+        <member name="M:Jwc.AutoFixture.Reflector.GetMember``2(System.Linq.Expressions.Expression{System.Func{``0,``1}})">
+            <summary>
+            Gets <see cref="T:System.Reflection.MemberInfo"/> specified through <paramref name="memberPicker"/>.
+            </summary>
+            <param name="memberPicker">The picker to express which member should be picked.</param>
+            <typeparam name="T">The target type to pick <see cref="T:System.Reflection.MemberInfo"/>.</typeparam>
+            <typeparam name="TReturn">The return type of <see cref="T:System.Reflection.MemberInfo"/>.</typeparam>
+            <returns>The picked <see cref="T:System.Reflection.MemberInfo"/>.</returns>
+        </member>
+        <member name="M:Jwc.AutoFixture.Reflector.GetMember``1(System.Linq.Expressions.Expression{System.Action{``0}})">
+            <summary>
+            Gets <see cref="T:System.Reflection.MemberInfo"/> specified through <paramref name="memberPicker"/>.
+            </summary>
+            <param name="memberPicker">The picker to express which member should be picked.</param>
+            <typeparam name="T">The target type to pick <see cref="T:System.Reflection.MemberInfo"/>.</typeparam>
+            <returns>The picked <see cref="T:System.Reflection.MemberInfo"/>.</returns>
+        </member>
+        <member name="T:Jwc.AutoFixture.ReflectorException">
+            <summary>
+            Represents a reflection exception.
+            </summary>
+        </member>
+        <member name="M:Jwc.AutoFixture.ReflectorException.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:Jwc.AutoFixture.ReflectorException"/> class.
+            </summary>
+        </member>
+        <member name="M:Jwc.AutoFixture.ReflectorException.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Jwc.AutoFixture.ReflectorException"/> class.
+            </summary>
+            <param name="message">
+            The exception message.
+            </param>
+        </member>
+        <member name="M:Jwc.AutoFixture.ReflectorException.#ctor(System.String,System.Exception)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Jwc.AutoFixture.ReflectorException"/> class.
+            </summary>
+            <param name="message">The exception message.</param>
+            <param name="inner">The inner exception.</param>
+        </member>
+        <member name="M:Jwc.AutoFixture.ReflectorException.#ctor(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Jwc.AutoFixture.ReflectorException"/> class
+            with serialized data.
+            </summary>
+            <param name="info">
+            The object that holds the serialized object data.
+            </param>
+            <param name="context">
+            The contextual information about the source or destination.
+            </param>
+        </member>
+        <member name="T:Jwc.AutoFixture.Xunit.TheoremAttribute">
+            <summary>
+            Attribute that is applied to a method to indicate that it is a specification of SUT(System Unde Test) that
+            should be run by the test runner. This supports auto test parameters using AutoFixture.
+            </summary>
+        </member>
+        <member name="M:Jwc.AutoFixture.Xunit.TheoremAttribute.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:Jwc.AutoFixture.Xunit.TheoremAttribute"/> class.
+            </summary>
+        </member>
+        <member name="M:Jwc.AutoFixture.Xunit.TheoremAttribute.#ctor(System.Type[])">
+            <summary>
+            Initializes a new instance of the <see cref="T:Jwc.AutoFixture.Xunit.TheoremAttribute"/> class with the
+            <paramref name="customizationTypes"/> argument.
+            </summary>
+            <param name="customizationTypes">
+            The types implementing <see cref="T:Ploeh.AutoFixture.ICustomization"/> to customize a fixture.
+            </param>
+        </member>
+        <member name="M:Jwc.AutoFixture.Xunit.TheoremAttribute.EnumerateTestCommands(Xunit.Sdk.IMethodInfo)">
+            <summary>
+            Enumerates the test commands represented by this test method. Derived classes should
+            override this method to return instances of <see cref="T:Xunit.Sdk.ITestCommand"/>, one per execution
+            of a test method.
+            </summary>
+            <param name="method">The test method</param>
+            <returns>
+            The test commands which will execute the test runs for the given method
+            </returns>
+        </member>
+        <member name="M:Jwc.AutoFixture.Xunit.TheoremAttribute.CreateFixture">
+            <summary>
+            Creates an instance of the <see cref="T:Ploeh.AutoFixture.IFixture"/> type to create auto-data.
+            </summary>
+        </member>
+        <member name="P:Jwc.AutoFixture.Xunit.TheoremAttribute.CustomizationTypes">
+            <summary>
+            Gets a value indicating customization types which implement <see cref="T:Ploeh.AutoFixture.ICustomization"/> to customize a
+            fixture.
+            </summary>
+        </member>
+        <member name="T:Jwc.AutoFixture.SpecimenBuilderExtensions">
+            <summary>
+            Represents the <see cref="T:Ploeh.AutoFixture.Kernel.ISpecimenBuilder"/> extensions.
+            </summary>
+        </member>
+        <member name="M:Jwc.AutoFixture.SpecimenBuilderExtensions.Create(Ploeh.AutoFixture.Kernel.ISpecimenBuilder,System.Object)">
+            <summary>
+            Creates a specimen with a request of the object type.
+            </summary>
+            <param name="builder">The builder to be used to create a specimen.</param>
+            <param name="request">The request to create a specimen.</param>
+            <returns>The specimen.</returns>
+        </member>
+    </members>
+</doc>
