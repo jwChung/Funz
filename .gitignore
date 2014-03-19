@@ -160,7 +160,4 @@ packages/*
 .nuget/NuGet.exe
 
 # Build
-build/*.snk
-build/*.cmd
-!build/CI.cmd
-!build/Verify.cmd
+*.snk
