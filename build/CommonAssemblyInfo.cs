@@ -10,16 +10,11 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 [assembly: NeutralResourcesLanguage("en-US")]
 [assembly: AssemblyProduct("")]
-[assembly: AssemblyVersion("0.4.1")]
-[assembly: AssemblyInformationalVersion("0.4.1")]
+[assembly: AssemblyVersion("0.4.2")]
+[assembly: AssemblyInformationalVersion("0.4.2")]
 
 /*
- * Version 0.4.1
+ * Version 0.4.2
  * 
- * - Overrode Container.ToString() to show the scope.
- * 
- * - Actually this version should be 0.4.0 but as the version was
- *   accidentally published and crashed, the patch version also was
- *   incremented.
- * 
+ * - fixes assembly signing. 
  */
