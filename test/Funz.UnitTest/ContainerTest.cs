@@ -17,7 +17,7 @@ namespace Jwc.Funz
 {
     public class ContainerTest : IdiomaticTest<Container, ContainerTest>
     {
-        public override MemberCollection<Container> GetGuardMembers()
+        public override IEnumerable<MemberInfo> GetGuardMembers()
         {
             MemberInfo[] members = typeof(Container)
                 .GetMethods()
@@ -25,7 +25,7 @@ namespace Jwc.Funz
                 .Cast<MemberInfo>()
                 .ToArray();
 
-            return base.GetGuardMembers().Apply(new MemberSubtraction(members));
+            return base.GetGuardMembers().Except(members);
         }
 
         [Theorem]

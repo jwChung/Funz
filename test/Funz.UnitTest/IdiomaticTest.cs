@@ -12,14 +12,22 @@ namespace Jwc.Funz
 {
     public abstract class IdiomaticTest<TSUT>
     {
-        public virtual MemberCollection<TSUT> GetGuardMembers()
+        public virtual MemberCollection<TSUT> GetInitializedMembers()
         {
             return new MemberCollection<TSUT>();
         }
 
-        public virtual MemberCollection<TSUT> GetInitializedMembers()
+        public virtual IEnumerable<MemberInfo> GetGuardMembers()
         {
-            return new MemberCollection<TSUT>();
+            return GetMembers();
+        }
+
+        public IEnumerable<MemberInfo> GetMembers()
+        {
+            const BindingFlags binding = BindingFlags.Instance | BindingFlags.Static |
+                                         BindingFlags.Public | BindingFlags.DeclaredOnly;
+            var accessors = typeof(TSUT).GetProperties(binding).SelectMany(p => p.GetAccessors(true));
+            return typeof(TSUT).GetMembers(binding).Except(accessors);
         }
     }
 
