@@ -1524,13 +1524,13 @@ namespace Jwc.Funz
                 var methods = typeof(Container)
                     .GetMethods(bindingFlags)
                     .Where(m => !m.Name.StartsWith("LazyResolve"))
-                    .Cast<MemberInfo>()
-                    .ToArray();
+                    .Except(new[] { new Methods<Container>().Select(x => x.Dispose()) })
+                    .Select(m =>
+                        !m.ContainsGenericParameters
+                        ? m
+                        : m.MakeGenericMethod(m.GetGenericArguments().Select(a => typeof(object)).ToArray()));
 
-                return new MemberCollection<Container>(new MemberEnumerable<Container>(BindingFlags.Default))
-                    .Apply(new MemberAddition(methods))
-                    .Remove(new Methods<Container>().Select(x => x.Dispose()))
-                    .Select(m => new object[] { m.MakeAutoGeneric() });
+                return methods.Select(m => new object[] { m });
             }
         }
 
