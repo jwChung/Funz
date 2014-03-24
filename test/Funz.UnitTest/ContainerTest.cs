@@ -365,10 +365,9 @@ namespace Jwc.Funz
 
         [Theorem]
         public void ResolveServiceReusedWithinCustomOnScopedContainerReturnsSharedInstance(
-            [Frozen] object scope,
             [Greedy] Container sut)
         {
-            sut.Register(c => new Foo()).ReusedWithin(scope);
+            sut.Register(c => new Foo()).ReusedWithin(sut.Scope);
             var expected = sut.Resolve<Foo>();
 
             var actual = sut.Resolve<Foo>();

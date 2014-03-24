@@ -27,11 +27,11 @@ namespace Jwc.Funz
 
         [Theorem]
         public void VisitMakesAllVisitorsVisitContainer(
-            [Frozen] IContainerVisitor<int>[] visitors,
-            [Greedy] CompositeContainerVisitor<int> sut,
+            CompositeContainerVisitor<int> sut,
             Container container,
             IContainerVisitor<int>[] returnedVisitors)
         {
+            var visitors = sut.Visitors.ToArray();
             visitors[0].ToMock().Setup(x => x.Visit(container)).Returns(returnedVisitors[0]);
             visitors[1].ToMock().Setup(x => x.Visit(container)).Returns(returnedVisitors[1]);
             visitors[2].ToMock().Setup(x => x.Visit(container)).Returns(returnedVisitors[2]);
@@ -53,10 +53,10 @@ namespace Jwc.Funz
 
         [Theorem]
         public void ResultReturnsEnumerableOfVisitorResult(
-            [Frozen] IContainerVisitor<string>[] visitors,
-            [Greedy] CompositeContainerVisitor<string> sut,
+            CompositeContainerVisitor<string> sut,
             string[] expected)
         {
+            var visitors = sut.Visitors.ToArray();
             visitors[0].ToMock().SetupGet(x => x.Result).Returns(expected[0]);
             visitors[1].ToMock().SetupGet(x => x.Result).Returns(expected[1]);
             visitors[2].ToMock().SetupGet(x => x.Result).Returns(expected[2]);
