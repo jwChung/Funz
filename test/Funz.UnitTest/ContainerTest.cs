@@ -5,11 +5,10 @@ using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Threading;
-using Jwc.AutoFixture;
-using Jwc.AutoFixture.Reflections;
-using Jwc.AutoFixture.Xunit;
 using Ploeh.Albedo;
 using Ploeh.AutoFixture;
+using Ploeh.AutoFixture.Kernel;
+using Ploeh.AutoFixture.Xunit;
 using Xunit;
 using Xunit.Extensions;
 
@@ -366,8 +365,8 @@ namespace Jwc.Funz
 
         [Theorem]
         public void ResolveServiceReusedWithinCustomOnScopedContainerReturnsSharedInstance(
-            [Inject] object scope,
-            [Build] Container sut)
+            [Frozen] object scope,
+            [Greedy] Container sut)
         {
             sut.Register(c => new Foo()).ReusedWithin(scope);
             var expected = sut.Resolve<Foo>();
@@ -843,7 +842,8 @@ namespace Jwc.Funz
             Container sut,
             IFixture fixture)
         {
-            var arugments = method.GetParameters().Select(p => fixture.Create((object)p.ParameterType)).ToArray();
+            var context = new SpecimenContext(fixture);
+            var arugments = method.GetParameters().Select(p => context.Resolve(p.ParameterType)).ToArray();
             sut.Dispose();
 
             var e = Assert.Throws<TargetInvocationException>(() => method.Invoke(sut, arugments));
@@ -1487,8 +1487,8 @@ namespace Jwc.Funz
 
         [Theorem]
         public void ToStringReturnsScopeString(
-            [Inject(As = typeof(object))] string scope,
-            [Build] Container sut)
+            [Frozen(As = typeof(object))] string scope,
+            [Greedy] Container sut)
         {
             var actual = sut.ToString();
             Assert.Equal(scope, actual);

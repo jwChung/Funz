@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using Jwc.AutoFixture.Xunit;
 using Ploeh.Albedo;
+using Ploeh.AutoFixture.Xunit;
 using Xunit;
 
 namespace Jwc.Funz
@@ -27,8 +27,8 @@ namespace Jwc.Funz
 
         [Theorem]
         public void VisitMakesAllVisitorsVisitContainer(
-            [Inject] IContainerVisitor<int>[] visitors,
-            [Build] CompositeContainerVisitor<int> sut,
+            [Frozen] IContainerVisitor<int>[] visitors,
+            [Greedy] CompositeContainerVisitor<int> sut,
             Container container,
             IContainerVisitor<int>[] returnedVisitors)
         {
@@ -53,8 +53,8 @@ namespace Jwc.Funz
 
         [Theorem]
         public void ResultReturnsEnumerableOfVisitorResult(
-            [Inject] IContainerVisitor<string>[] visitors,
-            [Build] CompositeContainerVisitor<string> sut,
+            [Frozen] IContainerVisitor<string>[] visitors,
+            [Greedy] CompositeContainerVisitor<string> sut,
             string[] expected)
         {
             visitors[0].ToMock().SetupGet(x => x.Result).Returns(expected[0]);

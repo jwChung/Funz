@@ -35,13 +35,12 @@
     <CodeAnalysisRuleSet>ManagedMinimumRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="AutoFixture.Contrib, Version=3.0.0.0, Culture=neutral, PublicKeyToken=db4e4bc25029966c, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\packages\AutoFixture.Contrib.3.0.0-pre11\lib\net40\AutoFixture.Contrib.dll</HintPath>
+    <Reference Include="Jwc.Experiment">
+      <HintPath>..\..\packages\Experiment.0.7.0\lib\net40\Jwc.Experiment.dll</HintPath>
     </Reference>
-    <Reference Include="Moq, Version=4.2.1312.1622, Culture=neutral, PublicKeyToken=69f491c39445e920, processorArchitecture=MSIL">
+    <Reference Include="Moq, Version=3.1.416.3, Culture=neutral, PublicKeyToken=69f491c39445e920, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\packages\Moq.4.2.1312.1622\lib\net40\Moq.dll</HintPath>
+      <HintPath>..\..\packages\Moq.3.1.416.3\lib\Moq.dll</HintPath>
     </Reference>
     <Reference Include="Ploeh.Albedo">
       <HintPath>..\..\packages\Albedo.0.4.0\lib\net35\Ploeh.Albedo.dll</HintPath>
@@ -49,8 +48,15 @@
     <Reference Include="Ploeh.AutoFixture">
       <HintPath>..\..\packages\AutoFixture.3.16.4\lib\net40\Ploeh.AutoFixture.dll</HintPath>
     </Reference>
+    <Reference Include="Ploeh.AutoFixture.AutoMoq">
+      <HintPath>..\..\packages\AutoFixture.AutoMoq.3.16.4\lib\net40\Ploeh.AutoFixture.AutoMoq.dll</HintPath>
+    </Reference>
     <Reference Include="Ploeh.AutoFixture.Idioms">
       <HintPath>..\..\packages\AutoFixture.Idioms.3.16.4\lib\net40\Ploeh.AutoFixture.Idioms.dll</HintPath>
+    </Reference>
+    <Reference Include="Ploeh.AutoFixture.Xunit, Version=3.16.4.0, Culture=neutral, PublicKeyToken=b24654c590009d4f, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\AutoFixture.Xunit.3.16.4\lib\net40\Ploeh.AutoFixture.Xunit.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -75,6 +81,8 @@
     <Compile Include="RunOn.cs" />
     <Compile Include="SlowTheoremAttribute.cs" />
     <Compile Include="Scenario.cs" />
+    <Compile Include="TestFixtureAdapter.cs" />
+    <Compile Include="TheoremAttribute.cs" />
     <Compile Include="VersionTheoremAttribute.cs" />
   </ItemGroup>
   <ItemGroup>

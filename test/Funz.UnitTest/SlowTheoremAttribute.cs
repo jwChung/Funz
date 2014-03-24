@@ -1,5 +1,4 @@
 ﻿using System;
-using Jwc.AutoFixture.Xunit;
 
 namespace Jwc.Funz
 {

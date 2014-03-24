@@ -1,6 +1,4 @@
-﻿using Jwc.AutoFixture.Xunit;
-
-namespace Jwc.Funz
+﻿namespace Jwc.Funz
 {
     public class VersionTheoremAttribute : TheoremAttribute
     {
