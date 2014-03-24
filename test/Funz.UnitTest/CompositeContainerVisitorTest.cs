@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
-using Jwc.AutoFixture.Reflections;
+using System.Linq;
+using System.Reflection;
 using Jwc.AutoFixture.Xunit;
 using Ploeh.Albedo;
 using Xunit;
@@ -9,10 +10,12 @@ namespace Jwc.Funz
     public class CompositeContainerVisitorTest
         : IdiomaticTest<CompositeContainerVisitor<object>, CompositeContainerVisitorTest>
     {
-        public override MemberCollection<CompositeContainerVisitor<object>> GetInitializedMembers()
+        public override IEnumerable<MemberInfo> GetInitializedMembers()
         {
-            return base.GetInitializedMembers().Remove(
-                new Properties<CompositeContainerVisitor<object>>().Select(x => x.Result));
+            return base.GetInitializedMembers().Except(new[]
+            {
+                new Properties<CompositeContainerVisitor<object>>().Select(x => x.Result)
+            });
         }
 
         [Theorem]

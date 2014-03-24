@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using Jwc.AutoFixture.Reflections;
 using Jwc.AutoFixture.Xunit;
 using Ploeh.AutoFixture;
 using Ploeh.AutoFixture.Idioms;
@@ -12,12 +11,12 @@ namespace Jwc.Funz
 {
     public abstract class IdiomaticTest<TSUT>
     {
-        public virtual MemberCollection<TSUT> GetInitializedMembers()
+        public virtual IEnumerable<MemberInfo> GetGuardMembers()
         {
-            return new MemberCollection<TSUT>();
+            return GetMembers();
         }
 
-        public virtual IEnumerable<MemberInfo> GetGuardMembers()
+        public virtual IEnumerable<MemberInfo> GetInitializedMembers()
         {
             return GetMembers();
         }
