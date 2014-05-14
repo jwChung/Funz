@@ -4,6 +4,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Threading;
 
 namespace Jwc.Funz
 {
@@ -640,23 +641,49 @@ namespace Jwc.Funz
         private class ContainerCollection : IEnumerable<Container>
         {
             private readonly IList<Container> _containers = new List<Container>();
+            private readonly ReaderWriterLockSlim _lockSlim = new ReaderWriterLockSlim();
 
             public void Add(Container container)
             {
-                lock (_containers)
+                _lockSlim.EnterWriteLock();
+
+                try
+                {
                     _containers.Add(container);
+                }
+                finally
+                {
+                    _lockSlim.ExitWriteLock();
+                }
+                    
             }
 
             public void Remove(Container container)
             {
-                lock (_containers)
+                _lockSlim.EnterWriteLock();
+
+                try
+                {
                     _containers.Remove(container);
+                }
+                finally
+                {
+                    _lockSlim.ExitWriteLock();
+                }
             }
 
             public IEnumerator<Container> GetEnumerator()
             {
-                lock (_containers)
+                _lockSlim.EnterReadLock();
+
+                try
+                {
                     return ((IEnumerable<Container>)_containers.ToArray()).GetEnumerator();
+                }
+                finally
+                {
+                    _lockSlim.ExitReadLock();
+                }
             }
 
             IEnumerator IEnumerable.GetEnumerator()
