@@ -1,31 +1,27 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using Jwc.Experiment.Xunit;
 using Ploeh.Albedo;
-using Ploeh.AutoFixture.Xunit;
 using Xunit;
 
 namespace Jwc.Funz
 {
-    public class CompositeContainerVisitorTest
-        : IdiomaticTest<CompositeContainerVisitor<object>, CompositeContainerVisitorTest>
+    public class CompositeContainerVisitorTest : IdiomaticTest<CompositeContainerVisitor<object>>
     {
-        public override IEnumerable<MemberInfo> GetInitializedMembers()
+        protected override IEnumerable<MemberInfo> ExceptToVerifyInitialization()
         {
-            return base.GetInitializedMembers().Except(new[]
-            {
-                new Properties<CompositeContainerVisitor<object>>().Select(x => x.Result)
-            });
+            yield return new Properties<CompositeContainerVisitor<object>>().Select(x => x.Result);
         }
 
-        [Theorem]
+        [Test]
         public void SutIsContainerVisitorOfEnumerable(
             CompositeContainerVisitor<string> sut)
         {
             Assert.IsAssignableFrom<IContainerVisitor<IEnumerable<string>>>(sut);
         }
 
-        [Theorem]
+        [Test]
         public void VisitMakesAllVisitorsVisitContainer(
             CompositeContainerVisitor<int> sut,
             Container container,
@@ -42,7 +38,7 @@ namespace Jwc.Funz
             Assert.Equal(returnedVisitors, result.Visitors);
         }
 
-        [Theorem]
+        [Test]
         public void VisitReturnsNewInstance(
             CompositeContainerVisitor<int> sut,
             Container container)
@@ -51,7 +47,7 @@ namespace Jwc.Funz
             Assert.NotEqual(sut, actual);
         }
 
-        [Theorem]
+        [Test]
         public void ResultReturnsEnumerableOfVisitorResult(
             CompositeContainerVisitor<string> sut,
             string[] expected)

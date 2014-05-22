@@ -5,36 +5,33 @@ using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Threading;
+using Jwc.Experiment.AutoFixture;
+using Jwc.Experiment.Xunit;
 using Ploeh.Albedo;
 using Ploeh.AutoFixture;
 using Ploeh.AutoFixture.Kernel;
-using Ploeh.AutoFixture.Xunit;
 using Xunit;
 using Xunit.Extensions;
 
 namespace Jwc.Funz
 {
-    public class ContainerTest : IdiomaticTest<Container, ContainerTest>
+    public class ContainerTest : IdiomaticTest<Container>
     {
-        public override IEnumerable<MemberInfo> GetGuardMembers()
+        protected override IEnumerable<MemberInfo> ExceptToVerifyGuardClause()
         {
-            MemberInfo[] members = typeof(Container)
+            return typeof(Container)
                 .GetMethods()
-                .Where(m => m.Name.StartsWith("LazyResolve"))
-                .Cast<MemberInfo>()
-                .ToArray();
-
-            return base.GetGuardMembers().Except(members);
+                .Where(m => m.Name.StartsWith("LazyResolve"));
         }
 
-        [Theorem]
+        [Test]
         public void SutIsDisposable(
             Container sut)
         {
             Assert.IsAssignableFrom<IDisposable>(sut);
         }
 
-        [Theorem]
+        [Test]
         public void RegisterServiceWithSameKeyManyTimeDoesNotThrow(
             Container sut)
         {
@@ -42,7 +39,7 @@ namespace Jwc.Funz
             Assert.DoesNotThrow(() => sut.Register(c => new Foo()));
         }
 
-        [Theorem]
+        [Test]
         public void ResolveUnregisteredServiceThrows(
             Container sut)
         {
@@ -55,7 +52,7 @@ namespace Jwc.Funz
             Assert.Equal(expected, e.Message);
         }
 
-        [Theorem]
+        [Test]
         public void ResolveUnregisteredServiceWithArgumentThrows(
             Container sut,
             string stringArg)
@@ -70,7 +67,7 @@ namespace Jwc.Funz
             Assert.Equal(expected, e.Message);
         }
 
-        [Theorem]
+        [Test]
         public void ResolveUnregisteredKeyedServiceThrows(
             Container sut,
             object key)
@@ -86,7 +83,7 @@ namespace Jwc.Funz
             Assert.Equal(expected, e.Message);
         }
 
-        [Theorem]
+        [Test]
         public void ResolveUnregisteredKeyedServiceWithArgumentThrows(
             Container sut,
             object key,
@@ -103,7 +100,7 @@ namespace Jwc.Funz
             Assert.Equal(expected, e.Message);
         }
 
-        [Theorem]
+        [Test]
         public void ResolveServiceReturnsCorrectInstance(
             Container sut)
         {
@@ -112,7 +109,7 @@ namespace Jwc.Funz
             Assert.NotNull(actual);
         }
 
-        [Theorem]
+        [Test]
         public void ResolveManyServicesReturnsCorrectInstances(
             Container sut,
             Foo fooValue,
@@ -130,7 +127,7 @@ namespace Jwc.Funz
             Assert.Equal(stringValue, sut.Resolve<string>());
         }
 
-        [Theorem]
+        [Test]
         public void ResolveManySameTypedServicesReturnsCorrectInstances(
             Container sut,
             string stringValue)
@@ -145,7 +142,7 @@ namespace Jwc.Funz
             Assert.Equal(stringValue, actual2.Arg);
         }
 
-        [Theorem]
+        [Test]
         public void ResolveServiceOnContainerReturnsSharedInstance(
             Container sut)
         {
@@ -157,7 +154,7 @@ namespace Jwc.Funz
             Assert.Equal(expected, actual);
         }
 
-        [Theorem]
+        [Test]
         public void ResolveServiceOnChildReturnsSharedInstanceOnContainer(
             Container sut)
         {
@@ -170,7 +167,7 @@ namespace Jwc.Funz
             Assert.Equal(expected, actual);
         }
 
-        [Theorem]
+        [Test]
         public void ResolveServiceUsingContainerReturnsCorrectInstance(
             Container sut,
             string stringValue)
@@ -183,7 +180,7 @@ namespace Jwc.Funz
             Assert.Equal(stringValue, actual.Arg);
         }
 
-        [Theorem]
+        [Test]
         public void ResolveKeyedServiceReturnsCorrectInstance(
             Container sut,
             object key)
@@ -193,7 +190,7 @@ namespace Jwc.Funz
             Assert.NotNull(actual);
         }
 
-        [Theorem]
+        [Test]
         public void ResolveServiceWithArgumentReturnsCorrectInstance(
             Container sut,
             string stringValue)
@@ -203,7 +200,7 @@ namespace Jwc.Funz
             Assert.Equal(stringValue, actual.Arg);
         }
 
-        [Theorem]
+        [Test]
         public void ResolveKeyedServiceWithArgumentReturnsCorrectInstance(
             Container sut,
             string key,
@@ -214,7 +211,7 @@ namespace Jwc.Funz
             Assert.Equal(stringValue, actual.Arg);
         }
 
-        [Theorem]
+        [Test]
         public void ResolveServiceReusedWithinNoneOnContainerReturnsNonSharedInstance(
             Container sut)
         {
@@ -226,7 +223,7 @@ namespace Jwc.Funz
             Assert.NotEqual(expected, actual);
         }
 
-        [Theorem]
+        [Test]
         public void ResolveServiceReusedWithinNoneOnChildReturnsNonSharedInstance(
             Container sut)
         {
@@ -239,7 +236,7 @@ namespace Jwc.Funz
             Assert.NotEqual(expected, actual);
         }
 
-        [Theorem]
+        [Test]
         public void ResolveServiceReusedWithinNoneOnContainerReturnsNonSharedInstanceOnChild(
             Container sut)
         {
@@ -252,7 +249,7 @@ namespace Jwc.Funz
             Assert.NotEqual(expected, actual);
         }
 
-        [Theorem]
+        [Test]
         public void ResolveServiceReusedWithinContainerOnContainerReturnsSharedInstance(
             Container sut)
         {
@@ -264,7 +261,7 @@ namespace Jwc.Funz
             Assert.Equal(expected, actual);
         }
 
-        [Theorem]
+        [Test]
         public void ResolveServiceReusedWithinContainerOnChildReturnsSharedInstance(
             Container sut)
         {
@@ -277,7 +274,7 @@ namespace Jwc.Funz
             Assert.Equal(expected, actual);
         }
 
-        [Theorem]
+        [Test]
         public void ResolveServiceReusedWithinContainerOnContainerReturnsNonSharedInstanceOnChild(
             Container sut)
         {
@@ -290,7 +287,7 @@ namespace Jwc.Funz
             Assert.NotEqual(expected, actual);
         }
 
-        [Theorem]
+        [Test]
         public void ResolveServiceReusedWithinHierarchyOnContainerReturnsSharedInstance(
             Container sut)
         {
@@ -302,7 +299,7 @@ namespace Jwc.Funz
             Assert.Equal(expected, actual);
         }
 
-        [Theorem]
+        [Test]
         public void ResolveServiceReusedWithinContainerOnContainerReturnsSharedInstanceOnChild(
             Container sut)
         {
@@ -315,7 +312,7 @@ namespace Jwc.Funz
             Assert.Equal(expected, actual);
         }
 
-        [Theorem]
+        [Test]
         public void ResolveServiceReusedWithinContainerOnChildReturnsSharedInstanceOnContainer(
             Container sut)
         {
@@ -328,7 +325,7 @@ namespace Jwc.Funz
             Assert.Equal(expected, actual);
         }
 
-        [SlowTheorem(RunOn.CI)]
+        [SlowTest(RunOn.CI)]
         public void ResolveServiceReusedWithinContainerDoesNotThrowOutOfMemoryException(
             Container sut)
         {
@@ -350,7 +347,7 @@ namespace Jwc.Funz
             });
         }
 
-        [Theorem]
+        [Test]
         public void ResolveServiceReusedWithinCustomOnNonScopedContainerReturnsNonSharedInstance(
             Container sut,
             object scope)
@@ -363,7 +360,7 @@ namespace Jwc.Funz
             Assert.NotEqual(expected, actual);
         }
 
-        [Theorem]
+        [Test]
         public void ResolveServiceReusedWithinCustomOnScopedContainerReturnsSharedInstance(
             [Greedy] Container sut)
         {
@@ -375,7 +372,7 @@ namespace Jwc.Funz
             Assert.Equal(expected, actual);
         }
 
-        [Theorem]
+        [Test]
         public void ResolveServiceReusedWithinCustomOnScopedChildReturnsNonSharedInstanceOnNonScopedContainer(
             object scope,
             Container sut)
@@ -389,7 +386,7 @@ namespace Jwc.Funz
             Assert.NotEqual(expected, actual);
         }
 
-        [Theorem]
+        [Test]
         public void ResolveServiceReusedWithinCustomOnScopedChildReturnsSharedInstanceOnScopedGrandChild(
             string scope,
             Container sut)
@@ -404,7 +401,7 @@ namespace Jwc.Funz
             Assert.Equal(expected, actual);
         }
 
-        [Theorem]
+        [Test]
         public void ResolveServiceReusedWithinCustomOnNewScopedGrandChildReturnsSharedInstanceOnScopedChild(
             string scope,
             Container sut)
@@ -419,7 +416,7 @@ namespace Jwc.Funz
             Assert.NotEqual(expected, actual);
         }
 
-        [Theorem]
+        [Test]
         public void ResolveServiceWithArgumentReusedWithinNoneReturnsNonSharedInstance(
             Container sut,
             string argument)
@@ -432,7 +429,7 @@ namespace Jwc.Funz
             Assert.NotEqual(expected, actual);
         }
 
-        [Theorem]
+        [Test]
         public void ResolveKeyedServiceReusedWithinNoneReturnsNonSharedInstance(
             Container sut,
             object key)
@@ -445,7 +442,7 @@ namespace Jwc.Funz
             Assert.NotEqual(expected, actual);
         }
 
-        [Theorem]
+        [Test]
         public void ResolveKeyedServiceWithArgumentReusedWithinNoneReturnsNonSharedInstance(
             Container sut,
             object key,
@@ -459,7 +456,7 @@ namespace Jwc.Funz
             Assert.NotEqual(expected, actual);
         }
 
-        [Theorem]
+        [Test]
         public void ResolveServiceWithArgumentReusedWithinContainerReturnsSharedInstance(
             Container sut,
             string argument)
@@ -472,7 +469,7 @@ namespace Jwc.Funz
             Assert.Equal(expected, actual);
         }
 
-        [Theorem]
+        [Test]
         public void ResolveKeyedServiceReusedWithinContainerReturnsSharedInstance(
             Container sut,
             object key)
@@ -485,7 +482,7 @@ namespace Jwc.Funz
             Assert.Equal(expected, actual);
         }
 
-        [Theorem]
+        [Test]
         public void ResolveKeyedServiceWithArgumentReusedWithinContainerReturnsSharedInstance(
             Container sut,
             object key,
@@ -499,14 +496,14 @@ namespace Jwc.Funz
             Assert.Equal(expected, actual);
         }
 
-        [Theorem]
+        [Test]
         public void ResolveContainerServiceReturnsSutItself(Container sut)
         {
             var actual = sut.Resolve<Container>();
             Assert.Equal(sut, actual);
         }
 
-        [Theorem]
+        [Test]
         public void ResolveContainerServiceOnChildReturnsChildItself(Container sut)
         {
             var child = sut.CreateChild();
@@ -514,7 +511,7 @@ namespace Jwc.Funz
             Assert.Equal(child, actual);
         }
 
-        [Theorem]
+        [Test]
         public void TryResolveUnregisteredServiceReturnsDefaultValue(
             Container sut)
         {
@@ -522,7 +519,7 @@ namespace Jwc.Funz
             Assert.Null(actual);
         }
 
-        [Theorem]
+        [Test]
         public void TryResolveRegisteredServiceReturnsCorrectInstance(
             Container sut)
         {
@@ -531,7 +528,7 @@ namespace Jwc.Funz
             Assert.NotNull(actual);
         }
 
-        [Theorem]
+        [Test]
         public void TryResolveUnregisteredServiceWithArgumentReturnsDefaultValue(
             Container sut,
             string stringValue)
@@ -540,7 +537,7 @@ namespace Jwc.Funz
             Assert.Null(actual);
         }
 
-        [Theorem]
+        [Test]
         public void TryResolveRegisteredServiceWithArgumentReturnsCorrectInstance(
             Container sut,
             string stringValue)
@@ -550,7 +547,7 @@ namespace Jwc.Funz
             Assert.Equal(stringValue, actual.Arg);
         }
 
-        [Theorem]
+        [Test]
         public void TryResolveUnregisteredKeyedServiceReturnsDefaultValue(
             Container sut,
             object key)
@@ -559,7 +556,7 @@ namespace Jwc.Funz
             Assert.Null(actual);
         }
 
-        [Theorem]
+        [Test]
         public void TryResolveRegisteredKeyedServiceReturnsCorrectInstance(
             Container sut,
             object key)
@@ -569,7 +566,7 @@ namespace Jwc.Funz
             Assert.NotNull(actual);
         }
 
-        [Theorem]
+        [Test]
         public void TryResolveUnregisteredKeyedServiceWithArgumentReturnsDefaultValue(
             Container sut,
             object key,
@@ -579,7 +576,7 @@ namespace Jwc.Funz
             Assert.Null(actual);
         }
 
-        [Theorem]
+        [Test]
         public void TryResolveRegisteredKeyedServiceWithArgumentReturnsCorrectInstance(
             Container sut,
             object key,
@@ -590,7 +587,7 @@ namespace Jwc.Funz
             Assert.Equal(stringValue, actual.Arg);
         }
 
-        [Theorem]
+        [Test]
         public void LazyResolveUnregisteredServiceThrows(
             Container sut)
         {
@@ -603,7 +600,7 @@ namespace Jwc.Funz
             Assert.Equal(expected, e.Message);
         }
 
-        [Theorem]
+        [Test]
         public void LazyResolveRegisteredServiceReturnsCorrectFactory(
             Container sut)
         {
@@ -616,7 +613,7 @@ namespace Jwc.Funz
             Assert.NotSame(expected, actual);
         }
 
-        [Theorem]
+        [Test]
         public void LazyResolveUnregisteredServiceWithArgumentThrows(
             Container sut,
             string argument)
@@ -631,7 +628,7 @@ namespace Jwc.Funz
             Assert.Equal(expected, e.Message);
         }
 
-        [Theorem]
+        [Test]
         public void LazyResolveRegisteredServiceWithArgumentReturnsCorrectFactory(
             Container sut,
             string argument)
@@ -646,7 +643,7 @@ namespace Jwc.Funz
             Assert.Equal(argument, actual.Arg);
         }
 
-        [Theorem]
+        [Test]
         public void LazyResolveUnregisteredKeyedServiceThrows(
             Container sut,
             object key)
@@ -661,7 +658,7 @@ namespace Jwc.Funz
             Assert.Equal(expected, e.Message);
         }
 
-        [Theorem]
+        [Test]
         public void LazyResolveRegisteredKeyedServiceReturnsCorrectFactory(
             Container sut,
             object key)
@@ -675,7 +672,7 @@ namespace Jwc.Funz
             Assert.NotSame(expected, actual);
         }
 
-        [Theorem]
+        [Test]
         public void LazyResolveUnregisteredKeyedServiceWithArgumentThrows(
             Container sut,
             object key,
@@ -692,7 +689,7 @@ namespace Jwc.Funz
             Assert.Equal(expected, e.Message);
         }
 
-        [Theorem]
+        [Test]
         public void LazyResolveRegisteredKeyedServiceWithArgumentReturnsCorrectFactory(
             Container sut,
             object key,
@@ -708,7 +705,7 @@ namespace Jwc.Funz
             Assert.Equal(argument, actual.Arg);
         }
 
-        [Theorem]
+        [Test]
         public void CreateChildReturnsCorrectContainer(
             Container sut)
         {
@@ -717,7 +714,7 @@ namespace Jwc.Funz
             Assert.NotNull(actual.Resolve<Foo>());
         }
 
-        [Theorem]
+        [Test]
         public void CreateChildWithScopeReturnsCorrectContainer(
             object scope,
             Container sut)
@@ -730,7 +727,7 @@ namespace Jwc.Funz
             Assert.Equal(scope, actual.Scope);
         }
 
-        [Theorem]
+        [Test]
         public void DisposeDisposesServices(
             Container sut)
         {
@@ -744,7 +741,7 @@ namespace Jwc.Funz
             Assert.Equal(1, disposable2.Count);
         }
 
-        [Theorem]
+        [Test]
         public void DisposeManyTimeDisposesOnlyOnce(
             Container sut)
         {
@@ -757,7 +754,7 @@ namespace Jwc.Funz
             Assert.Equal(1, disposable.Count);
         }
 
-        [Theorem]
+        [Test]
         public void DisposeDisposesServicesOnChild(
             Container sut)
         {
@@ -779,7 +776,7 @@ namespace Jwc.Funz
             Assert.Equal(1, disposable3.Count);
         }
 
-        [Theorem]
+        [Test]
         public void DisposeDoesNotDisposeServicesOwnedByExternal(
             Container sut)
         {
@@ -793,7 +790,7 @@ namespace Jwc.Funz
             Assert.Equal(0, disposable2.Count);
         }
 
-        [Theorem]
+        [Test]
         public void DisposeDisposesServicesOwnedByContainer(
             Container sut)
         {
@@ -807,7 +804,7 @@ namespace Jwc.Funz
             Assert.Equal(1, disposable2.Count);
         }
 
-        [Theorem]
+        [Test]
         public void DisposeDoesNotDisposeServicesOwnedByExternalOnChild(
             Container sut)
         {
@@ -820,7 +817,7 @@ namespace Jwc.Funz
             Assert.Equal(0, disposable.Count);
         }
 
-        [Theorem]
+        [Test]
         public void DisposeDoesNotDisposeServicesOwnedByExternalOnScopedChild(
             object scope,
             Container sut)
@@ -834,7 +831,7 @@ namespace Jwc.Funz
             Assert.Equal(0, disposable.Count);
         }
 
-        [Theorem]
+        [Test]
         [PublicMethodData]
         public void CallAllPublicMethodAfterDisposedThrowsDisposedException(
             MethodInfo method,
@@ -850,7 +847,7 @@ namespace Jwc.Funz
             Assert.IsType<ObjectDisposedException>(e.InnerException);
         }
 
-        [Theorem]
+        [Test]
         public void DisposeWithFalseDisposingDoesNotDispose(
             DerivedContainer sut)
         {
@@ -863,7 +860,7 @@ namespace Jwc.Funz
             Assert.Equal(0, disposable.Count);
         }
 
-        [Theorem]
+        [Test]
         public void DisposeWithDisposingTwiceDoesNotDispose(
             DerivedContainer sut)
         {
@@ -878,7 +875,7 @@ namespace Jwc.Funz
             Assert.Equal(0, disposable.Count);
         }
 
-        [Theorem]
+        [Test]
         public void LazyResolveWithNullKeyThrows(
             DerivedContainer sut)
         {
@@ -886,7 +883,7 @@ namespace Jwc.Funz
             Assert.Equal("key", e.ParamName);
         }
 
-        [Theorem]
+        [Test]
         public void LazyResolveWithNullKeyAndArgumentThrows(
             DerivedContainer sut,
             string argument)
@@ -896,7 +893,7 @@ namespace Jwc.Funz
             Assert.Equal("key", e.ParamName);
         }
 
-        [Theorem]
+        [Test]
         public void ResolveCreatedByTemplateReturnsCorrectInstance(
             DerivedContainer sut,
             object arg1,
@@ -912,7 +909,7 @@ namespace Jwc.Funz
             Assert.Equal(arg3, actual.Arg3);
         }
 
-        [Theorem]
+        [Test]
         public void TryResolveCreatedByTemplateReturnsCorrectInstance(
             DerivedContainer sut,
             object arg1,
@@ -928,7 +925,7 @@ namespace Jwc.Funz
             Assert.Equal(arg3, actual.Arg3);
         }
 
-        [Theorem]
+        [Test]
         public void TryResolveCreatedByTemplateIfUnregisteredReturnsNull(
             DerivedContainer sut,
             object arg1,
@@ -939,7 +936,7 @@ namespace Jwc.Funz
             Assert.Null(actual);
         }
 
-        [Theorem]
+        [Test]
         public void LazyResolveCreatedByTemplateReturnsCorrectFactory(
             DerivedContainer sut,
             object arg1,
@@ -955,7 +952,7 @@ namespace Jwc.Funz
             Assert.Equal(arg3, actual.Arg3);
         }
 
-        [Theorem]
+        [Test]
         public void ResolveKeyedCreatedByTemplateReturnsCorrectInstance(
             DerivedContainer sut,
             object key,
@@ -972,7 +969,7 @@ namespace Jwc.Funz
             Assert.Equal(arg3, actual.Arg3);
         }
 
-        [Theorem]
+        [Test]
         public void TryResolveKeyedCreatedByTemplateReturnsCorrectInstance(
             DerivedContainer sut,
             object key,
@@ -989,7 +986,7 @@ namespace Jwc.Funz
             Assert.Equal(arg3, actual.Arg3);
         }
 
-        [Theorem]
+        [Test]
         public void TryResolveKeyedCreatedByTemplateIfUnregisteredReturnsNull(
             DerivedContainer sut,
             object key,
@@ -1001,7 +998,7 @@ namespace Jwc.Funz
             Assert.Null(actual);
         }
 
-        [Theorem]
+        [Test]
         public void LazyResolveKeyedCreatedByTemplateReturnsCorrectFactory(
             DerivedContainer sut,
             object key,
@@ -1018,7 +1015,7 @@ namespace Jwc.Funz
             Assert.Equal(arg3, actual.Arg3);
         }
 
-        [Theorem]
+        [Test]
         public void ResolveRecursiveServiceThrows(
             Container sut)
         {
@@ -1036,7 +1033,7 @@ namespace Jwc.Funz
                 e.Message);
         }
 
-        [Theorem]
+        [Test]
         public void ResolveKeyedRecursiveServiceThrows(
             Container sut,
             object key)
@@ -1056,7 +1053,7 @@ namespace Jwc.Funz
                 e.Message);
         }
 
-        [Theorem]
+        [Test]
         public void ResolveRecursiveServiceWithArgumentThrows(
             Container sut,
             string argument)
@@ -1076,7 +1073,7 @@ namespace Jwc.Funz
                 e.Message);
         }
 
-        [Theorem]
+        [Test]
         public void ResolveKeyedRecursiveServiceWithArgumentThrows(
             Container sut,
             object key,
@@ -1097,7 +1094,7 @@ namespace Jwc.Funz
                 e.Message);
         }
 
-        [Theorem]
+        [Test]
         public void ResolveRecursiveManyStepsThrows(
             Container sut)
         {
@@ -1127,7 +1124,7 @@ namespace Jwc.Funz
                 e.Message);
         }
 
-        [Theorem]
+        [Test]
         public void ResolveRecursiveServiceCreatedByTemplateThrows(
             Container sut,
             object arg1,
@@ -1149,7 +1146,7 @@ namespace Jwc.Funz
                 e.Message);
         }
 
-        [Theorem]
+        [Test]
         public void ResolveKeyedRecursiveServiceCreatedByTemplateThrows(
             Container sut,
             object key,
@@ -1173,7 +1170,7 @@ namespace Jwc.Funz
                 e.Message);
         }
 
-        [Theorem]
+        [Test]
         public void ResolveServiceAfterRecursionExceptionReturnsCorrectInstance(
             Container sut)
         {
@@ -1203,7 +1200,7 @@ namespace Jwc.Funz
             Assert.NotNull(actual2);
         }
 
-        [Theorem]
+        [Test]
         public void ResolveShouldBeThreadSafe(
             Container sut)
         {
@@ -1238,7 +1235,7 @@ namespace Jwc.Funz
             }
         }
 
-        [Theorem]
+        [Test]
         public void CreateChildShouldBeThreadSafe(
             Container sut)
         {
@@ -1277,7 +1274,7 @@ namespace Jwc.Funz
             }
         }
 
-        [Theorem]
+        [Test]
         public void DisposeShouldBeThreadSafe(
             Container sut)
         {
@@ -1319,7 +1316,7 @@ namespace Jwc.Funz
             }
         }
 
-        [Theorem]
+        [Test]
         public void AcceptCorrectlyAcceptsVisitor(
             Container sut,
             IContainerVisitor<object> visitor,
@@ -1330,7 +1327,7 @@ namespace Jwc.Funz
             Assert.Equal(expected, actual);
         }
 
-        [Theorem]
+        [Test]
         public void DisposeIfOneChildWereDisposedCorrectlyDisposesOtherChildren(
             Container sut)
         {
@@ -1352,7 +1349,7 @@ namespace Jwc.Funz
             Assert.Equal(1, disposable3.Count);
         }
 
-        [Theorem]
+        [Test]
         public void CanResolveUnregisteredServiceReturnsFalse(
             Container sut)
         {
@@ -1360,7 +1357,7 @@ namespace Jwc.Funz
             Assert.False(actual, "CanResolve");
         }
 
-        [Theorem]
+        [Test]
         public void CanResolveRegisteredServiceReturnsTrue(
             Container sut)
         {
@@ -1369,7 +1366,7 @@ namespace Jwc.Funz
             Assert.True(actual, "CanResolve");
         }
 
-        [Theorem]
+        [Test]
         public void CanResolveUnregisteredServiceWithArgumentReturnsFalse(
             Container sut)
         {
@@ -1377,7 +1374,7 @@ namespace Jwc.Funz
             Assert.False(actual, "CanResolve");
         }
 
-        [Theorem]
+        [Test]
         public void CanResolveRegisteredServiceWithArgumentReturnsTrue(
             Container sut)
         {
@@ -1386,7 +1383,7 @@ namespace Jwc.Funz
             Assert.True(actual, "CanResolve");
         }
 
-        [Theorem]
+        [Test]
         public void CanResolveKeyedUnregisteredServiceReturnsFalse(
             Container sut,
             object key)
@@ -1395,7 +1392,7 @@ namespace Jwc.Funz
             Assert.False(actual, "CanResolve");
         }
 
-        [Theorem]
+        [Test]
         public void CanResolveKeyedRegisteredServiceReturnsTrue(
             Container sut,
             object key)
@@ -1405,7 +1402,7 @@ namespace Jwc.Funz
             Assert.True(actual, "CanResolve");
         }
 
-        [Theorem]
+        [Test]
         public void CanResolveKeyedUnregisteredServiceWithArgumentReturnsFalse(
             Container sut,
             object key)
@@ -1414,7 +1411,7 @@ namespace Jwc.Funz
             Assert.False(actual, "CanResolve");
         }
 
-        [Theorem]
+        [Test]
         public void CanResolveKeyedRegisteredServiceWithArgumentReturnsTrue(
             Container sut,
             object key)
@@ -1424,7 +1421,7 @@ namespace Jwc.Funz
             Assert.True(actual, "CanResolve");
         }
 
-        [Theorem]
+        [Test]
         public void CanResolveUnregisteredServiceIfCreatedByTemplateReturnsFalse(
             Container sut)
         {
@@ -1432,7 +1429,7 @@ namespace Jwc.Funz
             Assert.False(actual, "CanResolve");
         }
 
-        [Theorem]
+        [Test]
         public void CanResolveRegisteredServiceIfCreatedByTemplateReturnsTrue(
             Container sut)
         {
@@ -1441,7 +1438,7 @@ namespace Jwc.Funz
             Assert.True(actual, "CanResolve");
         }
 
-        [Theorem]
+        [Test]
         public void CanResolveKeyedUnregisteredServiceIfCreatedByTemplateReturnsFalse(
             Container sut,
             object key)
@@ -1450,7 +1447,7 @@ namespace Jwc.Funz
             Assert.False(actual, "CanResolve");
         }
 
-        [Theorem]
+        [Test]
         public void CanResolveKeyedRegisteredServiceIfCreatedByTemplateReturnsTrue(
             Container sut,
             object key)
@@ -1460,7 +1457,7 @@ namespace Jwc.Funz
             Assert.True(actual, "CanResolve");
         }
 
-        [Theorem]
+        [Test]
         public void ScopeIsString(
             Container sut)
         {
@@ -1468,7 +1465,7 @@ namespace Jwc.Funz
             Assert.IsType<string>(actual);
         }
 
-        [Theorem]
+        [Test]
         public void ScopeIsUnique(
             IFixture fixture)
         {
@@ -1476,7 +1473,7 @@ namespace Jwc.Funz
             Assert.Equal(10, actual.Distinct().Count());
         }
 
-        [Theorem]
+        [Test]
         public void ScopeIsCorrectFormat(
             Container sut)
         {
@@ -1484,7 +1481,7 @@ namespace Jwc.Funz
             Assert.True(Regex.IsMatch(actual.ToString(), "Container[0-9a-f]{32}"), "format");
         }
 
-        [Theorem]
+        [Test]
         public void ToStringReturnsScopeString(
             [Frozen(As = typeof(object))] string scope,
             [Greedy] Container sut)
@@ -1493,7 +1490,7 @@ namespace Jwc.Funz
             Assert.Equal(scope, actual);
         }
 
-        [Theorem]
+        [Test]
         public void ScopeOfChildIsCorrectFormat(
             Container sut)
         {
@@ -1502,7 +1499,7 @@ namespace Jwc.Funz
             Assert.True(Regex.IsMatch(actual.ToString(), "Container[0-9a-f]{32}"), "format");
         }
 
-        [Theorem]
+        [Test]
         public void ScopeOfChildIsUnique(
             Container sut)
         {

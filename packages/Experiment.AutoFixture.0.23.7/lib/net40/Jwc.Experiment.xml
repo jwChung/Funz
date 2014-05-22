@@ -1,0 +1,149 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Jwc.Experiment</name>
+    </assembly>
+    <members>
+        <member name="T:Jwc.Experiment.TestAssemblyConfigurationAttribute">
+            <summary>
+                Attribute to set up or tear down all fixtures in a test assembly.
+            </summary>
+        </member>
+        <member name="M:Jwc.Experiment.TestAssemblyConfigurationAttribute.Configure(System.Reflection.Assembly)">
+            <summary>
+                Sets up or tears down all fixtures in a test assembly.
+            </summary>
+            <param name="testAssembly">
+                The test assembly.
+            </param>
+        </member>
+        <member name="M:Jwc.Experiment.TestAssemblyConfigurationAttribute.Setup(System.Reflection.Assembly)">
+            <summary>
+                Sets up all fixtures in a test assembly.
+            </summary>
+            <param name="testAssembly">
+                The test assembly.
+            </param>
+        </member>
+        <member name="M:Jwc.Experiment.TestAssemblyConfigurationAttribute.Teardown(System.Reflection.Assembly)">
+            <summary>
+                Tears down all fixtures in a test assembly.
+            </summary>
+            <param name="testAssembly">
+                The test assembly.
+            </param>
+        </member>
+        <member name="E:Jwc.Experiment.TestAssemblyConfigurationAttribute.DomainUnload">
+            <summary>
+            Occurs when [domain unload].
+            </summary>
+        </member>
+        <member name="T:Jwc.Experiment.DefaultFixtureFactory">
+            <summary>
+                Supplies harbor of <see cref="T:Jwc.Experiment.ITestFixtureFactory"/>.
+            </summary>
+        </member>
+        <member name="M:Jwc.Experiment.DefaultFixtureFactory.SetCurrent(Jwc.Experiment.ITestFixtureFactory)">
+            <summary>
+                Sets a factory of test fixture.
+            </summary>
+            <param name="testFixtureFactory">
+                The factory of test fixture.
+            </param>
+        </member>
+        <member name="P:Jwc.Experiment.DefaultFixtureFactory.Current">
+            <summary>
+                Gets a value inicating the current
+                <see cref="T:Jwc.Experiment.ITestFixtureFactory"/>.
+            </summary>
+        </member>
+        <member name="T:Jwc.Experiment.TestFixtureConfigurationAttribute">
+            <summary>
+                Attribute to configure default fixture factory.
+            </summary>
+        </member>
+        <member name="M:Jwc.Experiment.TestFixtureConfigurationAttribute.#ctor(System.Type)">
+            <summary>
+                Initializes a new instance of the
+                <see cref="T:Jwc.Experiment.TestFixtureConfigurationAttribute"/> class.
+            </summary>
+            <param name="factoryType">
+                Type of the test fixture factory.
+            </param>
+        </member>
+        <member name="M:Jwc.Experiment.TestFixtureConfigurationAttribute.#ctor(Jwc.Experiment.ITestFixtureFactory)">
+            <summary>
+                Initializes a new instance of the
+                <see cref="T:Jwc.Experiment.TestFixtureConfigurationAttribute"/> class.
+            </summary>
+            <param name="factory">
+                The test fixture factory.
+            </param>
+        </member>
+        <member name="M:Jwc.Experiment.TestFixtureConfigurationAttribute.Setup(System.Reflection.Assembly)">
+            <summary>
+                Sets up the default factory of test fixture in a test assembly.
+            </summary>
+            <param name="testAssembly">
+                The test assembly.
+            </param>
+        </member>
+        <member name="P:Jwc.Experiment.TestFixtureConfigurationAttribute.FactoryType">
+            <summary>
+                Gets a value indicating the type of the test fixture factory.
+            </summary>
+        </member>
+        <member name="P:Jwc.Experiment.TestFixtureConfigurationAttribute.Factory">
+            <summary>
+                Gets a value indicating the test fixture factory.
+            </summary>
+        </member>
+        <member name="T:Jwc.Experiment.ITestFixture">
+            <summary>
+                test fixture를 표현.
+            </summary>
+        </member>
+        <member name="M:Jwc.Experiment.ITestFixture.Create(System.Object)">
+            <summary>
+                request를 통해 테스트에 필요한 specimen를 만듦.
+            </summary>
+            <param name="request">
+                specimen을 만들기 위해 필요한 정보를 제공. 일반적으로 <see cref="T:System.Type"/>을 많이 활용.
+            </param>
+            <returns>
+                만들어진 specimen 객체.
+            </returns>
+        </member>
+        <member name="T:Jwc.Experiment.ITestFixtureFactory">
+            <summary>
+                Represents a factory to create an instance of <see cref="T:Jwc.Experiment.ITestFixture"/>.
+            </summary>
+        </member>
+        <member name="M:Jwc.Experiment.ITestFixtureFactory.Create(System.Reflection.MethodInfo)">
+            <summary>
+                Creates a test fixture.
+            </summary>
+            <param name="testMethod">
+                The test method in which the test fixture will be used.
+            </param>
+            <returns>
+                The test fixture.
+            </returns>
+        </member>
+        <member name="T:Jwc.Experiment.NotSupportedFixtureFactory">
+            <summary>
+                Represents test fixture factory which throws
+                <see cref="T:System.NotSupportedException"/> when the <code>Create</code>
+                method is called.
+            </summary>
+        </member>
+        <member name="M:Jwc.Experiment.NotSupportedFixtureFactory.Create(System.Reflection.MethodInfo)">
+            <summary>
+                Throws <see cref="T:System.NotSupportedException"/>.
+            </summary>
+            <param name="testMethod">
+                The test method in which the test fixture will be used.
+            </param>
+        </member>
+    </members>
+</doc>

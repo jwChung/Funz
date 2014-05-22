@@ -2,79 +2,40 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using Ploeh.AutoFixture;
-using Ploeh.AutoFixture.Idioms;
-using Xunit.Extensions;
+using Jwc.Experiment;
+using Jwc.Experiment.Idioms;
+using Jwc.Experiment.Xunit;
 
 namespace Jwc.Funz
 {
     public abstract class IdiomaticTest<TSUT>
     {
-        public virtual IEnumerable<MemberInfo> GetGuardMembers()
+        [FirstClassTest]
+        public IEnumerable<ITestCase> SutHasAppropriateGuards()
         {
-            return GetMembers();
+            return ExceptToVerifyGuardClause()
+                .Except(ExceptToVerifyGuardClause())
+                .Select(m => new TestCase(new Action<NullGuardClauseAssertion>(
+                    a => a.Verify(m))));
         }
 
-        public virtual IEnumerable<MemberInfo> GetInitializedMembers()
+        [FirstClassTest]
+        public IEnumerable<ITestCase> SutCorrectlyInitializesMembers()
         {
-            return GetMembers();
+            return typeof(TSUT).GetIdiomaticMembers()
+                .Except(ExceptToVerifyInitialization())
+                .Select(m => new TestCase(new Action<MemberInitializationAssertion>(
+                    a => a.Verify(m))));
         }
 
-        public IEnumerable<MemberInfo> GetMembers()
+        protected virtual IEnumerable<MemberInfo> ExceptToVerifyGuardClause()
         {
-            const BindingFlags binding = BindingFlags.Instance | BindingFlags.Static |
-                                         BindingFlags.Public | BindingFlags.DeclaredOnly;
-            var accessors = typeof(TSUT).GetProperties(binding).SelectMany(p => p.GetAccessors(true));
-            return typeof(TSUT).GetMembers(binding).Except(accessors);
-        }
-    }
-
-    public abstract class IdiomaticTest<TSUT, TTestClass>
-        : IdiomaticTest<TSUT> where TTestClass : IdiomaticTest<TSUT>
-    {
-        [Theorem]
-        [PropertyData("GuardMemberData")]
-        public void SutHasAppropriateGuards(
-            MemberInfo member,
-            GuardClauseAssertion assertion)
-        {
-            assertion.Verify(member);
+            return typeof(TSUT).GetIdiomaticMembers();
         }
 
-        [Theorem]
-        [PropertyData("InitializedMemberData")]
-        public void SutHasCorrectInitializedMembers(
-            MemberInfo member,
-            IFixture fixture)
+        protected virtual IEnumerable<MemberInfo> ExceptToVerifyInitialization()
         {
-            // Fixture setup
-            var assertion = new ConstructorInitializedMemberAssertion(
-                fixture,
-                EqualityComparer<object>.Default,
-                new ParameterPropertyMatcher());
-
-            // Exercise system & Verify outcome
-            assertion.Verify(member);
-        }
-
-        public static IEnumerable<object[]> GuardMemberData
-        {
-            get
-            {
-                return Activator.CreateInstance<TTestClass>()
-                    .GetGuardMembers()
-                    .Select(m => new object[] { m });
-            }
-        }
-
-        public static IEnumerable<object[]> InitializedMemberData
-        {
-            get
-            {
-                return Activator.CreateInstance<TTestClass>()
-                    .GetInitializedMembers()
-                    .Select(m => new object[] { m });
-            }
+            return typeof(TSUT).GetIdiomaticMembers();
         }
     }
 }
