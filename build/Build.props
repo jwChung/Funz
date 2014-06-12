@@ -2,18 +2,20 @@
   <ItemGroup>
     <Projects Include="..\src\**\*.csproj" />
     <TestProjects Include="..\test\**\*.csproj" />
-    <TestAssemblies Include="..\test\**\bin\release\*UnitTest.dll" />
     <NuGetFiles Include="*.nuspec" />
     <CommonAssemblyInfo Include="CommonAssemblyInfo.cs" />
+    <NuGetPath Include="..\packages\**\NuGet.exe" />
+    <XunitRunnerPath Include="..\packages\**\xunit.runner.msbuild.dll" />
   </ItemGroup>
   <PropertyGroup>
-    <NuGetPath>..\packages\NuGet.CommandLine.2.8.0\tools\NuGet.exe</NuGetPath>
-    <XunitRunnerPath>..\packages\xunit.1.9.2\lib\net20\xunit.runner.msbuild.dll</XunitRunnerPath>
+    <TestAssemblies>..\test\**\bin\release\*UnitTest.dll</TestAssemblies>
     <LocalNugetFeed>D:\LocalNugetFeed</LocalNugetFeed>
-    <Repository>https://$(GitHubAccount)@github.com/jwChung/Funz.git</Repository>
+    <Repository>https://$(MY_GITHUBACCOUNT)@github.com/jwChung/Funz.git</Repository>
     <CurrentBranchName>$(APPVEYOR_REPO_BRANCH)</CurrentBranchName>
     <CommitMessage>$(APPVEYOR_REPO_COMMIT_MESSAGE)</CommitMessage>
     <CommitAuthor>$(APPVEYOR_REPO_COMMIT_AUTHOR)</CommitAuthor>
     <CommitAuthorEmail>$(APPVEYOR_REPO_COMMIT_AUTHOR_EMAIL)</CommitAuthorEmail>
+    <SetApiKey>$(MY_SETAPIKEY)</SetApiKey>
+    <PrivateKey>$(MY_PRIVATEKEY)</PrivateKey>
   </PropertyGroup>
 </Project>

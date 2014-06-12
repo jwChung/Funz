@@ -1,17 +1,14 @@
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0" DefaultTargets="Verify">
-
   <Import Project="Build.props"/>
+  <Import Project="Build.tasks"/>
   <Import Project="Build.targets"/>
 
-  <Target Name="Verify">
-    <CallTarget Targets="
+  <Target Name="Verify" DependsOnTargets="
       BuildProjects;
       UnitTest;
       " />
-  </Target>
 
-  <Target Name="LocalDeployment">
-    <CallTarget Targets="
+  <Target Name="LocalDeployment" DependsOnTargets="
       NuGetVersioning;
       NuGetReleaseNotes;
       NuGetPack;
@@ -20,24 +17,18 @@
       NuGetPushToLocal;
       DeleteNupkgFiles;
       " />
-  </Target>
 
-  <Target Name="Build">
-    <CallTarget Targets="
+  <Target Name="Build" DependsOnTargets="
       MakePrivateKeyFile;
       BuildProjects;
       DeleteKeyFiles;
       " />
-  </Target>
 
-  <Target Name="Tests">
-    <CallTarget Targets="
+  <Target Name="Tests" DependsOnTargets="
       UnitTest;
       " />
-  </Target>
 
-  <Target Name="Deployment" Condition=" '$(CommitAuthor)' == 'Jin-Wook Chung' and $(CommitMessage.Contains('DEPLOYMENT')) ">
-    <CallTarget Targets="
+  <Target Name="Deployment" Condition=" '$(CurrentBranchName)' == 'master' and !$(CommitMessage.StartsWith('Merge pull request #')) " DependsOnTargets="
       NuGetVersioning;
       NuGetReleaseNotes;
       NuGetPack;
@@ -49,5 +40,4 @@
       GitTagging;
       DeleteReleaseNotes;
       " />
-  </Target>
 </Project>
