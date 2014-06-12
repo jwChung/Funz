@@ -13,7 +13,7 @@ namespace Jwc.Funz
         [FirstClassTest]
         public IEnumerable<ITestCase> SutHasAppropriateGuards()
         {
-            return ExceptToVerifyGuardClause()
+            return typeof(TSUT).GetIdiomaticMembers()
                 .Except(ExceptToVerifyGuardClause())
                 .Select(m => new TestCase(new Action<NullGuardClauseAssertion>(
                     a => a.Verify(m))));
@@ -30,12 +30,12 @@ namespace Jwc.Funz
 
         protected virtual IEnumerable<MemberInfo> ExceptToVerifyGuardClause()
         {
-            return typeof(TSUT).GetIdiomaticMembers();
+            yield break;
         }
 
         protected virtual IEnumerable<MemberInfo> ExceptToVerifyInitialization()
         {
-            return typeof(TSUT).GetIdiomaticMembers();
+            yield break;
         }
     }
 }
