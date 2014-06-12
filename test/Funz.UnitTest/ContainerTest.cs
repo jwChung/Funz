@@ -5,13 +5,15 @@ using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Threading;
+using Jwc.Experiment;
 using Jwc.Experiment.AutoFixture;
+using Jwc.Experiment.Idioms;
 using Jwc.Experiment.Xunit;
 using Ploeh.Albedo;
+using Ploeh.Albedo.Refraction;
 using Ploeh.AutoFixture;
 using Ploeh.AutoFixture.Kernel;
 using Xunit;
-using Xunit.Extensions;
 
 namespace Jwc.Funz
 {
@@ -831,20 +833,24 @@ namespace Jwc.Funz
             Assert.Equal(0, disposable.Count);
         }
 
-        [Test]
-        [PublicMethodData]
-        public void CallAllPublicMethodAfterDisposedThrowsDisposedException(
-            MethodInfo method,
-            Container sut,
-            IFixture fixture)
+        [FirstClassTest]
+        public IEnumerable<ITestCase> CallAllPublicMethodAfterDisposedThrowsDisposedException()
         {
-            var context = new SpecimenContext(fixture);
-            var arugments = method.GetParameters().Select(p => context.Resolve(p.ParameterType)).ToArray();
-            sut.Dispose();
+            const BindingFlags bindingFlags =
+                BindingFlags.Public
+                | BindingFlags.Static
+                | BindingFlags.Instance
+                | BindingFlags.DeclaredOnly;
 
-            var e = Assert.Throws<TargetInvocationException>(() => method.Invoke(sut, arugments));
-
-            Assert.IsType<ObjectDisposedException>(e.InnerException);
+            var methods = typeof(Container)
+                .GetMethods(bindingFlags)
+                .Where(m => !m.Name.StartsWith("LazyResolve"))
+                .Except(new[] { new Methods<Container>().Select(x => x.Dispose()) })
+                .Select(m => !m.ContainsGenericParameters
+                    ? m : m.MakeGenericMethod(m.GetGenericArguments().Select(a => typeof(object)).ToArray()));
+            return methods.Select(m => new TestCase(
+                m.ToReflectionElement().Accept(new DisplayNameCollector()).Value.Single(),
+                new Action<ObjectDisposalAssertion>(a => a.Verify(m))));
         }
 
         [Test]
@@ -1505,29 +1511,6 @@ namespace Jwc.Funz
         {
             var actual = Enumerable.Range(0, 10).Select(i => sut.CreateChild().Scope);
             Assert.Equal(10, actual.Distinct().Count());
-        }
-
-        private class PublicMethodDataAttribute : DataAttribute
-        {
-            public override IEnumerable<object[]> GetData(MethodInfo methodUnderTest, Type[] parameterTypes)
-            {
-                const BindingFlags bindingFlags =
-                    BindingFlags.Public
-                    | BindingFlags.Static
-                    | BindingFlags.Instance
-                    | BindingFlags.DeclaredOnly;
-
-                var methods = typeof(Container)
-                    .GetMethods(bindingFlags)
-                    .Where(m => !m.Name.StartsWith("LazyResolve"))
-                    .Except(new[] { new Methods<Container>().Select(x => x.Dispose()) })
-                    .Select(m =>
-                        !m.ContainsGenericParameters
-                        ? m
-                        : m.MakeGenericMethod(m.GetGenericArguments().Select(a => typeof(object)).ToArray()));
-
-                return methods.Select(m => new object[] { m });
-            }
         }
 
         public class Foo
