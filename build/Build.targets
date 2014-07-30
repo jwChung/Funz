@@ -95,6 +95,16 @@
     <XmlPoke XmlInputPath="%(NuGetFiles.FullPath)" Query="//metadata/releaseNotes" Value="releaseNotes" />
   </Target>
 
+  <Target Name="DeterminesCanPush">
+    <Exec Command='git fetch origin -q --tags --depth 1' />
+    <Exec Command='git for-each-ref --count=1 --sort="-*authordate"' ConsoleToMSBuild="true">
+      <Output TaskParameter="ConsoleOutput" PropertyName="ConsoleOutput" />
+    </Exec>
+    <PropertyGroup>
+      <CanPush>!$(ConsoleOutput.Contains($(SemanticVersion)))</CanPush>
+    </PropertyGroup>
+  </Target>
+
   <Target Name="NuGetPush">
     <ItemGroup>
       <NugetSymbolPackages Include="*.symbols.nupkg" />

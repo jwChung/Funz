@@ -21,8 +21,7 @@ namespace Jwc.Funz
     {
         protected override IEnumerable<MemberInfo> ExceptToVerifyGuardClause()
         {
-            return typeof(Container)
-                .GetMethods()
+            return typeof(Container).GetMethods()
                 .Where(m => m.Name.StartsWith("LazyResolve"));
         }
 
