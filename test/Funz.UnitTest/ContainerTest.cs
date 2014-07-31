@@ -19,12 +19,6 @@ namespace Jwc.Funz
 {
     public class ContainerTest : IdiomaticTest<Container>
     {
-        protected override IEnumerable<MemberInfo> ExceptToVerifyGuardClause()
-        {
-            return typeof(Container).GetMethods()
-                .Where(m => m.Name.StartsWith("LazyResolve"));
-        }
-
         [Test]
         public void SutIsDisposable(
             Container sut)
@@ -835,14 +829,14 @@ namespace Jwc.Funz
         [FirstClassTest]
         public IEnumerable<ITestCase> CallAllPublicMethodAfterDisposedThrowsDisposedException()
         {
-            const BindingFlags bindingFlags =
+            const BindingFlags BindingFlags =
                 BindingFlags.Public
                 | BindingFlags.Static
                 | BindingFlags.Instance
                 | BindingFlags.DeclaredOnly;
 
             var methods = typeof(Container)
-                .GetMethods(bindingFlags)
+                .GetMethods(BindingFlags)
                 .Where(m => !m.Name.StartsWith("LazyResolve"))
                 .Except(new[] { new Methods<Container>().Select(x => x.Dispose()) })
                 .Select(m => !m.ContainsGenericParameters
@@ -1044,11 +1038,13 @@ namespace Jwc.Funz
             object key)
         {
             // Fixture setup
-            sut.Register(key, c =>
-            {
-                c.ResolveKeyed<Foo>(key);
-                return new Foo();
-            });
+            sut.Register(
+                key,
+                c =>
+                {
+                    c.ResolveKeyed<Foo>(key);
+                    return new Foo();
+                });
 
             // Exercise system & Verify outcome
             var e = Assert.Throws<ResolutionException>(() => sut.ResolveKeyed<Foo>(key));
@@ -1085,11 +1081,13 @@ namespace Jwc.Funz
             string argument)
         {
             // Fixture setup
-            sut.Register<Foo, string>(key, (c, s) =>
-            {
-                c.ResolveKeyed<Foo, string>(key, argument);
-                return new Foo(s);
-            });
+            sut.Register<Foo, string>(
+                key,
+                (c, s) =>
+                {
+                    c.ResolveKeyed<Foo, string>(key, argument);
+                    return new Foo(s);
+                });
 
             // Exercise system & Verify outcome
             var e = Assert.Throws<ResolutionException>(() => sut.ResolveKeyed<Foo, string>(key, argument));
@@ -1160,11 +1158,13 @@ namespace Jwc.Funz
             string arg3)
         {
             // Fixture setup
-            sut.Register<Bar, object, int, string>(key, (c, o, i, s) =>
-            {
-                c.ResolveKeyed<Bar, object, int, string>(key, o, i, s);
-                return new Bar(o, i, s);
-            });
+            sut.Register<Bar, object, int, string>(
+                key,
+                (c, o, i, s) =>
+                {
+                    c.ResolveKeyed<Bar, object, int, string>(key, o, i, s);
+                    return new Bar(o, i, s);
+                });
 
             // Exercise system & Verify outcome
             var e = Assert.Throws<ResolutionException>(
@@ -1270,7 +1270,7 @@ namespace Jwc.Funz
 
                 // Verify outcome
                 sut.Dispose();
-                Assert.Equal(threads.Length*100, StaticDisposable.Count);
+                Assert.Equal(threads.Length * 100, StaticDisposable.Count);
             }
             finally
             {
@@ -1297,7 +1297,9 @@ namespace Jwc.Funz
                 {
                     for (int j = 0; j < 100; j++)
                     {
-                        using (sut.CreateChild()) { }
+                        using (sut.CreateChild())
+                        {
+                        }
                     }
                 });
             }
@@ -1512,9 +1514,15 @@ namespace Jwc.Funz
             Assert.Equal(10, actual.Distinct().Count());
         }
 
+        protected override IEnumerable<MemberInfo> ExceptToVerifyGuardClause()
+        {
+            return typeof(Container).GetMethods()
+                .Where(m => m.Name.StartsWith("LazyResolve"));
+        }
+
         public class Foo
         {
-            private readonly string _arg;
+            private readonly string arg;
 
             public Foo()
             {
@@ -1522,41 +1530,41 @@ namespace Jwc.Funz
 
             public Foo(string arg)
             {
-                _arg = arg;
+                this.arg = arg;
             }
 
             public string Arg
             {
-                get { return _arg; }
+                get { return this.arg; }
             }
         }
 
         public class Bar
         {
-            private readonly object _arg1;
-            private readonly int _arg2;
-            private readonly string _arg3;
+            private readonly object arg1;
+            private readonly int arg2;
+            private readonly string arg3;
 
             public Bar(object arg1, int arg2, string arg3)
             {
-                _arg1 = arg1;
-                _arg2 = arg2;
-                _arg3 = arg3;
+                this.arg1 = arg1;
+                this.arg2 = arg2;
+                this.arg3 = arg3;
             }
 
             public object Arg1
             {
-                get { return _arg1; }
+                get { return this.arg1; }
             }
 
             public int Arg2
             {
-                get { return _arg2; }
+                get { return this.arg2; }
             }
 
             public string Arg3
             {
-                get { return _arg3; }
+                get { return this.arg3; }
             }
         }
 
@@ -1566,17 +1574,7 @@ namespace Jwc.Funz
 
             public void Dispose()
             {
-                Count++;
-            }
-        }
-
-        private class Dummy
-        {
-            public string Content { get; set; }
-
-            public void Generate(int size)
-            {
-                Content = new string('X', size*3000);
+                this.Count++;
             }
         }
 
@@ -1586,23 +1584,33 @@ namespace Jwc.Funz
 
             protected override void Dispose(bool disposing)
             {
-                base.Dispose(Disposing);
+                base.Dispose(this.Disposing);
             }
         }
 
         public class StaticDisposable : IDisposable
         {
-            private static int _count;
+            private static int count;
 
             public static int Count
             {
-                get { return _count; }
-                set { _count = value; }
+                get { return count; }
+                set { count = value; }
             }
 
             public void Dispose()
             {
-                Interlocked.Increment(ref _count);
+                Interlocked.Increment(ref count);
+            }
+        }
+
+        private class Dummy
+        {
+            public string Content { get; set; }
+
+            public void Generate(int size)
+            {
+                this.Content = new string('X', size * 3000);
             }
         }
     }

@@ -4,9 +4,17 @@
 <#@ Import Namespace="System.Linq" #>
 using System;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Jwc.Funz
 {
+    /// <summary>
+    /// Main container class for components, supporting container hierarchies and
+    /// lifetime management of <see cref="IDisposable" /> instances.
+    /// </summary>
+    [SuppressMessage("StyleCop.CSharp.LayoutRules", "SA1508:ClosingCurlyBracketsMustNotBePrecededByBlankLine", Justification = "The last line is automatically generated.")]
+    [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1618:GenericTypeParametersMustBeDocumented", Justification = "Suppressing this rule is desirable.")]
+    [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1611:ElementParametersMustBeDocumented", Justification = "Suppressing this rule is desirable.")]
     public partial class Container
     {
         /* Contain just the typed overloads that are just pass-through to the real implementations.
@@ -28,7 +36,7 @@ for (var typeCount = 2; typeCount <= GenericTypeMax - 2; typeCount++)
         [DebuggerStepThrough]
         public Func<<#=typeList#>, TService> LazyResolve<TService, <#=typeList#>>()
         {
-            return (<#=valueList#>) => ResolveImpl<TService, <#=typeList#>>(_noKey, true, <#=valueList#>);
+            return (<#=valueList#>) => this.ResolveImpl<TService, <#=typeList#>>(NoKey, true, <#=valueList#>);
         }
 
         /// <summary>
@@ -40,7 +48,7 @@ for (var typeCount = 2; typeCount <= GenericTypeMax - 2; typeCount++)
         [DebuggerStepThrough]
         public Func<<#=typeList#>, TService> LazyResolveKeyed<TService, <#=typeList#>>(object key)
         {
-            return (<#=valueList#>) => ResolveImpl<TService, <#=typeList#>>(key, true, <#=valueList#>);
+            return (<#=valueList#>) => this.ResolveImpl<TService, <#=typeList#>>(key, true, <#=valueList#>);
         }
 
 <#

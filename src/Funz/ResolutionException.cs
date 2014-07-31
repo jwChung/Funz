@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Runtime.Serialization;
 
 namespace Jwc.Funz
@@ -45,6 +46,7 @@ namespace Jwc.Funz
         /// <summary>
         /// Initializes a new instance of the <see cref="ResolutionException" /> class.
         /// </summary>
+        [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1611:ElementParametersMustBeDocumented", Justification = "Suppressing this rule is desirable.")]
         protected ResolutionException(
             SerializationInfo info,
             StreamingContext context) : base(info, context)

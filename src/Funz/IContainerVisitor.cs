@@ -1,7 +1,7 @@
 ﻿namespace Jwc.Funz
 {
     /// <summary>
-    /// Represents a contianer visitor.
+    /// Represents a container visitor.
     /// </summary>
     /// <typeparam name="TResult">A result type.</typeparam>
     public interface IContainerVisitor<out TResult>

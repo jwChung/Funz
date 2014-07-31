@@ -7,6 +7,23 @@ namespace Jwc.Funz
 {
     public class Scenario
     {
+        public interface IFoo
+        {
+            IBar Bar { get; set; }
+        }
+
+        public interface IBar
+        {
+            IFoo Foo { get; set; }
+        }
+
+        public interface IBaz
+        {
+            IFoo Foo { get; }
+
+            IBar Bar { get; }
+        }
+
         [VersionTest(0, 1, 0)]
         public void ResolveRegisteredServiceReturnsCorrectInstance(
             Container container)
@@ -432,23 +449,6 @@ namespace Jwc.Funz
             Assert.True(actual, "CanResolve");
         }
 
-        public interface IFoo
-        {
-            IBar Bar { get; set; }
-        }
-
-        public interface IBar
-        {
-            IFoo Foo { get; set; }
-        }
-
-        public interface IBaz
-        {
-            IFoo Foo { get; }
-
-            IBar Bar { get; }
-        }
-
         public class Foo : IFoo
         {
             public IBar Bar { get; set; }
@@ -461,8 +461,8 @@ namespace Jwc.Funz
 
         public class Baz : IBaz
         {
-            private readonly IFoo _foo;
-            private readonly IBar _bar;
+            private readonly IFoo foo;
+            private readonly IBar bar;
 
             public Baz()
             {
@@ -470,18 +470,18 @@ namespace Jwc.Funz
 
             public Baz(IFoo foo, IBar bar)
             {
-                _foo = foo;
-                _bar = bar;
+                this.foo = foo;
+                this.bar = bar;
             }
 
             public IFoo Foo
             {
-                get { return _foo; }
+                get { return this.foo; }
             }
 
             public IBar Bar
             {
-                get { return _bar; }
+                get { return this.bar; }
             }
         }
 
@@ -491,7 +491,7 @@ namespace Jwc.Funz
 
             public void Dispose()
             {
-                Disposed = true;
+                this.Disposed = true;
             }
         }
 
@@ -512,7 +512,7 @@ namespace Jwc.Funz
 
         public class FooBuilder : IContainerVisitor<IFoo>
         {
-            private readonly IFoo _result;
+            private readonly IFoo result;
 
             public FooBuilder()
             {
@@ -520,12 +520,12 @@ namespace Jwc.Funz
 
             private FooBuilder(IFoo result)
             {
-                _result = result;
+                this.result = result;
             }
 
             public IFoo Result
             {
-                get { return _result; }
+                get { return this.result; }
             }
 
             public IContainerVisitor<IFoo> Visit(Container container)
@@ -539,7 +539,7 @@ namespace Jwc.Funz
 
         public class BarBuilder : IContainerVisitor<IBar>
         {
-            private readonly IBar _result;
+            private readonly IBar result;
 
             public BarBuilder()
             {
@@ -547,12 +547,12 @@ namespace Jwc.Funz
 
             private BarBuilder(IBar result)
             {
-                _result = result;
+                this.result = result;
             }
 
             public IBar Result
             {
-                get { return _result; }
+                get { return this.result; }
             }
 
             public IContainerVisitor<IBar> Visit(Container container)
@@ -566,10 +566,10 @@ namespace Jwc.Funz
 
         public class TypeRegistration<TFrom, TTo> : IContainerVisitor<IRegistration> where TFrom : TTo
         {
-            private readonly MethodInfo _resolveMethod =
+            private readonly MethodInfo resolveMethod =
                 typeof(Container).GetMethods().Single(m => m.Name == "Resolve" && m.GetParameters().Length == 0);
 
-            private readonly IRegistration _registration;
+            private readonly IRegistration registration;
 
             public TypeRegistration()
             {
@@ -577,12 +577,12 @@ namespace Jwc.Funz
 
             private TypeRegistration(IRegistration registration)
             {
-                _registration = registration;
+                this.registration = registration;
             }
 
             public IRegistration Result
             {
-                get { return _registration; }
+                get { return this.registration; }
             }
 
             public IContainerVisitor<IRegistration> Visit(Container container)
@@ -605,7 +605,7 @@ namespace Jwc.Funz
 
             private object Resolve(Container container, Type serviceType)
             {
-                return _resolveMethod.MakeGenericMethod(serviceType).Invoke(container, new object[0]);
+                return this.resolveMethod.MakeGenericMethod(serviceType).Invoke(container, new object[0]);
             }
         }
     }

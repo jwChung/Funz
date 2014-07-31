@@ -1,14 +1,21 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using Ploeh.Albedo;
 
 namespace Jwc.Funz
 {
+    [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1305:FieldNamesMustNotUseHungarianNotation", Justification = "Suppressing this rule is desirable.")]
     internal class ParameterPropertyMatcher : IEqualityComparer<IReflectionElement>
     {
         public bool Equals(IReflectionElement x, IReflectionElement y)
         {
             return EqualsName(x, y) && EqualsType(x, y);
+        }
+        
+        public int GetHashCode(IReflectionElement obj)
+        {
+            return obj.GetHashCode();
         }
 
         private static bool EqualsName(IReflectionElement x, IReflectionElement y)
@@ -27,14 +34,9 @@ namespace Jwc.Funz
             return xType.IsAssignableFrom(yType) || yType.IsAssignableFrom(xType);
         }
 
-        public int GetHashCode(IReflectionElement obj)
-        {
-            return obj.GetHashCode();
-        }
-
         private class GetNameVisitor : ReflectionVisitor<string>
         {
-            private readonly string _value;
+            private readonly string value;
 
             public GetNameVisitor()
             {
@@ -42,12 +44,12 @@ namespace Jwc.Funz
 
             private GetNameVisitor(string value)
             {
-                _value = value;
+                this.value = value;
             }
 
             public override string Value
             {
-                get { return _value; }
+                get { return this.value; }
             }
 
             public override IReflectionVisitor<string> Visit(PropertyInfoElement propertyInfoElement)
@@ -63,7 +65,7 @@ namespace Jwc.Funz
 
         private class GetTypeVisitor : ReflectionVisitor<Type>
         {
-            private readonly Type _value;
+            private readonly Type value;
 
             public GetTypeVisitor()
             {
@@ -71,12 +73,12 @@ namespace Jwc.Funz
 
             private GetTypeVisitor(Type value)
             {
-                _value = value;
+                this.value = value;
             }
 
             public override Type Value
             {
-                get { return _value; }
+                get { return this.value; }
             }
 
             public override IReflectionVisitor<Type> Visit(PropertyInfoElement propertyInfoElement)

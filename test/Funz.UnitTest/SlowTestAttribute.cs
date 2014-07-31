@@ -5,16 +5,16 @@ namespace Jwc.Funz
 {
     public class SlowTestAttribute : TestAttribute
     {
-        private readonly RunOn _runOn;
+        private readonly RunOn runOn;
 
         public SlowTestAttribute(RunOn runOn)
         {
-            _runOn = runOn;
+            this.runOn = runOn;
         }
 
         public RunOn RunOn
         {
-            get { return _runOn; }
+            get { return this.runOn; }
         }
 
         public override string Skip
@@ -37,7 +37,11 @@ namespace Jwc.Funz
                         throw new ArgumentOutOfRangeException();
                 }
             }
-            set { throw new NotSupportedException(); }
+
+            set
+            {
+                throw new NotSupportedException();
+            }
         }
     }
 }

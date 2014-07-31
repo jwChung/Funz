@@ -12,9 +12,9 @@ namespace Jwc.Funz
         /// Specifies each request to resolve the dependency will result in a new
         /// instance being returned.
         /// </summary>
-        /// <return>
+        /// <returns>
         /// The fluent API instance about how to specifying the owner of instances.
-        /// </return>
+        /// </returns>
         IOwned ReusedWithinNone();
 
         /// <summary>
@@ -22,9 +22,9 @@ namespace Jwc.Funz
         /// containers do not reuse parent container instances and get
         /// a new instance at their level.
         /// </summary>
-        /// <return>
+        /// <returns>
         /// The fluent API instance about how to specifying the owner of instances.
-        /// </return>
+        /// </returns>
         IOwned ReusedWithinContainer();
 
         /// <summary>
@@ -32,22 +32,22 @@ namespace Jwc.Funz
         /// are created (if necessary) in the container where the registration
         /// was performed, and are reused by all descendent containers.
         /// </summary>
-        /// <return>
+        /// <returns>
         /// The fluent API instance about how to specifying the owner of instances.
-        /// </return>
+        /// </returns>
         IOwned ReusedWithinHierarchy();
 
         /// <summary>
-        /// Specifies instances are reused within the given scope. To reuse instainces,
+        /// Specifies instances are reused within the given scope. To reuse instances,
         /// a container should have same scope with the given scope, which can be
         /// passed when constructed.
         /// </summary>
         /// <param name="scope">
         /// The custom scope, within which instances are reused.
         /// </param>
-        /// <return>
+        /// <returns>
         /// The fluent API instance about how to specifying the owner of instances.
-        /// </return>
+        /// </returns>
         IOwned ReusedWithin(object scope);
     }
 }

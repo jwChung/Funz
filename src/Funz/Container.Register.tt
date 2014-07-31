@@ -4,9 +4,16 @@
 <#@ Import Namespace="System.Linq" #>
 using System;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Jwc.Funz
 {
+    /// <summary>
+    /// Main container class for components, supporting container hierarchies and
+    /// lifetime management of <see cref="IDisposable" /> instances.
+    /// </summary>
+    [SuppressMessage("StyleCop.CSharp.LayoutRules", "SA1508:ClosingCurlyBracketsMustNotBePrecededByBlankLine", Justification = "The last line is automatically generated.")]
+    [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1618:GenericTypeParametersMustBeDocumented", Justification = "Suppressing this rule is desirable.")]
     public partial class Container
     {
         /* Contain just the typed overloads that are just pass-through to the real implementations.
@@ -29,7 +36,7 @@ for (var typeCount = 2; typeCount <= GenericTypeMax - 2; typeCount++)
         [DebuggerStepThrough]
         public IRegistration Register<TService, <#=typeList #>>(Func<Container, <#=typeList #>, TService> factory)
         {
-            return RegisterImpl<Func<Container, <#=typeList #>, TService>, TService>(_noKey, factory);
+            return RegisterImpl<Func<Container, <#=typeList #>, TService>, TService>(NoKey, factory);
         }
 
         /// <summary>

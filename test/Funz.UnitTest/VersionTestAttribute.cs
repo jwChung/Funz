@@ -4,30 +4,30 @@ namespace Jwc.Funz
 {
     public class VersionTestAttribute : TestAttribute
     {
-        private readonly int _major;
-        private readonly int _minor;
-        private readonly int _patch;
+        private readonly int major;
+        private readonly int minor;
+        private readonly int patch;
 
         public VersionTestAttribute(int major, int minor, int patch)
         {
-            _major = major;
-            _minor = minor;
-            _patch = patch;
+            this.major = major;
+            this.minor = minor;
+            this.patch = patch;
         }
 
         public int Major
         {
-            get { return _major; }
+            get { return this.major; }
         }
 
         public int Minor
         {
-            get { return _minor; }
+            get { return this.minor; }
         }
 
         public int Patch
         {
-            get { return _patch; }
+            get { return this.patch; }
         }
     }
 }

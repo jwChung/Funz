@@ -1,7 +1,14 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Jwc.Funz
 {
+    /// <summary>
+    /// Main container class for components, supporting container hierarchies and
+    /// lifetime management of <see cref="IDisposable" /> instances.
+    /// </summary>
+    [SuppressMessage("StyleCop.CSharp.LayoutRules", "SA1508:ClosingCurlyBracketsMustNotBePrecededByBlankLine", Justification = "The last line is automatically generated.")]
+    [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1618:GenericTypeParametersMustBeDocumented", Justification = "Suppressing this rule is desirable.")]
     public partial class Container
     {
         /* All ResolveImpl are essentially equal, except for the type of the factory 

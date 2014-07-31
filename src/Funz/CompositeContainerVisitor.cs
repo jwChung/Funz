@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 namespace Jwc.Funz
@@ -10,7 +11,7 @@ namespace Jwc.Funz
     /// <typeparam name="TResult">The type of a enumerable result.</typeparam>
     public class CompositeContainerVisitor<TResult> : IContainerVisitor<IEnumerable<TResult>>
     {
-        private readonly IContainerVisitor<TResult>[] _visitors;
+        private readonly IContainerVisitor<TResult>[] visitors;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CompositeContainerVisitor{TResult}" /> class
@@ -22,7 +23,7 @@ namespace Jwc.Funz
             if (visitors == null)
                 throw new ArgumentNullException("visitors");
 
-            _visitors = visitors;
+            this.visitors = visitors;
         }
 
         /// <summary>
@@ -30,18 +31,16 @@ namespace Jwc.Funz
         /// </summary>
         public IEnumerable<TResult> Result
         {
-            get { return _visitors.Select(v => v.Result); }
+            get { return this.visitors.Select(v => v.Result); }
         }
 
         /// <summary>
         /// Gets a value indicating the visitors composed.
         /// </summary>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage(
-            "Microsoft.Design",
-            "CA1006:DoNotNestGenericTypesInMemberSignatures")]
+        [SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures", Justification = "Suppressing this warning is desirable.")]
         public IEnumerable<IContainerVisitor<TResult>> Visitors
         {
-            get { return _visitors; }
+            get { return this.visitors; }
         }
 
         /// <summary>
@@ -54,7 +53,7 @@ namespace Jwc.Funz
             if (container == null)
                 throw new ArgumentNullException("container");
 
-            var newVisitors = Visitors.Select(v => v.Visit(container)).ToArray();
+            var newVisitors = this.Visitors.Select(v => v.Visit(container)).ToArray();
             return new CompositeContainerVisitor<TResult>(newVisitors);
         }
     }

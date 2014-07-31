@@ -9,11 +9,6 @@ namespace Jwc.Funz
 {
     public class CompositeContainerVisitorTest : IdiomaticTest<CompositeContainerVisitor<object>>
     {
-        protected override IEnumerable<MemberInfo> ExceptToVerifyInitialization()
-        {
-            yield return new Properties<CompositeContainerVisitor<object>>().Select(x => x.Result);
-        }
-
         [Test]
         public void SutIsContainerVisitorOfEnumerable(
             CompositeContainerVisitor<string> sut)
@@ -60,6 +55,11 @@ namespace Jwc.Funz
             var actual = sut.Result;
 
             Assert.Equal(expected, actual);
+        }
+
+        protected override IEnumerable<MemberInfo> ExceptToVerifyInitialization()
+        {
+            yield return new Properties<CompositeContainerVisitor<object>>().Select(x => x.Result);
         }
     }
 }

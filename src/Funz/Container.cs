@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq;
 
@@ -13,16 +14,16 @@ namespace Jwc.Funz
     /// </summary>
     public partial class Container : IDisposable
     {
-        private static readonly object _noKey = new object();
+        private static readonly object NoKey = new object();
 
-        private readonly ContainerCollection _children = new ContainerCollection();
+        private readonly ContainerCollection children = new ContainerCollection();
 
-        private readonly IDictionary<ServiceKey, Registration> _registry =
+        private readonly IDictionary<ServiceKey, Registration> registry =
             new ConcurrentDictionary<ServiceKey, Registration>();
 
-        private readonly Container _parent;
-        private readonly object _scope;
-        private volatile bool _disposed;
+        private readonly Container parent;
+        private readonly object scope;
+        private volatile bool disposed;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Container" /> class.
@@ -45,8 +46,8 @@ namespace Jwc.Funz
             if (scope == null)
                 throw new ArgumentNullException("scope");
 
-            _parent = parent;
-            _scope = scope;
+            this.parent = parent;
+            this.scope = scope;
 
             Register(c => this).ReusedWithinContainer().OwnedByExternal();
         }
@@ -61,9 +62,9 @@ namespace Jwc.Funz
         {
             get
             {
-                ThrowExceptionIfDisposed();
+                this.ThrowExceptionIfDisposed();
 
-                return _scope;
+                return this.scope;
             }
         }
 
@@ -77,21 +78,21 @@ namespace Jwc.Funz
         /// </returns>
         public IRegistration Register<TService>(Func<Container, TService> factory)
         {
-            return RegisterImpl<Func<Container, TService>, TService>(_noKey, factory);
+            return RegisterImpl<Func<Container, TService>, TService>(NoKey, factory);
         }
 
         /// <summary>
         /// Registers the given service by providing a factory delegate to instantiate it.
         /// </summary>
         /// <typeparam name="TService">The service type to register.</typeparam>
-        /// <typeparam name="TArg">First argument that should be passed to the factory delegate to create the instace.</typeparam>
+        /// <typeparam name="TArg">First argument that should be passed to the factory delegate to create the instance.</typeparam>
         /// <param name="factory">The factory delegate to initialize new instances of the service when needed.</param>
         /// <returns>
         /// The registration object to perform further configuration via its fluent interface.
         /// </returns>
         public IRegistration Register<TService, TArg>(Func<Container, TArg, TService> factory)
         {
-            return RegisterImpl<Func<Container, TArg, TService>, TService>(_noKey, factory);
+            return RegisterImpl<Func<Container, TArg, TService>, TService>(NoKey, factory);
         }
 
         /// <summary>
@@ -112,7 +113,7 @@ namespace Jwc.Funz
         /// Registers the given service by providing a factory delegate to instantiate it.
         /// </summary>
         /// <typeparam name="TService">The service type to register.</typeparam>
-        /// <typeparam name="TArg">First argument that should be passed to the factory delegate to create the instace.</typeparam>
+        /// <typeparam name="TArg">First argument that should be passed to the factory delegate to create the instance.</typeparam>
         /// <param name="key">A key used to differenciate this service registration.</param>
         /// <param name="factory">The factory delegate to initialize new instances of the service when needed.</param>
         /// <returns>
@@ -132,7 +133,7 @@ namespace Jwc.Funz
         /// </returns>
         public TService Resolve<TService>()
         {
-            return ResolveImpl<TService>(_noKey, true);
+            return this.ResolveImpl<TService>(NoKey, true);
         }
 
         /// <summary>
@@ -140,13 +141,13 @@ namespace Jwc.Funz
         /// </summary>
         /// <typeparam name="TService">The type of the service to retrieve.</typeparam>
         /// <typeparam name="TArg">The type of the first argument.</typeparam>
-        /// <param name="arg">The first argument to pass to the factory delegate that may create the instace.</param>
+        /// <param name="arg">The first argument to pass to the factory delegate that may create the instance.</param>
         /// <returns>
         /// The resolved service instance.
         /// </returns>
         public TService Resolve<TService, TArg>(TArg arg)
         {
-            return ResolveImpl<TService, TArg>(_noKey, true, arg);
+            return this.ResolveImpl<TService, TArg>(NoKey, true, arg);
         }
 
         /// <summary>
@@ -159,7 +160,7 @@ namespace Jwc.Funz
         /// </returns>
         public TService ResolveKeyed<TService>(object key)
         {
-            return ResolveImpl<TService>(key, true);
+            return this.ResolveImpl<TService>(key, true);
         }
 
         /// <summary>
@@ -168,13 +169,13 @@ namespace Jwc.Funz
         /// <typeparam name="TService">The type of the service to retrieve.</typeparam>
         /// <typeparam name="TArg">The type of the first argument.</typeparam>
         /// <param name="key">The key of the service to retrieve.</param>
-        /// <param name="arg">The first argument to pass to the factory delegate that may create the instace.</param>
+        /// <param name="arg">The first argument to pass to the factory delegate that may create the instance.</param>
         /// <returns>
         /// The resolved service instance.
         /// </returns>
         public TService ResolveKeyed<TService, TArg>(object key, TArg arg)
         {
-            return ResolveImpl<TService, TArg>(key, true, arg);
+            return this.ResolveImpl<TService, TArg>(key, true, arg);
         }
 
         /// <summary>
@@ -187,7 +188,7 @@ namespace Jwc.Funz
         /// </returns>
         public TService TryResolve<TService>()
         {
-            return ResolveImpl<TService>(_noKey, false);
+            return this.ResolveImpl<TService>(NoKey, false);
         }
 
         /// <summary>
@@ -196,13 +197,13 @@ namespace Jwc.Funz
         /// </summary>
         /// <typeparam name="TService">The type of the service to retrieve.</typeparam>
         /// <typeparam name="TArg">The type of the first argument.</typeparam>
-        /// <param name="arg">The first argument to pass to the factory delegate that may create the instace.</param>
+        /// <param name="arg">The first argument to pass to the factory delegate that may create the instance.</param>
         /// <returns>
         /// The resolved service instance.
         /// </returns>
         public TService TryResolve<TService, TArg>(TArg arg)
         {
-            return ResolveImpl<TService, TArg>(_noKey, false, arg);
+            return this.ResolveImpl<TService, TArg>(NoKey, false, arg);
         }
 
         /// <summary>
@@ -216,7 +217,7 @@ namespace Jwc.Funz
         /// </returns>
         public TService TryResolveKeyed<TService>(object key)
         {
-            return ResolveImpl<TService>(key, false);
+            return this.ResolveImpl<TService>(key, false);
         }
 
         /// <summary>
@@ -227,14 +228,14 @@ namespace Jwc.Funz
         /// <typeparam name="TArg">The type of the first argument.</typeparam>
         /// <param name="key">The key of the service to retrieve.</param>
         /// <param name="arg">
-        /// The first argument to pass to the factory delegate that may create the instace.
+        /// The first argument to pass to the factory delegate that may create the instance.
         /// </param>
         /// <returns>
         /// The resolved service instance.
         /// </returns>
         public TService TryResolveKeyed<TService, TArg>(object key, TArg arg)
         {
-            return ResolveImpl<TService, TArg>(key, false, arg);
+            return this.ResolveImpl<TService, TArg>(key, false, arg);
         }
 
         /// <summary>
@@ -246,7 +247,7 @@ namespace Jwc.Funz
         /// </returns>
         public Func<TService> LazyResolve<TService>()
         {
-            return () => ResolveImpl<TService>(_noKey, true);
+            return () => this.ResolveImpl<TService>(NoKey, true);
         }
 
         /// <summary>
@@ -259,7 +260,7 @@ namespace Jwc.Funz
         /// </returns>
         public Func<TArg, TService> LazyResolve<TService, TArg>()
         {
-            return arg => ResolveImpl<TService, TArg>(_noKey, true, arg);
+            return arg => this.ResolveImpl<TService, TArg>(NoKey, true, arg);
         }
 
         /// <summary>
@@ -272,7 +273,7 @@ namespace Jwc.Funz
         /// </returns>
         public Func<TService> LazyResolveKeyed<TService>(object key)
         {
-            return () => ResolveImpl<TService>(key, true);
+            return () => this.ResolveImpl<TService>(key, true);
         }
 
         /// <summary>
@@ -286,7 +287,7 @@ namespace Jwc.Funz
         /// </returns>
         public Func<TArg, TService> LazyResolveKeyed<TService, TArg>(object key)
         {
-            return arg => ResolveImpl<TService, TArg>(key, true, arg);
+            return arg => this.ResolveImpl<TService, TArg>(key, true, arg);
         }
 
         /// <summary>
@@ -296,12 +297,9 @@ namespace Jwc.Funz
         /// <returns>
         /// The result whether this container can resolve.
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage(
-            "Microsoft.Design",
-            "CA1004:GenericMethodsShouldProvideTypeParameter")]
         public bool CanResolve<TService>()
         {
-            return CanResolveImpl<Func<Container, TService>, TService>(_noKey);
+            return CanResolveImpl<Func<Container, TService>, TService>(NoKey);
         }
 
         /// <summary>
@@ -312,12 +310,9 @@ namespace Jwc.Funz
         /// <returns>
         /// The result whether this container can resolve.
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage(
-            "Microsoft.Design",
-            "CA1004:GenericMethodsShouldProvideTypeParameter")]
         public bool CanResolve<TService, TArg>()
         {
-            return CanResolveImpl<Func<Container, TArg, TService>, TService>(_noKey);
+            return CanResolveImpl<Func<Container, TArg, TService>, TService>(NoKey);
         }
 
         /// <summary>
@@ -328,9 +323,6 @@ namespace Jwc.Funz
         /// <returns>
         /// The result whether this container can resolve.
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage(
-            "Microsoft.Design",
-            "CA1004:GenericMethodsShouldProvideTypeParameter")]
         public bool CanResolveKeyed<TService>(object key)
         {
             return CanResolveImpl<Func<Container, TService>, TService>(key);
@@ -345,9 +337,6 @@ namespace Jwc.Funz
         /// <returns>
         /// The result whether this container can resolve.
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage(
-            "Microsoft.Design",
-            "CA1004:GenericMethodsShouldProvideTypeParameter")]
         public bool CanResolveKeyed<TService, TArg>(object key)
         {
             return CanResolveImpl<Func<Container, TArg, TService>, TService>(key);
@@ -362,7 +351,7 @@ namespace Jwc.Funz
         /// </returns>
         public Container CreateChild()
         {
-            return CreateChild(CreateScope());
+            return this.CreateChild(CreateScope());
         }
 
         /// <summary>
@@ -375,16 +364,13 @@ namespace Jwc.Funz
         /// <returns>
         /// The new child container.
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage(
-            "Microsoft.Reliability",
-            "CA2000:Dispose objects before losing scope",
-            Justification = "The disposing process of the container will be performed explicitly.")]
+        [SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope", Justification = "The disposing process of the container will be performed explicitly.")]
         public Container CreateChild(object scope)
         {
-            ThrowExceptionIfDisposed();
+            this.ThrowExceptionIfDisposed();
 
             var container = new Container(this, scope);
-            _children.Add(container);
+            this.children.Add(container);
             return container;
         }
 
@@ -394,7 +380,7 @@ namespace Jwc.Funz
         /// </summary>
         public void Dispose()
         {
-            Dispose(true);
+            this.Dispose(true);
             GC.SuppressFinalize(this);
         }
 
@@ -409,7 +395,7 @@ namespace Jwc.Funz
             if (visitor == null)
                 throw new ArgumentNullException("visitor");
 
-            ThrowExceptionIfDisposed();
+            this.ThrowExceptionIfDisposed();
 
             return visitor.Visit(this);
         }
@@ -422,7 +408,7 @@ namespace Jwc.Funz
         /// </returns>
         public override string ToString()
         {
-            return Scope.ToString();
+            return this.Scope.ToString();
         }
 
         /// <summary>
@@ -434,32 +420,118 @@ namespace Jwc.Funz
         /// </param>
         protected virtual void Dispose(bool disposing)
         {
-            if (_disposed)
+            if (this.disposed)
                 return;
 
-            _disposed = true;
+            this.disposed = true;
 
             if (!disposing)
                 return;
 
-            DisposeServices();
-            DisposeChildren();
-            RemoveFromParent();
+            this.DisposeServices();
+            this.DisposeChildren();
+            this.RemoveFromParent();
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage(
-            "Microsoft.Reliability",
-            "CA2000:Dispose objects before losing scope",
-            Justification = "The disposing process of the registration will be performed on a container.")]
+        private static Type[] GetArgumentTypes(Type factoryType)
+        {
+            var genericArguments = factoryType.GetGenericArguments();
+            return genericArguments.Skip(1).Take(genericArguments.Length - 2).ToArray();
+        }
+
+        private static void ThrowNotRegistered(ServiceKey serviceKey)
+        {
+            var argumentTypes = GetArgumentTypes(serviceKey.FactoryType);
+            var serviceType = serviceKey.FactoryType.GetGenericArguments().Last();
+
+            if (serviceKey.Key == NoKey)
+            {
+                if (!argumentTypes.Any())
+                {
+                    throw new ResolutionException(string.Format(
+                        CultureInfo.CurrentCulture,
+                        "The service type '{0}' was not registered.",
+                        serviceType));
+                }
+
+                throw new ResolutionException(string.Format(
+                    CultureInfo.CurrentCulture,
+                    "The service type '{0}' with the argument(s) '{1}' was not registered.",
+                    serviceType,
+                    string.Join(", ", argumentTypes.Select(x => x.FullName))));
+            }
+
+            if (!argumentTypes.Any())
+            {
+                throw new ResolutionException(string.Format(
+                    CultureInfo.CurrentCulture,
+                    "The service type '{0}' with the key '{1}' was not registered.",
+                    serviceType,
+                    serviceKey.Key));
+            }
+
+            throw new ResolutionException(string.Format(
+                CultureInfo.CurrentCulture,
+                "The service type '{0}' with the key '{1}' and the argument(s) '{2}' was not registered.",
+                serviceType,
+                serviceKey.Key,
+                string.Join(", ", argumentTypes.Select(x => x.FullName))));
+        }
+
+        private static void ThrowRecursionException(ServiceKey serviceKey)
+        {
+            var argumentTypes = GetArgumentTypes(serviceKey.FactoryType);
+            var serviceType = serviceKey.FactoryType.GetGenericArguments().Last();
+
+            if (serviceKey.Key == NoKey)
+            {
+                if (!argumentTypes.Any())
+                {
+                    throw new ResolutionException(string.Format(
+                        CultureInfo.CurrentCulture,
+                        "The service type '{0}' was registered recursively.",
+                        serviceType));
+                }
+
+                throw new ResolutionException(string.Format(
+                    CultureInfo.CurrentCulture,
+                    "The service type '{0}' with the argument(s) '{1}' was registered recursively.",
+                    serviceType,
+                    string.Join(", ", argumentTypes.Select(x => x.FullName))));
+            }
+
+            if (!argumentTypes.Any())
+            {
+                throw new ResolutionException(string.Format(
+                    CultureInfo.CurrentCulture,
+                    "The service type '{0}' with the key '{1}' was registered recursively.",
+                    serviceType,
+                    serviceKey.Key));
+            }
+
+            throw new ResolutionException(string.Format(
+                CultureInfo.CurrentCulture,
+                "The service type '{0}' with the key '{1}' and the argument(s) '{2}' was registered recursively.",
+                serviceType,
+                serviceKey.Key,
+                string.Join(", ", argumentTypes.Select(x => x.FullName))));
+        }
+
+        private static string CreateScope()
+        {
+            return "Container" + Guid.NewGuid().ToString("N");
+        }
+
+        [SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope", Justification = "The disposing process of the registration will be performed on a container.")]
         private IRegistration RegisterImpl<TFunc, TService>(object key, TFunc factory) where TFunc : class
         {
             if (factory == null)
                 throw new ArgumentNullException("factory");
 
-            ThrowExceptionIfDisposed();
+            this.ThrowExceptionIfDisposed();
 
             var registration = new Registration<TFunc, TService>(this, factory, new HierarchyScope());
-            _registry[new ServiceKey(typeof(TFunc), key)] = registration;
+            this.registry[new ServiceKey(typeof(TFunc), key)] = registration;
             return registration;
         }
 
@@ -501,17 +573,17 @@ namespace Jwc.Funz
 
         private bool CanResolveImpl<TFunc, TService>(object key)
         {
-            return GetRegistration<TFunc, TService>(new ServiceKey(typeof(TFunc), key), false) != null;
+            return this.GetRegistration<TFunc, TService>(new ServiceKey(typeof(TFunc), key), false) != null;
         }
 
         private Registration<TFunc, TService> GetRegistration<TFunc, TService>(ServiceKey serviceKey, bool throws)
         {
-            ThrowExceptionIfDisposed();
+            this.ThrowExceptionIfDisposed();
 
             Container current = this;
             Registration registration = null;
-            while (current != null && !current._registry.TryGetValue(serviceKey, out registration))
-                current = current._parent;
+            while (current != null && !current.registry.TryGetValue(serviceKey, out registration))
+                current = current.parent;
 
             if (registration != null)
                 return registration.Clone<TFunc, TService>(this, serviceKey);
@@ -522,163 +594,46 @@ namespace Jwc.Funz
             return null;
         }
 
-        private static Type[] GetArgumentTypes(Type factoryType)
-        {
-            var genericArguments = factoryType.GetGenericArguments();
-            return genericArguments.Skip(1).Take(genericArguments.Length - 2).ToArray();
-        }
-
         private void DisposeServices()
         {
-            foreach (var registration in _registry.Values)
+            foreach (var registration in this.registry.Values)
                 registration.Dispose();
         }
 
         private void DisposeChildren()
         {
-            foreach (var child in _children)
+            foreach (var child in this.children)
                 child.Dispose();
         }
 
         private void RemoveFromParent()
         {
-            if (_parent == null)
+            if (this.parent == null)
                 return;
 
-            _parent._children.Remove(this);
+            this.parent.children.Remove(this);
         }
 
         private void ThrowExceptionIfDisposed()
         {
-            if (_disposed)
+            if (this.disposed)
                 throw new ObjectDisposedException("Jwc.Funz.Container");
-        }
-
-        private static void ThrowNotRegistered(ServiceKey serviceKey)
-        {
-            var argumentTypes = GetArgumentTypes(serviceKey.FactoryType);
-            var serviceType = serviceKey.FactoryType.GetGenericArguments().Last();
-
-            if (serviceKey.Key == _noKey)
-            {
-                if (!argumentTypes.Any())
-                {
-                    throw new ResolutionException(string.Format(
-                        CultureInfo.CurrentCulture,
-                        "The service type '{0}' was not registered.",
-                        serviceType));
-                }
-
-                throw new ResolutionException(string.Format(
-                    CultureInfo.CurrentCulture,
-                    "The service type '{0}' with the argument(s) '{1}' was not registered.",
-                    serviceType,
-                    string.Join(", ", argumentTypes.Select(x => x.FullName))));
-            }
-
-            if (!argumentTypes.Any())
-            {
-                throw new ResolutionException(string.Format(
-                    CultureInfo.CurrentCulture,
-                    "The service type '{0}' with the key '{1}' was not registered.",
-                    serviceType,
-                    serviceKey.Key));
-            }
-
-            throw new ResolutionException(string.Format(
-                CultureInfo.CurrentCulture,
-                "The service type '{0}' with the key '{1}' and the argument(s) '{2}' was not registered.",
-                serviceType,
-                serviceKey.Key,
-                string.Join(", ", argumentTypes.Select(x => x.FullName))));
-        }
-
-        private static void ThrowRecursionException(ServiceKey serviceKey)
-        {
-            var argumentTypes = GetArgumentTypes(serviceKey.FactoryType);
-            var serviceType = serviceKey.FactoryType.GetGenericArguments().Last();
-
-            if (serviceKey.Key == _noKey)
-            {
-                if (!argumentTypes.Any())
-                {
-                    throw new ResolutionException(string.Format(
-                        CultureInfo.CurrentCulture,
-                        "The service type '{0}' was registered recursively.",
-                        serviceType));
-                }
-
-                throw new ResolutionException(string.Format(
-                    CultureInfo.CurrentCulture,
-                    "The service type '{0}' with the argument(s) '{1}' was registered recursively.",
-                    serviceType,
-                    string.Join(", ", argumentTypes.Select(x => x.FullName))));
-            }
-
-            if (!argumentTypes.Any())
-            {
-                throw new ResolutionException(string.Format(
-                    CultureInfo.CurrentCulture,
-                    "The service type '{0}' with the key '{1}' was registered recursively.",
-                    serviceType,
-                    serviceKey.Key));
-            }
-
-            throw new ResolutionException(string.Format(
-                CultureInfo.CurrentCulture,
-                "The service type '{0}' with the key '{1}' and the argument(s) '{2}' was registered recursively.",
-                serviceType,
-                serviceKey.Key,
-                string.Join(", ", argumentTypes.Select(x => x.FullName))));
-        }
-
-        private static string CreateScope()
-        {
-            return "Container" + Guid.NewGuid().ToString("N");
-        }
-
-        private class ContainerCollection : IEnumerable<Container>
-        {
-            private readonly IList<Container> _containers = new List<Container>();
-
-            public void Add(Container container)
-            {
-                lock (_containers)
-                    _containers.Add(container);
-            }
-
-            public void Remove(Container container)
-            {
-                lock (_containers)
-                    _containers.Remove(container);
-            }
-
-            public IEnumerator<Container> GetEnumerator()
-            {
-                lock (_containers)
-                    return ((IEnumerable<Container>)_containers.ToArray()).GetEnumerator();
-            }
-
-            IEnumerator IEnumerable.GetEnumerator()
-            {
-                return GetEnumerator();
-            }
         }
 
         private static class RecursionGuard
         {
             [ThreadStatic]
-            private static Stack<ServiceKey> _serviceKeys;
+            private static Stack<ServiceKey> serviceKeys;
 
             public static IDisposable Inspect(ServiceKey serviceKey)
             {
-                if (_serviceKeys == null)
-                    _serviceKeys = new Stack<ServiceKey>();
+                if (serviceKeys == null)
+                    serviceKeys = new Stack<ServiceKey>();
 
-                if (_serviceKeys.Contains(serviceKey))
+                if (serviceKeys.Contains(serviceKey))
                     ThrowRecursionException(serviceKey);
 
-                _serviceKeys.Push(serviceKey);
+                serviceKeys.Push(serviceKey);
                 return new EndInspection();
             }
 
@@ -686,38 +641,61 @@ namespace Jwc.Funz
             {
                 public void Dispose()
                 {
-                    _serviceKeys.Pop();
+                    serviceKeys.Pop();
                 }
+            }
+        }
+
+        private class ContainerCollection : IEnumerable<Container>
+        {
+            private readonly IList<Container> containers = new List<Container>();
+
+            public void Add(Container container)
+            {
+                lock (this.containers)
+                    this.containers.Add(container);
+            }
+
+            public void Remove(Container container)
+            {
+                lock (this.containers)
+                    this.containers.Remove(container);
+            }
+
+            public IEnumerator<Container> GetEnumerator()
+            {
+                lock (this.containers)
+                    return ((IEnumerable<Container>)this.containers.ToArray()).GetEnumerator();
+            }
+
+            IEnumerator IEnumerable.GetEnumerator()
+            {
+                return this.GetEnumerator();
             }
         }
 
         private sealed class ServiceKey
         {
-            private readonly Type _factoryType;
-            private readonly object _key;
+            private readonly Type factoryType;
+            private readonly object key;
 
             public ServiceKey(Type factoryType, object key)
             {
                 if (key == null)
                     throw new ArgumentNullException("key");
 
-                _factoryType = factoryType;
-                _key = key;
+                this.factoryType = factoryType;
+                this.key = key;
             }
 
             public Type FactoryType
             {
-                get { return _factoryType; }
+                get { return this.factoryType; }
             }
 
             public object Key
             {
-                get { return _key; }
-            }
-
-            private bool Equals(ServiceKey other)
-            {
-                return FactoryType == other.FactoryType && Key.Equals(other.Key);
+                get { return this.key; }
             }
 
             public override bool Equals(object obj)
@@ -731,71 +709,76 @@ namespace Jwc.Funz
                 if (obj.GetType() != GetType())
                     return false;
 
-                return Equals((ServiceKey)obj);
+                return this.Equals((ServiceKey)obj);
             }
 
             public override int GetHashCode()
             {
                 unchecked
                 {
-                    return (FactoryType.GetHashCode()*397) ^ Key.GetHashCode();
+                    return (this.FactoryType.GetHashCode() * 397) ^ this.Key.GetHashCode();
                 }
+            }
+
+            private bool Equals(ServiceKey other)
+            {
+                return this.FactoryType == other.FactoryType && this.Key.Equals(other.Key);
             }
         }
 
         private abstract class Registration : IRegistration, IDisposable
         {
-            private ReusedScope _reusedScope;
-            private bool _canDispose;
+            private ReusedScope reusedScope;
+            private bool canDispose;
 
             protected Registration(ReusedScope reusedScope, bool canDispose)
             {
-                _reusedScope = reusedScope;
-                _canDispose = canDispose;
-            }
-
-            protected ReusedScope ReusedScope
-            {
-                get { return _reusedScope; }
+                this.reusedScope = reusedScope;
+                this.canDispose = canDispose;
             }
 
             public bool CanDispose
             {
-                get { return _canDispose; }
+                get { return this.canDispose; }
+            }
+
+            protected ReusedScope ReusedScope
+            {
+                get { return this.reusedScope; }
             }
 
             public IOwned ReusedWithinNone()
             {
-                _reusedScope = new NoneScope { Registration = this };
+                this.reusedScope = new NoneScope { Registration = this };
                 return this;
             }
 
             public IOwned ReusedWithinContainer()
             {
-                _reusedScope = new ContainerScope { Registration = this };
+                this.reusedScope = new ContainerScope { Registration = this };
                 return this;
             }
 
             public IOwned ReusedWithinHierarchy()
             {
-                _reusedScope = new HierarchyScope { Registration = this };
+                this.reusedScope = new HierarchyScope { Registration = this };
                 return this;
             }
 
             public IOwned ReusedWithin(object scope)
             {
-                _reusedScope = new CustomScope(scope) { Registration = this };
+                this.reusedScope = new CustomScope(scope) { Registration = this };
                 return this;
             }
 
             public void OwnedByContainer()
             {
-                _canDispose = true;
+                this.canDispose = true;
             }
 
             public void OwnedByExternal()
             {
-                _canDispose = false;
+                this.canDispose = false;
             }
 
             public Registration<TFunc, TService> Clone<TFunc, TService>(Container container, ServiceKey serviceKey)
@@ -805,7 +788,7 @@ namespace Jwc.Funz
 
             public void Dispose()
             {
-                Dispose(true);
+                this.Dispose(true);
             }
 
             protected abstract void Dispose(bool disposing);
@@ -813,10 +796,10 @@ namespace Jwc.Funz
 
         private sealed class Registration<TFunc, TService> : Registration
         {
-            private readonly TFunc _factory;
-            private readonly Container _container;
-            private TService _service;
-            private bool _hasService;
+            private readonly TFunc factory;
+            private readonly Container container;
+            private TService service;
+            private bool hasService;
 
             public Registration(
                 Container container,
@@ -825,38 +808,42 @@ namespace Jwc.Funz
                 bool canDispose = true)
                 : base(reusedScope, canDispose)
             {
-                _factory = factory;
-                _container = container;
+                this.factory = factory;
+                this.container = container;
 
                 reusedScope.Registration = this;
             }
 
             public TFunc Factory
             {
-                get { return _factory; }
+                get { return this.factory; }
             }
 
             public TService Service
             {
-                get { return _service; }
+                get
+                {
+                    return this.service;
+                }
+
                 set
                 {
                     if (!ReusedScope.CanSave)
                         return;
 
-                    _service = value;
-                    _hasService = true;
+                    this.service = value;
+                    this.hasService = true;
                 }
             }
 
             public bool HasService
             {
-                get { return _hasService; }
+                get { return this.hasService; }
             }
 
             public Container Container
             {
-                get { return _container; }
+                get { return this.container; }
             }
 
             protected override void Dispose(bool disposing)
@@ -864,10 +851,10 @@ namespace Jwc.Funz
                 if (!disposing)
                     return;
 
-                if (!CanDispose)
+                if (!this.CanDispose)
                     return;
 
-                var disposable = Service as IDisposable;
+                var disposable = this.Service as IDisposable;
                 if (disposable != null)
                     disposable.Dispose();
             }
@@ -922,7 +909,7 @@ namespace Jwc.Funz
                     new ContainerScope(),
                     registration.CanDispose);
 
-                container._registry[serviceKey] = clone;
+                container.registry[serviceKey] = clone;
                 return clone;
             }
         }
@@ -943,18 +930,18 @@ namespace Jwc.Funz
 
         private class CustomScope : ReusedScope
         {
-            private readonly object _scope;
-            private bool _canSave;
+            private readonly object scope;
+            private bool canSave;
 
             public CustomScope(object scope, bool canSave = false)
             {
-                _scope = scope;
-                _canSave = canSave;
+                this.scope = scope;
+                this.canSave = canSave;
             }
 
             public override bool CanSave
             {
-                get { return _canSave; }
+                get { return this.canSave; }
             }
 
             [System.Diagnostics.CodeAnalysis.SuppressMessage(
@@ -966,11 +953,11 @@ namespace Jwc.Funz
             {
                 var registration = (Registration<TFunc, TService>)Registration;
 
-                var scoped = GetScopedContainer(container);
+                var scoped = this.GetScopedContainer(container);
                 if (scoped == null)
                     return registration;
 
-                _canSave = true;
+                this.canSave = true;
 
                 if (registration.Container == scoped)
                     return registration;
@@ -978,18 +965,18 @@ namespace Jwc.Funz
                 var clone = new Registration<TFunc, TService>(
                     scoped,
                     registration.Factory,
-                    new CustomScope(_scope, _canSave),
+                    new CustomScope(this.scope, this.canSave),
                     registration.CanDispose);
 
-                scoped._registry[serviceKey] = clone;
+                scoped.registry[serviceKey] = clone;
                 return clone;
             }
 
             private Container GetScopedContainer(Container container)
             {
                 Container current = container;
-                while (current != null && current.Scope != _scope)
-                    current = current._parent;
+                while (current != null && current.Scope != this.scope)
+                    current = current.parent;
 
                 return current;
             }

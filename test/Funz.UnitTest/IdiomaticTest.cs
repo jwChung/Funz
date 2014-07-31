@@ -14,7 +14,7 @@ namespace Jwc.Funz
         public IEnumerable<ITestCase> SutHasAppropriateGuards()
         {
             return typeof(TSUT).GetIdiomaticMembers()
-                .Except(ExceptToVerifyGuardClause())
+                .Except(this.ExceptToVerifyGuardClause())
                 .Select(m => new TestCase(new Action<NullGuardClauseAssertion>(
                     a => a.Verify(m))));
         }
@@ -23,7 +23,7 @@ namespace Jwc.Funz
         public IEnumerable<ITestCase> SutCorrectlyInitializesMembers()
         {
             return typeof(TSUT).GetIdiomaticMembers()
-                .Except(ExceptToVerifyInitialization())
+                .Except(this.ExceptToVerifyInitialization())
                 .Select(m => new TestCase(new Action<MemberInitializationAssertion>(
                     a => a.Verify(m))));
         }

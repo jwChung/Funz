@@ -1,8 +1,15 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Jwc.Funz
 {
+    /// <summary>
+    /// Main container class for components, supporting container hierarchies and
+    /// lifetime management of <see cref="IDisposable" /> instances.
+    /// </summary>
+    [SuppressMessage("StyleCop.CSharp.LayoutRules", "SA1508:ClosingCurlyBracketsMustNotBePrecededByBlankLine", Justification = "The last line is automatically generated.")]
+    [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1618:GenericTypeParametersMustBeDocumented", Justification = "Suppressing this rule is desirable.")]
     public partial class Container
     {
         /* Contain just the typed overloads that are just pass-through to the real implementations.
@@ -20,7 +27,7 @@ namespace Jwc.Funz
         [DebuggerStepThrough]
         public IRegistration Register<TService, TArg1, TArg2>(Func<Container, TArg1, TArg2, TService> factory)
         {
-            return RegisterImpl<Func<Container, TArg1, TArg2, TService>, TService>(_noKey, factory);
+            return RegisterImpl<Func<Container, TArg1, TArg2, TService>, TService>(NoKey, factory);
         }
 
         /// <summary>
@@ -53,7 +60,7 @@ namespace Jwc.Funz
         [DebuggerStepThrough]
         public IRegistration Register<TService, TArg1, TArg2, TArg3>(Func<Container, TArg1, TArg2, TArg3, TService> factory)
         {
-            return RegisterImpl<Func<Container, TArg1, TArg2, TArg3, TService>, TService>(_noKey, factory);
+            return RegisterImpl<Func<Container, TArg1, TArg2, TArg3, TService>, TService>(NoKey, factory);
         }
 
         /// <summary>
@@ -86,7 +93,7 @@ namespace Jwc.Funz
         [DebuggerStepThrough]
         public IRegistration Register<TService, TArg1, TArg2, TArg3, TArg4>(Func<Container, TArg1, TArg2, TArg3, TArg4, TService> factory)
         {
-            return RegisterImpl<Func<Container, TArg1, TArg2, TArg3, TArg4, TService>, TService>(_noKey, factory);
+            return RegisterImpl<Func<Container, TArg1, TArg2, TArg3, TArg4, TService>, TService>(NoKey, factory);
         }
 
         /// <summary>
@@ -119,7 +126,7 @@ namespace Jwc.Funz
         [DebuggerStepThrough]
         public IRegistration Register<TService, TArg1, TArg2, TArg3, TArg4, TArg5>(Func<Container, TArg1, TArg2, TArg3, TArg4, TArg5, TService> factory)
         {
-            return RegisterImpl<Func<Container, TArg1, TArg2, TArg3, TArg4, TArg5, TService>, TService>(_noKey, factory);
+            return RegisterImpl<Func<Container, TArg1, TArg2, TArg3, TArg4, TArg5, TService>, TService>(NoKey, factory);
         }
 
         /// <summary>
@@ -152,7 +159,7 @@ namespace Jwc.Funz
         [DebuggerStepThrough]
         public IRegistration Register<TService, TArg1, TArg2, TArg3, TArg4, TArg5, TArg6>(Func<Container, TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TService> factory)
         {
-            return RegisterImpl<Func<Container, TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TService>, TService>(_noKey, factory);
+            return RegisterImpl<Func<Container, TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TService>, TService>(NoKey, factory);
         }
 
         /// <summary>
@@ -185,7 +192,7 @@ namespace Jwc.Funz
         [DebuggerStepThrough]
         public IRegistration Register<TService, TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7>(Func<Container, TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TService> factory)
         {
-            return RegisterImpl<Func<Container, TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TService>, TService>(_noKey, factory);
+            return RegisterImpl<Func<Container, TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TService>, TService>(NoKey, factory);
         }
 
         /// <summary>
@@ -218,7 +225,7 @@ namespace Jwc.Funz
         [DebuggerStepThrough]
         public IRegistration Register<TService, TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8>(Func<Container, TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TService> factory)
         {
-            return RegisterImpl<Func<Container, TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TService>, TService>(_noKey, factory);
+            return RegisterImpl<Func<Container, TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TService>, TService>(NoKey, factory);
         }
 
         /// <summary>
@@ -251,7 +258,7 @@ namespace Jwc.Funz
         [DebuggerStepThrough]
         public IRegistration Register<TService, TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9>(Func<Container, TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TService> factory)
         {
-            return RegisterImpl<Func<Container, TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TService>, TService>(_noKey, factory);
+            return RegisterImpl<Func<Container, TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TService>, TService>(NoKey, factory);
         }
 
         /// <summary>
@@ -284,7 +291,7 @@ namespace Jwc.Funz
         [DebuggerStepThrough]
         public IRegistration Register<TService, TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10>(Func<Container, TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TService> factory)
         {
-            return RegisterImpl<Func<Container, TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TService>, TService>(_noKey, factory);
+            return RegisterImpl<Func<Container, TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TService>, TService>(NoKey, factory);
         }
 
         /// <summary>
@@ -317,7 +324,7 @@ namespace Jwc.Funz
         [DebuggerStepThrough]
         public IRegistration Register<TService, TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11>(Func<Container, TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TService> factory)
         {
-            return RegisterImpl<Func<Container, TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TService>, TService>(_noKey, factory);
+            return RegisterImpl<Func<Container, TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TService>, TService>(NoKey, factory);
         }
 
         /// <summary>
@@ -350,7 +357,7 @@ namespace Jwc.Funz
         [DebuggerStepThrough]
         public IRegistration Register<TService, TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12>(Func<Container, TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TService> factory)
         {
-            return RegisterImpl<Func<Container, TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TService>, TService>(_noKey, factory);
+            return RegisterImpl<Func<Container, TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TService>, TService>(NoKey, factory);
         }
 
         /// <summary>
@@ -383,7 +390,7 @@ namespace Jwc.Funz
         [DebuggerStepThrough]
         public IRegistration Register<TService, TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13>(Func<Container, TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, TService> factory)
         {
-            return RegisterImpl<Func<Container, TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, TService>, TService>(_noKey, factory);
+            return RegisterImpl<Func<Container, TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, TService>, TService>(NoKey, factory);
         }
 
         /// <summary>
@@ -416,7 +423,7 @@ namespace Jwc.Funz
         [DebuggerStepThrough]
         public IRegistration Register<TService, TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, TArg14>(Func<Container, TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, TArg14, TService> factory)
         {
-            return RegisterImpl<Func<Container, TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, TArg14, TService>, TService>(_noKey, factory);
+            return RegisterImpl<Func<Container, TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, TArg14, TService>, TService>(NoKey, factory);
         }
 
         /// <summary>
