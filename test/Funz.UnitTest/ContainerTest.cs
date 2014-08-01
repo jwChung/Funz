@@ -841,9 +841,11 @@ namespace Jwc.Funz
                 .Except(new[] { new Methods<Container>().Select(x => x.Dispose()) })
                 .Select(m => !m.ContainsGenericParameters
                     ? m : m.MakeGenericMethod(m.GetGenericArguments().Select(a => typeof(object)).ToArray()));
-            return methods.Select(m => new TestCase(
-                new Action<ObjectDisposalAssertion>(a => a.Verify(m)),
-                m.ToReflectionElement().Accept(new DisplayNameCollector()).Value.Single()));
+
+            return methods.Select(
+                m => TestCase.New<ObjectDisposalAssertion>(
+                    a => a.Verify(m),
+                    m.GetDisplayName()));
         }
 
         [Test]
