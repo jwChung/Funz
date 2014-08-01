@@ -36,7 +36,7 @@ for (var typeCount = 2; typeCount <= GenericTypeMax - 2; typeCount++)
         [DebuggerStepThrough]
         public TService Resolve<TService, <#=typeList#>>(<#=argumentList #>)
         {
-            return ResolveImpl<TService, <#=typeList#>>(NoKey, true, <#=valueList#>);
+            return this.ResolveImpl<TService, <#=typeList#>>(NoKey, true, <#=valueList#>);
         }
 
         /// <summary>
@@ -48,7 +48,7 @@ for (var typeCount = 2; typeCount <= GenericTypeMax - 2; typeCount++)
         [DebuggerStepThrough]
         public TService ResolveKeyed<TService, <#=typeList#>>(object key, <#=argumentList #>)
         {
-            return ResolveImpl<TService, <#=typeList#>>(key, true, <#=valueList#>);
+            return this.ResolveImpl<TService, <#=typeList#>>(key, true, <#=valueList#>);
         }
 
 <#

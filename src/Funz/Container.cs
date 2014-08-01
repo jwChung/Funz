@@ -297,6 +297,7 @@ namespace Jwc.Funz
         /// <returns>
         /// The result whether this container can resolve.
         /// </returns>
+        [SuppressMessage("Microsoft.Design", "CA1004:GenericMethodsShouldProvideTypeParameter", Justification = "The generic types are to provide information of explicit types.")]
         public bool CanResolve<TService>()
         {
             return CanResolveImpl<Func<Container, TService>, TService>(NoKey);
@@ -310,6 +311,7 @@ namespace Jwc.Funz
         /// <returns>
         /// The result whether this container can resolve.
         /// </returns>
+        [SuppressMessage("Microsoft.Design", "CA1004:GenericMethodsShouldProvideTypeParameter", Justification = "The generic types are to provide information of explicit types.")]
         public bool CanResolve<TService, TArg>()
         {
             return CanResolveImpl<Func<Container, TArg, TService>, TService>(NoKey);
@@ -323,6 +325,7 @@ namespace Jwc.Funz
         /// <returns>
         /// The result whether this container can resolve.
         /// </returns>
+        [SuppressMessage("Microsoft.Design", "CA1004:GenericMethodsShouldProvideTypeParameter", Justification = "The generic types are to provide information of explicit types.")]
         public bool CanResolveKeyed<TService>(object key)
         {
             return CanResolveImpl<Func<Container, TService>, TService>(key);
@@ -337,6 +340,7 @@ namespace Jwc.Funz
         /// <returns>
         /// The result whether this container can resolve.
         /// </returns>
+        [SuppressMessage("Microsoft.Design", "CA1004:GenericMethodsShouldProvideTypeParameter", Justification = "The generic types are to provide information of explicit types.")]
         public bool CanResolveKeyed<TService, TArg>(object key)
         {
             return CanResolveImpl<Func<Container, TArg, TService>, TService>(key);
@@ -358,18 +362,18 @@ namespace Jwc.Funz
         /// Creates a child container of the current one with custom scope, which exposes its
         /// current service registration to the new child container.
         /// </summary>
-        /// <param name="scope">
+        /// <param name="childScope">
         /// The scope to represent custom lifetime.
         /// </param>
         /// <returns>
         /// The new child container.
         /// </returns>
         [SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope", Justification = "The disposing process of the container will be performed explicitly.")]
-        public Container CreateChild(object scope)
+        public Container CreateChild(object childScope)
         {
             this.ThrowExceptionIfDisposed();
 
-            var container = new Container(this, scope);
+            var container = new Container(this, childScope);
             this.children.Add(container);
             return container;
         }

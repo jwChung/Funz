@@ -14,7 +14,6 @@ namespace Jwc.Funz
     /// </summary>
     [SuppressMessage("StyleCop.CSharp.LayoutRules", "SA1508:ClosingCurlyBracketsMustNotBePrecededByBlankLine", Justification = "The last line is automatically generated.")]
     [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1618:GenericTypeParametersMustBeDocumented", Justification = "Suppressing this rule is desirable.")]
-    [SuppressMessage("Microsoft.Design", "CA1004:GenericMethodsShouldProvideTypeParameter", Justification = "Suppressing this rule is desirable.")]
     [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1611:ElementParametersMustBeDocumented", Justification = "Suppressing this rule is desirable.")]
     public partial class Container
     {
@@ -33,6 +32,7 @@ for (var typeCount = 2; typeCount <= GenericTypeMax - 2; typeCount++)
         /// The result whether this container can resolve.
         /// </returns>
         [DebuggerStepThrough]
+        [SuppressMessage("Microsoft.Design", "CA1004:GenericMethodsShouldProvideTypeParameter", Justification = "The generic types are to provide information of explicit types.")]
         public bool CanResolve<TService, <#=typeList#>>()
         {
             return CanResolveImpl<Func<Container, <#=typeList#>, TService>, TService>(NoKey);
@@ -45,6 +45,7 @@ for (var typeCount = 2; typeCount <= GenericTypeMax - 2; typeCount++)
         /// The result whether this container can resolve.
         /// </returns>
         [DebuggerStepThrough]
+        [SuppressMessage("Microsoft.Design", "CA1004:GenericMethodsShouldProvideTypeParameter", Justification = "The generic types are to provide information of explicit types.")]
         public bool CanResolveKeyed<TService, <#=typeList#>>(object key)
         {
             return CanResolveImpl<Func<Container, <#=typeList#>, TService>, TService>(key);
