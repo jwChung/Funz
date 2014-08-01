@@ -842,8 +842,8 @@ namespace Jwc.Funz
                 .Select(m => !m.ContainsGenericParameters
                     ? m : m.MakeGenericMethod(m.GetGenericArguments().Select(a => typeof(object)).ToArray()));
             return methods.Select(m => new TestCase(
-                m.ToReflectionElement().Accept(new DisplayNameCollector()).Value.Single(),
-                new Action<ObjectDisposalAssertion>(a => a.Verify(m))));
+                new Action<ObjectDisposalAssertion>(a => a.Verify(m)),
+                m.ToReflectionElement().Accept(new DisplayNameCollector()).Value.Single()));
         }
 
         [Test]

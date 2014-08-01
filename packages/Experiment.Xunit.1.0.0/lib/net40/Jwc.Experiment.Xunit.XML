@@ -1,0 +1,982 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Jwc.Experiment.Xunit</name>
+    </assembly>
+    <members>
+        <member name="T:Jwc.Experiment.Xunit.TestAttribute">
+            <summary>
+            이 attribute는 method위에 선언되어 해당 method가 test라는 것을 지칭하게 되며,
+            non-parameterized test 뿐 아니라 parameterized test에도 사용될 수 있다.
+            </summary>
+        </member>
+        <member name="M:Jwc.Experiment.Xunit.TestAttribute.EnumerateTestCommands(Xunit.Sdk.IMethodInfo)">
+            <summary>
+            Enumerates the test commands represented by this test method. Derived classes should
+            override this method to return instances of <see cref="T:Xunit.Sdk.ITestCommand"/>, one per
+            execution of a test method.
+            </summary>
+            <param name="method">
+            The test method
+            </param>
+            <returns>
+            The test commands which will execute the test runs for the given method.
+            </returns>
+        </member>
+        <member name="M:Jwc.Experiment.Xunit.TestAttribute.CreateTestFixture(System.Reflection.MethodInfo)">
+            <summary>
+            Creates an instance of <see cref="T:Jwc.Experiment.ITestFixture"/>.
+            </summary>
+            <param name="testMethod">
+            The test method
+            </param>
+            <returns>
+            The created fixture.
+            </returns>
+        </member>
+        <member name="T:Jwc.Experiment.Xunit.ExceptionCommand">
+            <summary>
+            Exception 테스트커멘드를 나타냄.
+            </summary>
+        </member>
+        <member name="M:Jwc.Experiment.Xunit.ExceptionCommand.#ctor(Xunit.Sdk.IMethodInfo,System.Exception)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Jwc.Experiment.Xunit.ExceptionCommand"/> class.
+            </summary>
+            <param name="method">
+            The method under test.
+            </param>
+            <param name="exception">
+            The exception to be expressed.
+            </param>
+        </member>
+        <member name="M:Jwc.Experiment.Xunit.ExceptionCommand.Execute(System.Object)">
+            <summary>
+            이 테스트 실행 결과는 항상 <see cref="T:Xunit.Sdk.FailedResult"/>를 리턴함.
+            </summary>
+            <param name="testClass">
+            테스트 메소드의 owner.
+            </param>
+            <returns>
+            특정 exception을 표현하는 <see cref="T:Xunit.Sdk.FailedResult"/> 결과.
+            </returns>
+        </member>
+        <member name="P:Jwc.Experiment.Xunit.ExceptionCommand.Exception">
+            <summary>
+            Gets a value indicating the exception.
+            </summary>
+        </member>
+        <member name="T:Jwc.Experiment.Xunit.FirstClassCommand">
+            <summary>
+            Represents a test command for first class tests.
+            </summary>
+        </member>
+        <member name="M:Jwc.Experiment.Xunit.FirstClassCommand.#ctor(Xunit.Sdk.IMethodInfo,System.String,System.Action)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Jwc.Experiment.Xunit.FirstClassCommand"/> class.
+            </summary>
+            <param name="method">
+            The test method which this instance is associated. This will likely be the method
+            adorned with an <see cref="T:Jwc.Experiment.Xunit.FirstClassTestAttribute"/>.
+            </param>
+            <param name="displayParameterName">
+            A string to show parameters of a test method in test result.
+            </param>
+            <param name="action">
+            The test action to be invoked when the test is executed.
+            </param>
+        </member>
+        <member name="M:Jwc.Experiment.Xunit.FirstClassCommand.Execute(System.Object)">
+            <summary>
+            Execute the test action.
+            </summary>
+            <param name="testClass">
+            The test class object.
+            </param>
+            <returns>
+            The result of the execution.
+            </returns>
+        </member>
+        <member name="P:Jwc.Experiment.Xunit.FirstClassCommand.Method">
+            <summary>
+            Gets the test method.
+            </summary>
+        </member>
+        <member name="P:Jwc.Experiment.Xunit.FirstClassCommand.DisplayParameterName">
+            <summary>
+            Gets a value indicating the string to show parameters of a test method in test result.
+            </summary>
+        </member>
+        <member name="P:Jwc.Experiment.Xunit.FirstClassCommand.Action">
+            <summary>
+            Gets the test action.
+            </summary>
+        </member>
+        <member name="P:Jwc.Experiment.Xunit.FirstClassCommand.ShouldCreateInstance">
+            <summary>
+            Gets a value indicating whether a test-case instance is created.
+            </summary>
+            <value>
+            <c>true</c> if a test-case instance is created; otherwise, <c>false</c>.
+            </value>
+        </member>
+        <member name="T:Jwc.Experiment.Xunit.FirstClassTestAttribute">
+            <summary>
+            A test attribute used to adorn methods that creates first-class executable test
+            cases.
+            </summary>
+        </member>
+        <member name="M:Jwc.Experiment.Xunit.FirstClassTestAttribute.EnumerateTestCommands(Xunit.Sdk.IMethodInfo)">
+            <summary>
+            Enumerates the test commands represented by this test method. Derived classes should
+            override this method to return instances of <see cref="T:Xunit.Sdk.ITestCommand"/>, one per
+            execution of a test method.
+            </summary>
+            <param name="method">
+            The test method.
+            </param>
+            <returns>
+            The test commands which will execute the test runs for the given method.
+            </returns>
+        </member>
+        <member name="M:Jwc.Experiment.Xunit.FirstClassTestAttribute.CreateTestFixture(System.Reflection.MethodInfo)">
+            <summary>
+            Creates an instance of <see cref="T:Jwc.Experiment.ITestFixture"/>.
+            </summary>
+            <param name="testMethod">
+            The test method.
+            </param>
+            <returns>
+            The created fixture.
+            </returns>
+        </member>
+        <member name="T:Jwc.Experiment.Xunit.ITestCase">
+            <summary>
+            Represents a test-case that can be turned into an xUnit.net ITestCommand when returned from
+            a test method adorned with the
+            <see cref="T:Jwc.Experiment.Xunit.FirstClassTestAttribute"/>.
+            </summary>
+        </member>
+        <member name="M:Jwc.Experiment.Xunit.ITestCase.ConvertToTestCommand(Xunit.Sdk.IMethodInfo,Jwc.Experiment.ITestFixtureFactory)">
+            <summary>
+            Converts the instance to an xUnit.net ITestCommand instance.
+            </summary>
+            <param name="method">
+            The method adorned by a <see cref="T:Jwc.Experiment.Xunit.FirstClassTestAttribute"/>.
+            </param>
+            <param name="testFixtureFactory">
+            A test fixture factory to provide auto data.
+            </param>
+            <returns>
+            An xUnit.net ITestCommand that represents the executable test case.
+            </returns>
+        </member>
+        <member name="T:Jwc.Experiment.Xunit.TestCase">
+            <summary>
+            Represents a weakly-typed test case that can be turned into an xUnit.net ITestCommand when
+            returned from a test method adorned with the <see cref="T:Jwc.Experiment.Xunit.FirstClassTestAttribute"/>.
+            </summary>
+            <summary>
+            Represents a weakly-typed test case that can be turned into an xUnit.net ITestCommand when
+            returned from a test method adorned with the <see cref="T:Jwc.Experiment.Xunit.FirstClassTestAttribute"/>.
+            </summary>
+        </member>
+        <member name="M:Jwc.Experiment.Xunit.TestCase.#ctor(System.Delegate)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Jwc.Experiment.Xunit.TestCase"/> class.
+            </summary>
+            <param name="delegate">
+            The test delegate.
+            </param>
+        </member>
+        <member name="M:Jwc.Experiment.Xunit.TestCase.#ctor(System.Delegate,System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Jwc.Experiment.Xunit.TestCase"/> class.
+            </summary>
+            <param name="delegate">
+            The test delegate.
+            </param>
+            <param name="displayParameterName">
+            A string to show parameters of a test method in test result.
+            </param>
+        </member>
+        <member name="M:Jwc.Experiment.Xunit.TestCase.New(System.Action)">
+            <summary>
+            Creates a new instance of <see cref="T:Jwc.Experiment.Xunit.TestCase"/>.
+            </summary>
+            <param name="action">
+            An action.
+            </param>
+            <returns>
+            The new instance.
+            </returns>
+        </member>
+        <member name="M:Jwc.Experiment.Xunit.TestCase.New(System.Action,System.String)">
+            <summary>
+            Creates a new instance of <see cref="T:Jwc.Experiment.Xunit.TestCase"/>.
+            </summary>
+            <param name="action">
+            An action.
+            </param>
+            <param name="displayParameterName">
+            A name of the parameter.
+            </param>
+            <returns>
+            The new instance.
+            </returns>
+        </member>
+        <member name="M:Jwc.Experiment.Xunit.TestCase.New``1(System.Action{``0})">
+            <summary>
+            Creates a new instance of <see cref="T:Jwc.Experiment.Xunit.TestCase"/>.
+            </summary>
+            <typeparam name="TArg">A type of the first argument.</typeparam>
+            <param name="action">
+            An action.
+            </param>
+            <returns>
+            The new instance.
+            </returns>
+        </member>
+        <member name="M:Jwc.Experiment.Xunit.TestCase.New``1(System.Action{``0},System.String)">
+            <summary>
+            Creates a new instance of <see cref="T:Jwc.Experiment.Xunit.TestCase"/>.
+            </summary>
+            <typeparam name="TArg">A type of the first argument.</typeparam>
+            <param name="action">
+            An action.
+            </param>
+            <param name="displayParameterName">
+            A name of the parameter.
+            </param>
+            <returns>
+            The new instance.
+            </returns>
+        </member>
+        <member name="M:Jwc.Experiment.Xunit.TestCase.ConvertToTestCommand(Xunit.Sdk.IMethodInfo,Jwc.Experiment.ITestFixtureFactory)">
+            <summary>
+            Converts the instance to an xUnit.net ITestCommand instance.
+            </summary>
+            <param name="method">
+            The method adorned by a <see cref="T:Jwc.Experiment.Xunit.FirstClassTestAttribute"/>.
+            </param>
+            <param name="testFixtureFactory">
+            A test fixture factory to provide auto data.
+            </param>
+            <returns>
+            An xUnit.net ITestCommand that represents the executable test case.
+            </returns>
+        </member>
+        <member name="M:Jwc.Experiment.Xunit.TestCase.New``2(System.Action{``0,``1})">
+            <summary>
+            Creates a new instance of <see cref="T:Jwc.Experiment.Xunit.TestCase"/>.
+            </summary>
+            <typeparam name="TArg1">A type of the first argument.</typeparam>
+            <typeparam name="TArg2">A type of the second argument.</typeparam>
+            <param name="action">
+            An action.
+            </param>
+            <returns>
+            The new instance.
+            </returns>
+        </member>
+        <member name="M:Jwc.Experiment.Xunit.TestCase.New``2(System.Action{``0,``1},System.String)">
+            <summary>
+            Creates a new instance of <see cref="T:Jwc.Experiment.Xunit.TestCase"/>.
+            </summary>
+            <typeparam name="TArg1">A type of the first argument.</typeparam>
+            <typeparam name="TArg2">A type of the second argument.</typeparam>
+            <param name="action">
+            An action.
+            </param>
+            <param name="displayParameterName">
+            A name of the parameter.
+            </param>
+            <returns>
+            The new instance.
+            </returns>
+        </member>
+        <member name="M:Jwc.Experiment.Xunit.TestCase.New``3(System.Action{``0,``1,``2})">
+            <summary>
+            Creates a new instance of <see cref="T:Jwc.Experiment.Xunit.TestCase"/>.
+            </summary>
+            <typeparam name="TArg1">A type of the first argument.</typeparam>
+            <typeparam name="TArg2">A type of the second argument.</typeparam>
+            <typeparam name="TArg3">A type of the third argument.</typeparam>
+            <param name="action">
+            An action.
+            </param>
+            <returns>
+            The new instance.
+            </returns>
+        </member>
+        <member name="M:Jwc.Experiment.Xunit.TestCase.New``3(System.Action{``0,``1,``2},System.String)">
+            <summary>
+            Creates a new instance of <see cref="T:Jwc.Experiment.Xunit.TestCase"/>.
+            </summary>
+            <typeparam name="TArg1">A type of the first argument.</typeparam>
+            <typeparam name="TArg2">A type of the second argument.</typeparam>
+            <typeparam name="TArg3">A type of the third argument.</typeparam>
+            <param name="action">
+            An action.
+            </param>
+            <param name="displayParameterName">
+            A name of the parameter.
+            </param>
+            <returns>
+            The new instance.
+            </returns>
+        </member>
+        <member name="M:Jwc.Experiment.Xunit.TestCase.New``4(System.Action{``0,``1,``2,``3})">
+            <summary>
+            Creates a new instance of <see cref="T:Jwc.Experiment.Xunit.TestCase"/>.
+            </summary>
+            <typeparam name="TArg1">A type of the first argument.</typeparam>
+            <typeparam name="TArg2">A type of the second argument.</typeparam>
+            <typeparam name="TArg3">A type of the third argument.</typeparam>
+            <typeparam name="TArg4">A type of the fourth argument.</typeparam>
+            <param name="action">
+            An action.
+            </param>
+            <returns>
+            The new instance.
+            </returns>
+        </member>
+        <member name="M:Jwc.Experiment.Xunit.TestCase.New``4(System.Action{``0,``1,``2,``3},System.String)">
+            <summary>
+            Creates a new instance of <see cref="T:Jwc.Experiment.Xunit.TestCase"/>.
+            </summary>
+            <typeparam name="TArg1">A type of the first argument.</typeparam>
+            <typeparam name="TArg2">A type of the second argument.</typeparam>
+            <typeparam name="TArg3">A type of the third argument.</typeparam>
+            <typeparam name="TArg4">A type of the fourth argument.</typeparam>
+            <param name="action">
+            An action.
+            </param>
+            <param name="displayParameterName">
+            A name of the parameter.
+            </param>
+            <returns>
+            The new instance.
+            </returns>
+        </member>
+        <member name="M:Jwc.Experiment.Xunit.TestCase.New``5(System.Action{``0,``1,``2,``3,``4})">
+            <summary>
+            Creates a new instance of <see cref="T:Jwc.Experiment.Xunit.TestCase"/>.
+            </summary>
+            <typeparam name="TArg1">A type of the first argument.</typeparam>
+            <typeparam name="TArg2">A type of the second argument.</typeparam>
+            <typeparam name="TArg3">A type of the third argument.</typeparam>
+            <typeparam name="TArg4">A type of the fourth argument.</typeparam>
+            <typeparam name="TArg5">A type of the fifth argument.</typeparam>
+            <param name="action">
+            An action.
+            </param>
+            <returns>
+            The new instance.
+            </returns>
+        </member>
+        <member name="M:Jwc.Experiment.Xunit.TestCase.New``5(System.Action{``0,``1,``2,``3,``4},System.String)">
+            <summary>
+            Creates a new instance of <see cref="T:Jwc.Experiment.Xunit.TestCase"/>.
+            </summary>
+            <typeparam name="TArg1">A type of the first argument.</typeparam>
+            <typeparam name="TArg2">A type of the second argument.</typeparam>
+            <typeparam name="TArg3">A type of the third argument.</typeparam>
+            <typeparam name="TArg4">A type of the fourth argument.</typeparam>
+            <typeparam name="TArg5">A type of the fifth argument.</typeparam>
+            <param name="action">
+            An action.
+            </param>
+            <param name="displayParameterName">
+            A name of the parameter.
+            </param>
+            <returns>
+            The new instance.
+            </returns>
+        </member>
+        <member name="M:Jwc.Experiment.Xunit.TestCase.New``6(System.Action{``0,``1,``2,``3,``4,``5})">
+            <summary>
+            Creates a new instance of <see cref="T:Jwc.Experiment.Xunit.TestCase"/>.
+            </summary>
+            <typeparam name="TArg1">A type of the first argument.</typeparam>
+            <typeparam name="TArg2">A type of the second argument.</typeparam>
+            <typeparam name="TArg3">A type of the third argument.</typeparam>
+            <typeparam name="TArg4">A type of the fourth argument.</typeparam>
+            <typeparam name="TArg5">A type of the fifth argument.</typeparam>
+            <typeparam name="TArg6">A type of the sixth argument.</typeparam>
+            <param name="action">
+            An action.
+            </param>
+            <returns>
+            The new instance.
+            </returns>
+        </member>
+        <member name="M:Jwc.Experiment.Xunit.TestCase.New``6(System.Action{``0,``1,``2,``3,``4,``5},System.String)">
+            <summary>
+            Creates a new instance of <see cref="T:Jwc.Experiment.Xunit.TestCase"/>.
+            </summary>
+            <typeparam name="TArg1">A type of the first argument.</typeparam>
+            <typeparam name="TArg2">A type of the second argument.</typeparam>
+            <typeparam name="TArg3">A type of the third argument.</typeparam>
+            <typeparam name="TArg4">A type of the fourth argument.</typeparam>
+            <typeparam name="TArg5">A type of the fifth argument.</typeparam>
+            <typeparam name="TArg6">A type of the sixth argument.</typeparam>
+            <param name="action">
+            An action.
+            </param>
+            <param name="displayParameterName">
+            A name of the parameter.
+            </param>
+            <returns>
+            The new instance.
+            </returns>
+        </member>
+        <member name="M:Jwc.Experiment.Xunit.TestCase.New``7(System.Action{``0,``1,``2,``3,``4,``5,``6})">
+            <summary>
+            Creates a new instance of <see cref="T:Jwc.Experiment.Xunit.TestCase"/>.
+            </summary>
+            <typeparam name="TArg1">A type of the first argument.</typeparam>
+            <typeparam name="TArg2">A type of the second argument.</typeparam>
+            <typeparam name="TArg3">A type of the third argument.</typeparam>
+            <typeparam name="TArg4">A type of the fourth argument.</typeparam>
+            <typeparam name="TArg5">A type of the fifth argument.</typeparam>
+            <typeparam name="TArg6">A type of the sixth argument.</typeparam>
+            <typeparam name="TArg7">A type of the seventh argument.</typeparam>
+            <param name="action">
+            An action.
+            </param>
+            <returns>
+            The new instance.
+            </returns>
+        </member>
+        <member name="M:Jwc.Experiment.Xunit.TestCase.New``7(System.Action{``0,``1,``2,``3,``4,``5,``6},System.String)">
+            <summary>
+            Creates a new instance of <see cref="T:Jwc.Experiment.Xunit.TestCase"/>.
+            </summary>
+            <typeparam name="TArg1">A type of the first argument.</typeparam>
+            <typeparam name="TArg2">A type of the second argument.</typeparam>
+            <typeparam name="TArg3">A type of the third argument.</typeparam>
+            <typeparam name="TArg4">A type of the fourth argument.</typeparam>
+            <typeparam name="TArg5">A type of the fifth argument.</typeparam>
+            <typeparam name="TArg6">A type of the sixth argument.</typeparam>
+            <typeparam name="TArg7">A type of the seventh argument.</typeparam>
+            <param name="action">
+            An action.
+            </param>
+            <param name="displayParameterName">
+            A name of the parameter.
+            </param>
+            <returns>
+            The new instance.
+            </returns>
+        </member>
+        <member name="M:Jwc.Experiment.Xunit.TestCase.New``8(System.Action{``0,``1,``2,``3,``4,``5,``6,``7})">
+            <summary>
+            Creates a new instance of <see cref="T:Jwc.Experiment.Xunit.TestCase"/>.
+            </summary>
+            <typeparam name="TArg1">A type of the first argument.</typeparam>
+            <typeparam name="TArg2">A type of the second argument.</typeparam>
+            <typeparam name="TArg3">A type of the third argument.</typeparam>
+            <typeparam name="TArg4">A type of the fourth argument.</typeparam>
+            <typeparam name="TArg5">A type of the fifth argument.</typeparam>
+            <typeparam name="TArg6">A type of the sixth argument.</typeparam>
+            <typeparam name="TArg7">A type of the seventh argument.</typeparam>
+            <typeparam name="TArg8">A type of the eighth argument.</typeparam>
+            <param name="action">
+            An action.
+            </param>
+            <returns>
+            The new instance.
+            </returns>
+        </member>
+        <member name="M:Jwc.Experiment.Xunit.TestCase.New``8(System.Action{``0,``1,``2,``3,``4,``5,``6,``7},System.String)">
+            <summary>
+            Creates a new instance of <see cref="T:Jwc.Experiment.Xunit.TestCase"/>.
+            </summary>
+            <typeparam name="TArg1">A type of the first argument.</typeparam>
+            <typeparam name="TArg2">A type of the second argument.</typeparam>
+            <typeparam name="TArg3">A type of the third argument.</typeparam>
+            <typeparam name="TArg4">A type of the fourth argument.</typeparam>
+            <typeparam name="TArg5">A type of the fifth argument.</typeparam>
+            <typeparam name="TArg6">A type of the sixth argument.</typeparam>
+            <typeparam name="TArg7">A type of the seventh argument.</typeparam>
+            <typeparam name="TArg8">A type of the eighth argument.</typeparam>
+            <param name="action">
+            An action.
+            </param>
+            <param name="displayParameterName">
+            A name of the parameter.
+            </param>
+            <returns>
+            The new instance.
+            </returns>
+        </member>
+        <member name="M:Jwc.Experiment.Xunit.TestCase.New``9(System.Action{``0,``1,``2,``3,``4,``5,``6,``7,``8})">
+            <summary>
+            Creates a new instance of <see cref="T:Jwc.Experiment.Xunit.TestCase"/>.
+            </summary>
+            <typeparam name="TArg1">A type of the first argument.</typeparam>
+            <typeparam name="TArg2">A type of the second argument.</typeparam>
+            <typeparam name="TArg3">A type of the third argument.</typeparam>
+            <typeparam name="TArg4">A type of the fourth argument.</typeparam>
+            <typeparam name="TArg5">A type of the fifth argument.</typeparam>
+            <typeparam name="TArg6">A type of the sixth argument.</typeparam>
+            <typeparam name="TArg7">A type of the seventh argument.</typeparam>
+            <typeparam name="TArg8">A type of the eighth argument.</typeparam>
+            <typeparam name="TArg9">A type of the ninth argument.</typeparam>
+            <param name="action">
+            An action.
+            </param>
+            <returns>
+            The new instance.
+            </returns>
+        </member>
+        <member name="M:Jwc.Experiment.Xunit.TestCase.New``9(System.Action{``0,``1,``2,``3,``4,``5,``6,``7,``8},System.String)">
+            <summary>
+            Creates a new instance of <see cref="T:Jwc.Experiment.Xunit.TestCase"/>.
+            </summary>
+            <typeparam name="TArg1">A type of the first argument.</typeparam>
+            <typeparam name="TArg2">A type of the second argument.</typeparam>
+            <typeparam name="TArg3">A type of the third argument.</typeparam>
+            <typeparam name="TArg4">A type of the fourth argument.</typeparam>
+            <typeparam name="TArg5">A type of the fifth argument.</typeparam>
+            <typeparam name="TArg6">A type of the sixth argument.</typeparam>
+            <typeparam name="TArg7">A type of the seventh argument.</typeparam>
+            <typeparam name="TArg8">A type of the eighth argument.</typeparam>
+            <typeparam name="TArg9">A type of the ninth argument.</typeparam>
+            <param name="action">
+            An action.
+            </param>
+            <param name="displayParameterName">
+            A name of the parameter.
+            </param>
+            <returns>
+            The new instance.
+            </returns>
+        </member>
+        <member name="M:Jwc.Experiment.Xunit.TestCase.New``10(System.Action{``0,``1,``2,``3,``4,``5,``6,``7,``8,``9})">
+            <summary>
+            Creates a new instance of <see cref="T:Jwc.Experiment.Xunit.TestCase"/>.
+            </summary>
+            <typeparam name="TArg1">A type of the first argument.</typeparam>
+            <typeparam name="TArg2">A type of the second argument.</typeparam>
+            <typeparam name="TArg3">A type of the third argument.</typeparam>
+            <typeparam name="TArg4">A type of the fourth argument.</typeparam>
+            <typeparam name="TArg5">A type of the fifth argument.</typeparam>
+            <typeparam name="TArg6">A type of the sixth argument.</typeparam>
+            <typeparam name="TArg7">A type of the seventh argument.</typeparam>
+            <typeparam name="TArg8">A type of the eighth argument.</typeparam>
+            <typeparam name="TArg9">A type of the ninth argument.</typeparam>
+            <typeparam name="TArg10">A type of the tenth argument.</typeparam>
+            <param name="action">
+            An action.
+            </param>
+            <returns>
+            The new instance.
+            </returns>
+        </member>
+        <member name="M:Jwc.Experiment.Xunit.TestCase.New``10(System.Action{``0,``1,``2,``3,``4,``5,``6,``7,``8,``9},System.String)">
+            <summary>
+            Creates a new instance of <see cref="T:Jwc.Experiment.Xunit.TestCase"/>.
+            </summary>
+            <typeparam name="TArg1">A type of the first argument.</typeparam>
+            <typeparam name="TArg2">A type of the second argument.</typeparam>
+            <typeparam name="TArg3">A type of the third argument.</typeparam>
+            <typeparam name="TArg4">A type of the fourth argument.</typeparam>
+            <typeparam name="TArg5">A type of the fifth argument.</typeparam>
+            <typeparam name="TArg6">A type of the sixth argument.</typeparam>
+            <typeparam name="TArg7">A type of the seventh argument.</typeparam>
+            <typeparam name="TArg8">A type of the eighth argument.</typeparam>
+            <typeparam name="TArg9">A type of the ninth argument.</typeparam>
+            <typeparam name="TArg10">A type of the tenth argument.</typeparam>
+            <param name="action">
+            An action.
+            </param>
+            <param name="displayParameterName">
+            A name of the parameter.
+            </param>
+            <returns>
+            The new instance.
+            </returns>
+        </member>
+        <member name="M:Jwc.Experiment.Xunit.TestCase.New``11(System.Action{``0,``1,``2,``3,``4,``5,``6,``7,``8,``9,``10})">
+            <summary>
+            Creates a new instance of <see cref="T:Jwc.Experiment.Xunit.TestCase"/>.
+            </summary>
+            <typeparam name="TArg1">A type of the first argument.</typeparam>
+            <typeparam name="TArg2">A type of the second argument.</typeparam>
+            <typeparam name="TArg3">A type of the third argument.</typeparam>
+            <typeparam name="TArg4">A type of the fourth argument.</typeparam>
+            <typeparam name="TArg5">A type of the fifth argument.</typeparam>
+            <typeparam name="TArg6">A type of the sixth argument.</typeparam>
+            <typeparam name="TArg7">A type of the seventh argument.</typeparam>
+            <typeparam name="TArg8">A type of the eighth argument.</typeparam>
+            <typeparam name="TArg9">A type of the ninth argument.</typeparam>
+            <typeparam name="TArg10">A type of the tenth argument.</typeparam>
+            <typeparam name="TArg11">A type of the eleventh argument.</typeparam>
+            <param name="action">
+            An action.
+            </param>
+            <returns>
+            The new instance.
+            </returns>
+        </member>
+        <member name="M:Jwc.Experiment.Xunit.TestCase.New``11(System.Action{``0,``1,``2,``3,``4,``5,``6,``7,``8,``9,``10},System.String)">
+            <summary>
+            Creates a new instance of <see cref="T:Jwc.Experiment.Xunit.TestCase"/>.
+            </summary>
+            <typeparam name="TArg1">A type of the first argument.</typeparam>
+            <typeparam name="TArg2">A type of the second argument.</typeparam>
+            <typeparam name="TArg3">A type of the third argument.</typeparam>
+            <typeparam name="TArg4">A type of the fourth argument.</typeparam>
+            <typeparam name="TArg5">A type of the fifth argument.</typeparam>
+            <typeparam name="TArg6">A type of the sixth argument.</typeparam>
+            <typeparam name="TArg7">A type of the seventh argument.</typeparam>
+            <typeparam name="TArg8">A type of the eighth argument.</typeparam>
+            <typeparam name="TArg9">A type of the ninth argument.</typeparam>
+            <typeparam name="TArg10">A type of the tenth argument.</typeparam>
+            <typeparam name="TArg11">A type of the eleventh argument.</typeparam>
+            <param name="action">
+            An action.
+            </param>
+            <param name="displayParameterName">
+            A name of the parameter.
+            </param>
+            <returns>
+            The new instance.
+            </returns>
+        </member>
+        <member name="M:Jwc.Experiment.Xunit.TestCase.New``12(System.Action{``0,``1,``2,``3,``4,``5,``6,``7,``8,``9,``10,``11})">
+            <summary>
+            Creates a new instance of <see cref="T:Jwc.Experiment.Xunit.TestCase"/>.
+            </summary>
+            <typeparam name="TArg1">A type of the first argument.</typeparam>
+            <typeparam name="TArg2">A type of the second argument.</typeparam>
+            <typeparam name="TArg3">A type of the third argument.</typeparam>
+            <typeparam name="TArg4">A type of the fourth argument.</typeparam>
+            <typeparam name="TArg5">A type of the fifth argument.</typeparam>
+            <typeparam name="TArg6">A type of the sixth argument.</typeparam>
+            <typeparam name="TArg7">A type of the seventh argument.</typeparam>
+            <typeparam name="TArg8">A type of the eighth argument.</typeparam>
+            <typeparam name="TArg9">A type of the ninth argument.</typeparam>
+            <typeparam name="TArg10">A type of the tenth argument.</typeparam>
+            <typeparam name="TArg11">A type of the eleventh argument.</typeparam>
+            <typeparam name="TArg12">A type of the twelfth argument.</typeparam>
+            <param name="action">
+            An action.
+            </param>
+            <returns>
+            The new instance.
+            </returns>
+        </member>
+        <member name="M:Jwc.Experiment.Xunit.TestCase.New``12(System.Action{``0,``1,``2,``3,``4,``5,``6,``7,``8,``9,``10,``11},System.String)">
+            <summary>
+            Creates a new instance of <see cref="T:Jwc.Experiment.Xunit.TestCase"/>.
+            </summary>
+            <typeparam name="TArg1">A type of the first argument.</typeparam>
+            <typeparam name="TArg2">A type of the second argument.</typeparam>
+            <typeparam name="TArg3">A type of the third argument.</typeparam>
+            <typeparam name="TArg4">A type of the fourth argument.</typeparam>
+            <typeparam name="TArg5">A type of the fifth argument.</typeparam>
+            <typeparam name="TArg6">A type of the sixth argument.</typeparam>
+            <typeparam name="TArg7">A type of the seventh argument.</typeparam>
+            <typeparam name="TArg8">A type of the eighth argument.</typeparam>
+            <typeparam name="TArg9">A type of the ninth argument.</typeparam>
+            <typeparam name="TArg10">A type of the tenth argument.</typeparam>
+            <typeparam name="TArg11">A type of the eleventh argument.</typeparam>
+            <typeparam name="TArg12">A type of the twelfth argument.</typeparam>
+            <param name="action">
+            An action.
+            </param>
+            <param name="displayParameterName">
+            A name of the parameter.
+            </param>
+            <returns>
+            The new instance.
+            </returns>
+        </member>
+        <member name="M:Jwc.Experiment.Xunit.TestCase.New``13(System.Action{``0,``1,``2,``3,``4,``5,``6,``7,``8,``9,``10,``11,``12})">
+            <summary>
+            Creates a new instance of <see cref="T:Jwc.Experiment.Xunit.TestCase"/>.
+            </summary>
+            <typeparam name="TArg1">A type of the first argument.</typeparam>
+            <typeparam name="TArg2">A type of the second argument.</typeparam>
+            <typeparam name="TArg3">A type of the third argument.</typeparam>
+            <typeparam name="TArg4">A type of the fourth argument.</typeparam>
+            <typeparam name="TArg5">A type of the fifth argument.</typeparam>
+            <typeparam name="TArg6">A type of the sixth argument.</typeparam>
+            <typeparam name="TArg7">A type of the seventh argument.</typeparam>
+            <typeparam name="TArg8">A type of the eighth argument.</typeparam>
+            <typeparam name="TArg9">A type of the ninth argument.</typeparam>
+            <typeparam name="TArg10">A type of the tenth argument.</typeparam>
+            <typeparam name="TArg11">A type of the eleventh argument.</typeparam>
+            <typeparam name="TArg12">A type of the twelfth argument.</typeparam>
+            <typeparam name="TArg13">A type of the thirteenth argument.</typeparam>
+            <param name="action">
+            An action.
+            </param>
+            <returns>
+            The new instance.
+            </returns>
+        </member>
+        <member name="M:Jwc.Experiment.Xunit.TestCase.New``13(System.Action{``0,``1,``2,``3,``4,``5,``6,``7,``8,``9,``10,``11,``12},System.String)">
+            <summary>
+            Creates a new instance of <see cref="T:Jwc.Experiment.Xunit.TestCase"/>.
+            </summary>
+            <typeparam name="TArg1">A type of the first argument.</typeparam>
+            <typeparam name="TArg2">A type of the second argument.</typeparam>
+            <typeparam name="TArg3">A type of the third argument.</typeparam>
+            <typeparam name="TArg4">A type of the fourth argument.</typeparam>
+            <typeparam name="TArg5">A type of the fifth argument.</typeparam>
+            <typeparam name="TArg6">A type of the sixth argument.</typeparam>
+            <typeparam name="TArg7">A type of the seventh argument.</typeparam>
+            <typeparam name="TArg8">A type of the eighth argument.</typeparam>
+            <typeparam name="TArg9">A type of the ninth argument.</typeparam>
+            <typeparam name="TArg10">A type of the tenth argument.</typeparam>
+            <typeparam name="TArg11">A type of the eleventh argument.</typeparam>
+            <typeparam name="TArg12">A type of the twelfth argument.</typeparam>
+            <typeparam name="TArg13">A type of the thirteenth argument.</typeparam>
+            <param name="action">
+            An action.
+            </param>
+            <param name="displayParameterName">
+            A name of the parameter.
+            </param>
+            <returns>
+            The new instance.
+            </returns>
+        </member>
+        <member name="M:Jwc.Experiment.Xunit.TestCase.New``14(System.Action{``0,``1,``2,``3,``4,``5,``6,``7,``8,``9,``10,``11,``12,``13})">
+            <summary>
+            Creates a new instance of <see cref="T:Jwc.Experiment.Xunit.TestCase"/>.
+            </summary>
+            <typeparam name="TArg1">A type of the first argument.</typeparam>
+            <typeparam name="TArg2">A type of the second argument.</typeparam>
+            <typeparam name="TArg3">A type of the third argument.</typeparam>
+            <typeparam name="TArg4">A type of the fourth argument.</typeparam>
+            <typeparam name="TArg5">A type of the fifth argument.</typeparam>
+            <typeparam name="TArg6">A type of the sixth argument.</typeparam>
+            <typeparam name="TArg7">A type of the seventh argument.</typeparam>
+            <typeparam name="TArg8">A type of the eighth argument.</typeparam>
+            <typeparam name="TArg9">A type of the ninth argument.</typeparam>
+            <typeparam name="TArg10">A type of the tenth argument.</typeparam>
+            <typeparam name="TArg11">A type of the eleventh argument.</typeparam>
+            <typeparam name="TArg12">A type of the twelfth argument.</typeparam>
+            <typeparam name="TArg13">A type of the thirteenth argument.</typeparam>
+            <typeparam name="TArg14">A type of the fourteenth argument.</typeparam>
+            <param name="action">
+            An action.
+            </param>
+            <returns>
+            The new instance.
+            </returns>
+        </member>
+        <member name="M:Jwc.Experiment.Xunit.TestCase.New``14(System.Action{``0,``1,``2,``3,``4,``5,``6,``7,``8,``9,``10,``11,``12,``13},System.String)">
+            <summary>
+            Creates a new instance of <see cref="T:Jwc.Experiment.Xunit.TestCase"/>.
+            </summary>
+            <typeparam name="TArg1">A type of the first argument.</typeparam>
+            <typeparam name="TArg2">A type of the second argument.</typeparam>
+            <typeparam name="TArg3">A type of the third argument.</typeparam>
+            <typeparam name="TArg4">A type of the fourth argument.</typeparam>
+            <typeparam name="TArg5">A type of the fifth argument.</typeparam>
+            <typeparam name="TArg6">A type of the sixth argument.</typeparam>
+            <typeparam name="TArg7">A type of the seventh argument.</typeparam>
+            <typeparam name="TArg8">A type of the eighth argument.</typeparam>
+            <typeparam name="TArg9">A type of the ninth argument.</typeparam>
+            <typeparam name="TArg10">A type of the tenth argument.</typeparam>
+            <typeparam name="TArg11">A type of the eleventh argument.</typeparam>
+            <typeparam name="TArg12">A type of the twelfth argument.</typeparam>
+            <typeparam name="TArg13">A type of the thirteenth argument.</typeparam>
+            <typeparam name="TArg14">A type of the fourteenth argument.</typeparam>
+            <param name="action">
+            An action.
+            </param>
+            <param name="displayParameterName">
+            A name of the parameter.
+            </param>
+            <returns>
+            The new instance.
+            </returns>
+        </member>
+        <member name="M:Jwc.Experiment.Xunit.TestCase.New``15(System.Action{``0,``1,``2,``3,``4,``5,``6,``7,``8,``9,``10,``11,``12,``13,``14})">
+            <summary>
+            Creates a new instance of <see cref="T:Jwc.Experiment.Xunit.TestCase"/>.
+            </summary>
+            <typeparam name="TArg1">A type of the first argument.</typeparam>
+            <typeparam name="TArg2">A type of the second argument.</typeparam>
+            <typeparam name="TArg3">A type of the third argument.</typeparam>
+            <typeparam name="TArg4">A type of the fourth argument.</typeparam>
+            <typeparam name="TArg5">A type of the fifth argument.</typeparam>
+            <typeparam name="TArg6">A type of the sixth argument.</typeparam>
+            <typeparam name="TArg7">A type of the seventh argument.</typeparam>
+            <typeparam name="TArg8">A type of the eighth argument.</typeparam>
+            <typeparam name="TArg9">A type of the ninth argument.</typeparam>
+            <typeparam name="TArg10">A type of the tenth argument.</typeparam>
+            <typeparam name="TArg11">A type of the eleventh argument.</typeparam>
+            <typeparam name="TArg12">A type of the twelfth argument.</typeparam>
+            <typeparam name="TArg13">A type of the thirteenth argument.</typeparam>
+            <typeparam name="TArg14">A type of the fourteenth argument.</typeparam>
+            <typeparam name="TArg15">A type of the fifteenth argument.</typeparam>
+            <param name="action">
+            An action.
+            </param>
+            <returns>
+            The new instance.
+            </returns>
+        </member>
+        <member name="M:Jwc.Experiment.Xunit.TestCase.New``15(System.Action{``0,``1,``2,``3,``4,``5,``6,``7,``8,``9,``10,``11,``12,``13,``14},System.String)">
+            <summary>
+            Creates a new instance of <see cref="T:Jwc.Experiment.Xunit.TestCase"/>.
+            </summary>
+            <typeparam name="TArg1">A type of the first argument.</typeparam>
+            <typeparam name="TArg2">A type of the second argument.</typeparam>
+            <typeparam name="TArg3">A type of the third argument.</typeparam>
+            <typeparam name="TArg4">A type of the fourth argument.</typeparam>
+            <typeparam name="TArg5">A type of the fifth argument.</typeparam>
+            <typeparam name="TArg6">A type of the sixth argument.</typeparam>
+            <typeparam name="TArg7">A type of the seventh argument.</typeparam>
+            <typeparam name="TArg8">A type of the eighth argument.</typeparam>
+            <typeparam name="TArg9">A type of the ninth argument.</typeparam>
+            <typeparam name="TArg10">A type of the tenth argument.</typeparam>
+            <typeparam name="TArg11">A type of the eleventh argument.</typeparam>
+            <typeparam name="TArg12">A type of the twelfth argument.</typeparam>
+            <typeparam name="TArg13">A type of the thirteenth argument.</typeparam>
+            <typeparam name="TArg14">A type of the fourteenth argument.</typeparam>
+            <typeparam name="TArg15">A type of the fifteenth argument.</typeparam>
+            <param name="action">
+            An action.
+            </param>
+            <param name="displayParameterName">
+            A name of the parameter.
+            </param>
+            <returns>
+            The new instance.
+            </returns>
+        </member>
+        <member name="M:Jwc.Experiment.Xunit.TestCase.New``16(System.Action{``0,``1,``2,``3,``4,``5,``6,``7,``8,``9,``10,``11,``12,``13,``14,``15})">
+            <summary>
+            Creates a new instance of <see cref="T:Jwc.Experiment.Xunit.TestCase"/>.
+            </summary>
+            <typeparam name="TArg1">A type of the first argument.</typeparam>
+            <typeparam name="TArg2">A type of the second argument.</typeparam>
+            <typeparam name="TArg3">A type of the third argument.</typeparam>
+            <typeparam name="TArg4">A type of the fourth argument.</typeparam>
+            <typeparam name="TArg5">A type of the fifth argument.</typeparam>
+            <typeparam name="TArg6">A type of the sixth argument.</typeparam>
+            <typeparam name="TArg7">A type of the seventh argument.</typeparam>
+            <typeparam name="TArg8">A type of the eighth argument.</typeparam>
+            <typeparam name="TArg9">A type of the ninth argument.</typeparam>
+            <typeparam name="TArg10">A type of the tenth argument.</typeparam>
+            <typeparam name="TArg11">A type of the eleventh argument.</typeparam>
+            <typeparam name="TArg12">A type of the twelfth argument.</typeparam>
+            <typeparam name="TArg13">A type of the thirteenth argument.</typeparam>
+            <typeparam name="TArg14">A type of the fourteenth argument.</typeparam>
+            <typeparam name="TArg15">A type of the fifteenth argument.</typeparam>
+            <typeparam name="TArg16">A type of the sixteenth argument.</typeparam>
+            <param name="action">
+            An action.
+            </param>
+            <returns>
+            The new instance.
+            </returns>
+        </member>
+        <member name="M:Jwc.Experiment.Xunit.TestCase.New``16(System.Action{``0,``1,``2,``3,``4,``5,``6,``7,``8,``9,``10,``11,``12,``13,``14,``15},System.String)">
+            <summary>
+            Creates a new instance of <see cref="T:Jwc.Experiment.Xunit.TestCase"/>.
+            </summary>
+            <typeparam name="TArg1">A type of the first argument.</typeparam>
+            <typeparam name="TArg2">A type of the second argument.</typeparam>
+            <typeparam name="TArg3">A type of the third argument.</typeparam>
+            <typeparam name="TArg4">A type of the fourth argument.</typeparam>
+            <typeparam name="TArg5">A type of the fifth argument.</typeparam>
+            <typeparam name="TArg6">A type of the sixth argument.</typeparam>
+            <typeparam name="TArg7">A type of the seventh argument.</typeparam>
+            <typeparam name="TArg8">A type of the eighth argument.</typeparam>
+            <typeparam name="TArg9">A type of the ninth argument.</typeparam>
+            <typeparam name="TArg10">A type of the tenth argument.</typeparam>
+            <typeparam name="TArg11">A type of the eleventh argument.</typeparam>
+            <typeparam name="TArg12">A type of the twelfth argument.</typeparam>
+            <typeparam name="TArg13">A type of the thirteenth argument.</typeparam>
+            <typeparam name="TArg14">A type of the fourteenth argument.</typeparam>
+            <typeparam name="TArg15">A type of the fifteenth argument.</typeparam>
+            <typeparam name="TArg16">A type of the sixteenth argument.</typeparam>
+            <param name="action">
+            An action.
+            </param>
+            <param name="displayParameterName">
+            A name of the parameter.
+            </param>
+            <returns>
+            The new instance.
+            </returns>
+        </member>
+        <member name="P:Jwc.Experiment.Xunit.TestCase.DisplayParameterName">
+            <summary>
+            Gets a value indicating the string to show parameters of a test method in test result.
+            </summary>
+        </member>
+        <member name="P:Jwc.Experiment.Xunit.TestCase.Delegate">
+            <summary>
+            Gets the test delegate.
+            </summary>
+        </member>
+        <member name="T:Jwc.Experiment.Xunit.TargetInvocationExceptionUnwrappingCommand">
+            <summary>
+            Represents <see cref="T:Xunit.Sdk.ITestCommand"/> unwrapping <see cref="T:System.Reflection.TargetInvocationException"/>.
+            </summary>
+        </member>
+        <member name="M:Jwc.Experiment.Xunit.TargetInvocationExceptionUnwrappingCommand.#ctor(Xunit.Sdk.ITestCommand)">
+            <summary>
+            Initializes a new instance of the
+            <see cref="T:Jwc.Experiment.Xunit.TargetInvocationExceptionUnwrappingCommand"/> class.
+            </summary>
+            <param name="testCommand">
+            The test command to be unwrapped.
+            </param>
+        </member>
+        <member name="M:Jwc.Experiment.Xunit.TargetInvocationExceptionUnwrappingCommand.Execute(System.Object)">
+            <summary>
+            Executes the test method.
+            </summary>
+            <param name="testClass">
+            The instance of the test class
+            </param>
+            <returns>
+            Returns information about the test run
+            </returns>
+        </member>
+        <member name="M:Jwc.Experiment.Xunit.TargetInvocationExceptionUnwrappingCommand.ToStartXml">
+            <summary>
+            To the start XML.
+            </summary>
+            <returns>
+            The XML node.
+            </returns>
+        </member>
+        <member name="P:Jwc.Experiment.Xunit.TargetInvocationExceptionUnwrappingCommand.TestCommand">
+            <summary>
+            Gets a value indicating the test command to be unwrapped.
+            </summary>
+        </member>
+        <member name="P:Jwc.Experiment.Xunit.TargetInvocationExceptionUnwrappingCommand.DisplayName">
+            <summary>
+            Gets the display name of the test method.
+            </summary>
+        </member>
+        <member name="P:Jwc.Experiment.Xunit.TargetInvocationExceptionUnwrappingCommand.ShouldCreateInstance">
+            <summary>
+            Gets a value indicating whether the test runner infrastructure should create a new
+            instance of the test class before running the test.
+            </summary>
+        </member>
+        <member name="P:Jwc.Experiment.Xunit.TargetInvocationExceptionUnwrappingCommand.Timeout">
+            <summary>
+            Gets a value indicating amount of time before automatically failing.
+            </summary>
+            <returns>
+            The timeout value, in milliseconds; if zero, the test will not have a timeout.
+            </returns>
+        </member>
+    </members>
+</doc>

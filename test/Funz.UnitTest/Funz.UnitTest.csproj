@@ -37,21 +37,21 @@
     <StyleCopTreatErrorsAsWarnings>false</StyleCopTreatErrorsAsWarnings>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Jwc.Experiment, Version=0.23.7.0, Culture=neutral, PublicKeyToken=db4e4bc25029966c, processorArchitecture=MSIL">
+    <Reference Include="Jwc.Experiment, Version=1.0.0.0, Culture=neutral, PublicKeyToken=db4e4bc25029966c, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\packages\Experiment.Idioms.0.23.7\lib\net40\Jwc.Experiment.dll</HintPath>
+      <HintPath>..\..\packages\Experiment.Idioms.1.0.0\lib\net40\Jwc.Experiment.dll</HintPath>
     </Reference>
-    <Reference Include="Jwc.Experiment.AutoFixture, Version=0.23.7.0, Culture=neutral, PublicKeyToken=db4e4bc25029966c, processorArchitecture=MSIL">
+    <Reference Include="Jwc.Experiment.AutoFixture, Version=1.0.0.0, Culture=neutral, PublicKeyToken=db4e4bc25029966c, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\packages\Experiment.AutoFixture.0.23.7\lib\net40\Jwc.Experiment.AutoFixture.dll</HintPath>
+      <HintPath>..\..\packages\Experiment.AutoFixture.1.0.0\lib\net40\Jwc.Experiment.AutoFixture.dll</HintPath>
     </Reference>
-    <Reference Include="Jwc.Experiment.Idioms, Version=0.23.7.0, Culture=neutral, PublicKeyToken=db4e4bc25029966c, processorArchitecture=MSIL">
+    <Reference Include="Jwc.Experiment.Idioms, Version=1.0.0.0, Culture=neutral, PublicKeyToken=db4e4bc25029966c, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\packages\Experiment.Idioms.0.23.7\lib\net40\Jwc.Experiment.Idioms.dll</HintPath>
+      <HintPath>..\..\packages\Experiment.Idioms.1.0.0\lib\net40\Jwc.Experiment.Idioms.dll</HintPath>
     </Reference>
-    <Reference Include="Jwc.Experiment.Xunit, Version=0.23.7.0, Culture=neutral, PublicKeyToken=db4e4bc25029966c, processorArchitecture=MSIL">
+    <Reference Include="Jwc.Experiment.Xunit, Version=1.0.0.0, Culture=neutral, PublicKeyToken=db4e4bc25029966c, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\packages\Experiment.Xunit.0.23.7\lib\net40\Jwc.Experiment.Xunit.dll</HintPath>
+      <HintPath>..\..\packages\Experiment.Xunit.1.0.0\lib\net40\Jwc.Experiment.Xunit.dll</HintPath>
     </Reference>
     <Reference Include="Moq, Version=3.1.416.3, Culture=neutral, PublicKeyToken=69f491c39445e920, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
