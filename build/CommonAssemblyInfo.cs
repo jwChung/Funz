@@ -10,11 +10,11 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 [assembly: NeutralResourcesLanguage("en-US")]
 [assembly: AssemblyProduct("")]
-[assembly: AssemblyVersion("0.4.2")]
-[assembly: AssemblyInformationalVersion("0.4.2")]
+[assembly: AssemblyVersion("1.0.0")]
+[assembly: AssemblyInformationalVersion("1.0.0")]
 
 /*
- * Version 0.4.2
+ * Version 1.0.0
  * 
- * - fixes assembly signing. 
+ * - This is the first, official stable version.
  */
