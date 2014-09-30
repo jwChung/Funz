@@ -25,25 +25,25 @@
     <GitHubId>jwChung</GitHubId>
 
     <!--Github repository name used to identify the repository on GitHub.-->
-    <GitHubRepository>Funz</GitHubRepository>
+    <GitHubRepository>CIBuild</GitHubRepository>
     
     <!--Ref or sha to create a tag for, which can be ommited as the default is
         'refs/heads/master'.-->
     <RefOrShaForTag>$(APPVEYOR_REPO_COMMIT)</RefOrShaForTag>
 
-    <!--Author name for making git tag.-->
+    <!--Author name for git commit as the author for making git tag.-->
     <AuthorName>Jin-Wook Chung</AuthorName>
     
-    <!--Author email for making git tag.-->
+    <!--Author email for git commit as the author's email for making git tag.-->
     <AuthorEmail>$(AuthorEmail)</AuthorEmail>
     
   </PropertyGroup>
   <ItemGroup>
     <Projects Include="$(SolutionDir)src\**\*.csproj" />
     <TestProjects Include="$(SolutionDir)test\**\*.csproj" />
-    <ProjectRulSet Include="Funz.ruleset" />
-    <TestProjectRulSet Include="FunzTest.ruleset" />
-    <CommonAssemblyInfo Include="$(SolutionDir)build\CommonAssemblyInfo.cs" />
+    <ProjectRulSet Include="All.ruleset" />
+    <TestProjectRulSet Include="Test.ruleset" />
+    <CommonAssemblyInfo Include="$(SolutionDir)CommonAssemblyInfo.cs" />
     <NuspecFiles Include="$(SolutionDir)**\*.nuspec" />
   </ItemGroup>
 </Project>

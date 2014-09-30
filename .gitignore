@@ -1,5 +1,6 @@
 *.suo
-*.user
 bin/
 obj/
-*.Cache
+StyleCop.Cache
+*.user
+/Run.sh
