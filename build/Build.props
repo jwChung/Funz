@@ -43,7 +43,7 @@
     <TestProjects Include="$(SolutionDir)test\**\*.csproj" />
     <ProjectRulSet Include="Funz.ruleset" />
     <TestProjectRulSet Include="FunzTest.ruleset" />
-    <CommonAssemblyInfo Include="$(SolutionDir)CommonAssemblyInfo.cs" />
+    <CommonAssemblyInfo Include="$(SolutionDir)build\CommonAssemblyInfo.cs" />
     <NuspecFiles Include="$(SolutionDir)**\*.nuspec" />
   </ItemGroup>
 </Project>
