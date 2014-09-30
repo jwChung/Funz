@@ -50,14 +50,14 @@ namespace Jwc.Funz
         [Test]
         public void ResolveUnregisteredServiceWithArgumentThrows(
             Container sut,
-            string stringArg)
+            string value)
         {
             var expected = string.Format(
                 "The service type '{0}' with the argument(s) '{1}' was not registered.",
                 typeof(Foo),
                 "System.String");
 
-            var e = Assert.Throws<ResolutionException>(() => sut.Resolve<Foo, string>(stringArg));
+            var e = Assert.Throws<ResolutionException>(() => sut.Resolve<Foo, string>(value));
 
             Assert.Equal(expected, e.Message);
         }
@@ -82,7 +82,7 @@ namespace Jwc.Funz
         public void ResolveUnregisteredKeyedServiceWithArgumentThrows(
             Container sut,
             object key,
-            string stringArg)
+            string value)
         {
             var expected = string.Format(
                 "The service type '{0}' with the key '{1}' and the argument(s) '{2}' was not registered.",
@@ -90,7 +90,7 @@ namespace Jwc.Funz
                 key,
                 "System.String");
 
-            var e = Assert.Throws<ResolutionException>(() => sut.ResolveKeyed<Foo, string>(key, stringArg));
+            var e = Assert.Throws<ResolutionException>(() => sut.ResolveKeyed<Foo, string>(key, value));
 
             Assert.Equal(expected, e.Message);
         }
@@ -107,34 +107,34 @@ namespace Jwc.Funz
         [Test]
         public void ResolveManyServicesReturnsCorrectInstances(
             Container sut,
-            Foo fooValue,
-            int intValue,
-            string stringValue)
+            Foo value1,
+            int value2,
+            string value3)
         {
             // Fixture setup
-            sut.Register(c => fooValue);
-            sut.Register(c => intValue);
-            sut.Register(c => stringValue);
+            sut.Register(c => value1);
+            sut.Register(c => value2);
+            sut.Register(c => value3);
 
             // Exercise system & Verify outcome
-            Assert.Equal(fooValue, sut.Resolve<Foo>());
-            Assert.Equal(intValue, sut.Resolve<int>());
-            Assert.Equal(stringValue, sut.Resolve<string>());
+            Assert.Equal(value1, sut.Resolve<Foo>());
+            Assert.Equal(value2, sut.Resolve<int>());
+            Assert.Equal(value3, sut.Resolve<string>());
         }
 
         [Test]
         public void ResolveManySameTypedServicesReturnsCorrectInstances(
             Container sut,
-            string stringValue)
+            string value)
         {
             sut.Register(c => new Foo());
             sut.Register<Foo, string>((c, s) => new Foo(s));
 
             var actual1 = sut.Resolve<Foo>();
-            var actual2 = sut.Resolve<Foo, string>(stringValue);
+            var actual2 = sut.Resolve<Foo, string>(value);
 
             Assert.NotNull(actual1);
-            Assert.Equal(stringValue, actual2.Arg);
+            Assert.Equal(value, actual2.Arg);
         }
 
         [Test]
@@ -165,14 +165,14 @@ namespace Jwc.Funz
         [Test]
         public void ResolveServiceUsingContainerReturnsCorrectInstance(
             Container sut,
-            string stringValue)
+            string value)
         {
-            sut.Register(c => stringValue);
+            sut.Register(c => value);
             sut.Register(c => new Foo(c.Resolve<string>()));
 
             var actual = sut.Resolve<Foo>();
 
-            Assert.Equal(stringValue, actual.Arg);
+            Assert.Equal(value, actual.Arg);
         }
 
         [Test]
@@ -188,22 +188,22 @@ namespace Jwc.Funz
         [Test]
         public void ResolveServiceWithArgumentReturnsCorrectInstance(
             Container sut,
-            string stringValue)
+            string value)
         {
             sut.Register<Foo, string>((c, s) => new Foo(s));
-            var actual = sut.Resolve<Foo, string>(stringValue);
-            Assert.Equal(stringValue, actual.Arg);
+            var actual = sut.Resolve<Foo, string>(value);
+            Assert.Equal(value, actual.Arg);
         }
 
         [Test]
         public void ResolveKeyedServiceWithArgumentReturnsCorrectInstance(
             Container sut,
             string key,
-            string stringValue)
+            string value)
         {
             sut.Register<Foo, string>(key, (c, s) => new Foo(s));
-            var actual = sut.ResolveKeyed<Foo, string>(key, stringValue);
-            Assert.Equal(stringValue, actual.Arg);
+            var actual = sut.ResolveKeyed<Foo, string>(key, value);
+            Assert.Equal(value, actual.Arg);
         }
 
         [Test]
@@ -382,7 +382,7 @@ namespace Jwc.Funz
         }
 
         [Test]
-        public void ResolveServiceReusedWithinCustomOnScopedChildReturnsSharedInstanceOnScopedGrandChild(
+        public void ResolveServiceReusedWithinCustomOnScopedChildReturnsSharedInstanceOnScopedGrandchild(
             string scope,
             Container sut)
         {
@@ -397,7 +397,7 @@ namespace Jwc.Funz
         }
 
         [Test]
-        public void ResolveServiceReusedWithinCustomOnNewScopedGrandChildReturnsSharedInstanceOnScopedChild(
+        public void ResolveServiceReusedWithinCustomOnNewScopedGrandchildReturnsSharedInstanceOnScopedChild(
             string scope,
             Container sut)
         {
@@ -481,12 +481,12 @@ namespace Jwc.Funz
         public void ResolveKeyedServiceWithArgumentReusedWithinContainerReturnsSharedInstance(
             Container sut,
             object key,
-            string stringValue)
+            string value)
         {
             sut.Register<Foo, string>(key, (c, s) => new Foo(s)).OwnedByContainer();
-            var expected = sut.ResolveKeyed<Foo, string>(key, stringValue);
+            var expected = sut.ResolveKeyed<Foo, string>(key, value);
 
-            var actual = sut.ResolveKeyed<Foo, string>(key, stringValue);
+            var actual = sut.ResolveKeyed<Foo, string>(key, value);
 
             Assert.Equal(expected, actual);
         }
@@ -526,20 +526,20 @@ namespace Jwc.Funz
         [Test]
         public void TryResolveUnregisteredServiceWithArgumentReturnsDefaultValue(
             Container sut,
-            string stringValue)
+            string value)
         {
-            var actual = sut.TryResolve<Foo, string>(stringValue);
+            var actual = sut.TryResolve<Foo, string>(value);
             Assert.Null(actual);
         }
 
         [Test]
         public void TryResolveRegisteredServiceWithArgumentReturnsCorrectInstance(
             Container sut,
-            string stringValue)
+            string value)
         {
             sut.Register<Foo, string>((c, s) => new Foo(s));
-            var actual = sut.TryResolve<Foo, string>(stringValue);
-            Assert.Equal(stringValue, actual.Arg);
+            var actual = sut.TryResolve<Foo, string>(value);
+            Assert.Equal(value, actual.Arg);
         }
 
         [Test]
@@ -565,9 +565,9 @@ namespace Jwc.Funz
         public void TryResolveUnregisteredKeyedServiceWithArgumentReturnsDefaultValue(
             Container sut,
             object key,
-            string stringValue)
+            string value)
         {
-            var actual = sut.TryResolveKeyed<Foo, string>(key, stringValue);
+            var actual = sut.TryResolveKeyed<Foo, string>(key, value);
             Assert.Null(actual);
         }
 
@@ -575,11 +575,11 @@ namespace Jwc.Funz
         public void TryResolveRegisteredKeyedServiceWithArgumentReturnsCorrectInstance(
             Container sut,
             object key,
-            string stringValue)
+            string value)
         {
             sut.Register<Foo, string>(key, (c, s) => new Foo(s));
-            var actual = sut.TryResolveKeyed<Foo, string>(key, stringValue);
-            Assert.Equal(stringValue, actual.Arg);
+            var actual = sut.TryResolveKeyed<Foo, string>(key, value);
+            Assert.Equal(value, actual.Arg);
         }
 
         [Test]

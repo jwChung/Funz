@@ -34,7 +34,7 @@ namespace Jwc.Funz
                         return null;
 
                     default:
-                        throw new ArgumentOutOfRangeException();
+                        throw new InvalidOperationException();
                 }
             }
 

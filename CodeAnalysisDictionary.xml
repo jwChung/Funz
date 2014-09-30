@@ -2,8 +2,11 @@
 <Dictionary>
   <Words>
     <Recognized>
-      <Word>Jwc</Word>
-      <Word>Funz</Word>
+      <Word>jwc</Word>
+      <Word>funz</Word>
+      <Word>sut</Word>
+      <Word>baz</Word>
+      <Word>unkeyed</Word>
     </Recognized>
     <Unrecognized>
       <Word></Word>
@@ -20,7 +23,7 @@
   </Words>
   <Acronyms>
     <CasingExceptions>
-      <Acronym></Acronym>
+      <Acronym>SUT</Acronym>
     </CasingExceptions>
   </Acronyms>
 </Dictionary>

@@ -112,7 +112,7 @@ namespace Jwc.Funz
         }
 
         [VersionTest(0, 1, 0)]
-        public void ResolveServiceReusedWithinNoneAlwayReturnsNewInstance(
+        public void ResolveServiceReusedWithinNoneAlwaysReturnsNewInstance(
             Container container)
         {
             // Fixture setup
@@ -174,7 +174,7 @@ namespace Jwc.Funz
         }
 
         [VersionTest(0, 1, 0)]
-        public void ResolveServiceReusedWithinHierarchyReturnsSharedInstanceWithChildAndGrandChild(
+        public void ResolveServiceReusedWithinHierarchyReturnsSharedInstanceWithChildAndGrandchild(
             Container container)
         {
             // Fixture setup
@@ -193,7 +193,7 @@ namespace Jwc.Funz
         }
 
         [VersionTest(0, 1, 0)]
-        public void ResolveServieReusedWithinScopeReturnsNonSharedInstanceWithDifferentScope(
+        public void ResolveServiceReusedWithinScopeReturnsNonSharedInstanceWithDifferentScope(
             Container container,
             string scope)
         {
@@ -210,7 +210,7 @@ namespace Jwc.Funz
         }
 
         [VersionTest(0, 1, 0)]
-        public void ResolveServieReusedWithinScopeReturnsSharedInstanceWithSameScope(
+        public void ResolveServiceReusedWithinScopeReturnsSharedInstanceWithSameScope(
             Container container)
         {
             // Fixture setup
@@ -225,7 +225,7 @@ namespace Jwc.Funz
         }
 
         [VersionTest(0, 1, 0)]
-        public void ResolveServieReusedWithinScopeReturnsSharedInstanceWithSameScopedChild(
+        public void ResolveServiceReusedWithinScopeReturnsSharedInstanceWithSameScopedChild(
             Container container)
         {
             // Fixture setup
@@ -241,7 +241,7 @@ namespace Jwc.Funz
         }
 
         [VersionTest(0, 1, 0)]
-        public void ResolveServieReusedWithinScopeReturnsNonSharedInstanceWithDifferentScopedChild(
+        public void ResolveServiceReusedWithinScopeReturnsNonSharedInstanceWithDifferentScopedChild(
             Container container,
             int scope)
         {
