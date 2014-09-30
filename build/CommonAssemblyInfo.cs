@@ -11,7 +11,7 @@ using System.Runtime.InteropServices;
 [assembly: NeutralResourcesLanguage("en-US")]
 [assembly: AssemblyProduct("")]
 [assembly: AssemblyVersion("1.0.0")]
-[assembly: AssemblyInformationalVersion("1.0.0")]
+[assembly: AssemblyInformationalVersion("1.0.0-a01")]
 
 /*
  * Version 1.0.0
