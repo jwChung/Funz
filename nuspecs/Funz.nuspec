@@ -11,10 +11,10 @@
     <releaseNotes>releaseNotes</releaseNotes>
   </metadata>
   <files>
-    <file src="bin\Release\Funz.dll" target="lib\net40" />
-    <file src="bin\Release\Funz.pdb" target="lib\net40" />
-    <file src="bin\Release\Funz.xml" target="lib\net40" />
-    <file src="**\*.cs" target="src" />
-    <file src="..\..\build\Install.ps1" target="tools" />
+    <file src="..\src\Funz\bin\Release\Funz.dll" target="lib\net40" />
+    <file src="..\src\Funz\bin\Release\Funz.pdb" target="lib\net40" />
+    <file src="..\src\Funz\bin\Release\Funz.xml" target="lib\net40" />
+    <file src="..\src\Funz\**\*.cs" target="src" />
+    <file src="..\build\Install.ps1" target="tools" />
   </files>
 </package>

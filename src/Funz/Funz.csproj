@@ -86,6 +86,9 @@
     <Compile Include="IRegistration.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\..\nuspecs\Funz.nuspec">
+      <Link>Funz.nuspec</Link>
+    </None>
     <None Include="Container.Register.tt">
       <DependentUpon>Container.cs</DependentUpon>
       <Generator>TextTemplatingFileGenerator</Generator>
@@ -116,7 +119,6 @@
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>Container.ResolveImpl.cs</LastGenOutput>
     </None>
-    <None Include="Funz.nuspec" />
     <None Include="Helpers.tt">
       <DependentUpon>Container.cs</DependentUpon>
       <LastGenOutput>Helpers.cs</LastGenOutput>
