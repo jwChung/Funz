@@ -78,7 +78,8 @@
                          CodeAnalysisTreatWarningsAsErrors=true;
                          StyleCopTreatErrorsAsWarnings=false;
                          RunCodeAnalysis=$(RunCodeAnalysis);
-                         CodeAnalysisRuleSet=$(TestProjectRulSet);">
+                         CodeAnalysisRuleSet=$(TestProjectRulSet);
+                         DefineConstants=TRACE,CI;">
       <Output TaskParameter="TargetOutputs" ItemName="TestAssemblies" />
     </MSBuild>
   </Target>
