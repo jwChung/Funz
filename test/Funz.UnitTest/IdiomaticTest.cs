@@ -1,31 +1,34 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using Jwc.Experiment;
-using Jwc.Experiment.Idioms;
-using Jwc.Experiment.Xunit;
-
 namespace Jwc.Funz
 {
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Reflection;
+    using Experiment;
+    using Experiment.Idioms;
+    using Experiment.Xunit;
+
     public abstract class IdiomaticTest<TSUT>
     {
-        [FirstClassTest]
+        [Test]
         public IEnumerable<ITestCase> SutHasAppropriateGuards()
         {
-            return typeof(TSUT).GetIdiomaticMembers()
-                .Except(this.ExceptToVerifyGuardClause())
-                .Select(m => new TestCase(new Action<NullGuardClauseAssertion>(
-                    a => a.Verify(m))));
+            var members = typeof(TSUT).GetIdiomaticMembers()
+                .Except(this.ExceptToVerifyGuardClause());
+
+            return TestCases.WithArgs(members)
+                .WithAuto<GuardClauseAssertion>()
+                .Create((m, a) => a.Verify(m));
         }
 
-        [FirstClassTest]
+        [Test]
         public IEnumerable<ITestCase> SutCorrectlyInitializesMembers()
         {
-            return typeof(TSUT).GetIdiomaticMembers()
-                .Except(this.ExceptToVerifyInitialization())
-                .Select(m => new TestCase(new Action<MemberInitializationAssertion>(
-                    a => a.Verify(m))));
+            var members = typeof(TSUT).GetIdiomaticMembers()
+                .Except(this.ExceptToVerifyInitialization());
+
+            return TestCases.WithArgs(members)
+                .WithAuto<MemberInitializationAssertion>()
+                .Create((m, a) => a.Verify(m));
         }
 
         protected virtual IEnumerable<MemberInfo> ExceptToVerifyGuardClause()

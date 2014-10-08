@@ -1,6 +1,4 @@
-﻿using Jwc.Experiment.Xunit;
-
-namespace Jwc.Funz
+﻿namespace Jwc.Funz
 {
     public class VersionTestAttribute : TestAttribute
     {
