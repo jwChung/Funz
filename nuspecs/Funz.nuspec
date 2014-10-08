@@ -15,6 +15,6 @@
     <file src="..\src\Funz\bin\Release\Funz.pdb" target="lib\net40" />
     <file src="..\src\Funz\bin\Release\Funz.xml" target="lib\net40" />
     <file src="..\src\Funz\**\*.cs" target="src" />
-    <file src="..\build\Install.ps1" target="tools" />
+    <file src="Install.ps1" target="tools" />
   </files>
 </package>

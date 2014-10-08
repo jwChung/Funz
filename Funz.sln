@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.30501.0
+VisualStudioVersion = 12.0.30723.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Funz.UnitTest", "test\Funz.UnitTest\Funz.UnitTest.csproj", "{EF409562-FADE-4970-9625-451DC829F521}"
 EndProject
@@ -15,7 +15,6 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Build", "Build", "{7172F02D-1123-442F-B3DA-5DD8E8860440}"
 	ProjectSection(SolutionItems) = preProject
 		build\Build.proj = build\Build.proj
-		build\Build.props = build\Build.props
 	EndProjectSection
 EndProject
 Global
