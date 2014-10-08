@@ -1,12 +1,11 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using Jwc.Experiment.Xunit;
-using Ploeh.Albedo;
-using Xunit;
-
-namespace Jwc.Funz
+﻿namespace Jwc.Funz
 {
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Reflection;
+    using Ploeh.Albedo;
+    using Xunit;
+
     public class CompositeContainerVisitorTest : IdiomaticTest<CompositeContainerVisitor<object>>
     {
         [Test]

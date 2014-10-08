@@ -1,10 +1,10 @@
-﻿using System;
-using System.Linq;
-using System.Reflection;
-using Xunit;
-
-namespace Jwc.Funz
+﻿namespace Jwc.Funz
 {
+    using System;
+    using System.Linq;
+    using System.Reflection;
+    using Xunit;
+
     public class Scenario
     {
         public interface IFoo
@@ -590,7 +590,7 @@ namespace Jwc.Funz
                 var constructor = GetGreedyConstructor();
                 IRegistration registration = container.Register(c =>
                 {
-                    var arguments = constructor.GetParameters().Select(p => Resolve(c, p.ParameterType)).ToArray();
+                    var arguments = constructor.GetParameters().Select(p => this.Resolve(c, p.ParameterType)).ToArray();
                     return (TTo)constructor.Invoke(arguments);
                 });
 

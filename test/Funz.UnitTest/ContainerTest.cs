@@ -1,22 +1,19 @@
-﻿using System;
-using System.Collections.Concurrent;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Text.RegularExpressions;
-using System.Threading;
-using Jwc.Experiment;
-using Jwc.Experiment.AutoFixture;
-using Jwc.Experiment.Idioms;
-using Jwc.Experiment.Xunit;
-using Ploeh.Albedo;
-using Ploeh.Albedo.Refraction;
-using Ploeh.AutoFixture;
-using Ploeh.AutoFixture.Kernel;
-using Xunit;
-
-namespace Jwc.Funz
+﻿namespace Jwc.Funz
 {
+    using System;
+    using System.Collections.Concurrent;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Reflection;
+    using System.Text.RegularExpressions;
+    using System.Threading;
+    using Experiment.Idioms;
+    using Experiment.Xunit;
+    using Ploeh.Albedo;
+    using Ploeh.AutoFixture;
+    using Ploeh.AutoFixture.Xunit;
+    using Xunit;
+
     public class ContainerTest : IdiomaticTest<Container>
     {
         [Test]
@@ -320,7 +317,7 @@ namespace Jwc.Funz
             Assert.Equal(expected, actual);
         }
 
-        [SlowTest(RunOn.CI)]
+        [Test(RunsOnCI = true)]
         public void ResolveServiceReusedWithinContainerDoesNotThrowOutOfMemoryException(
             Container sut)
         {
@@ -826,26 +823,26 @@ namespace Jwc.Funz
             Assert.Equal(0, disposable.Count);
         }
 
-        [FirstClassTest]
+        [Test]
         public IEnumerable<ITestCase> CallAllPublicMethodAfterDisposedThrowsDisposedException()
         {
             const BindingFlags BindingFlags =
                 BindingFlags.Public
-                | BindingFlags.Static
-                | BindingFlags.Instance
-                | BindingFlags.DeclaredOnly;
+                    | BindingFlags.Static
+                    | BindingFlags.Instance
+                    | BindingFlags.DeclaredOnly;
 
             var methods = typeof(Container)
                 .GetMethods(BindingFlags)
                 .Where(m => !m.Name.StartsWith("LazyResolve"))
                 .Except(new[] { new Methods<Container>().Select(x => x.Dispose()) })
                 .Select(m => !m.ContainsGenericParameters
-                    ? m : m.MakeGenericMethod(m.GetGenericArguments().Select(a => typeof(object)).ToArray()));
+                    ? m : m.MakeGenericMethod(
+                        m.GetGenericArguments().Select(a => typeof(object)).ToArray()));
 
-            return methods.Select(
-                m => TestCase.New<ObjectDisposalAssertion>(
-                    a => a.Verify(m),
-                    m.GetDisplayName()));
+            return TestCases.WithArgs(methods)
+                .WithAuto<ObjectDisposalAssertion>()
+                .Create((m, a) => a.Verify(m));
         }
 
         [Test]
@@ -1052,7 +1049,7 @@ namespace Jwc.Funz
             var e = Assert.Throws<ResolutionException>(() => sut.ResolveKeyed<Foo>(key));
             Assert.Equal(
                 "The service type 'Jwc.Funz.ContainerTest+Foo' with the key 'System.Object' " +
-                "was registered recursively.",
+                    "was registered recursively.",
                 e.Message);
         }
 
@@ -1072,7 +1069,7 @@ namespace Jwc.Funz
             var e = Assert.Throws<ResolutionException>(() => sut.Resolve<Foo, string>(argument));
             Assert.Equal(
                 "The service type 'Jwc.Funz.ContainerTest+Foo' with the argument(s) " +
-                "'System.String' was registered recursively.",
+                    "'System.String' was registered recursively.",
                 e.Message);
         }
 
@@ -1095,7 +1092,7 @@ namespace Jwc.Funz
             var e = Assert.Throws<ResolutionException>(() => sut.ResolveKeyed<Foo, string>(key, argument));
             Assert.Equal(
                 "The service type 'Jwc.Funz.ContainerTest+Foo' with the key 'System.Object' " +
-                "and the argument(s) 'System.String' was registered recursively.",
+                    "and the argument(s) 'System.String' was registered recursively.",
                 e.Message);
         }
 
@@ -1147,7 +1144,7 @@ namespace Jwc.Funz
             var e = Assert.Throws<ResolutionException>(() => sut.Resolve<Bar, object, int, string>(arg1, arg2, arg3));
             Assert.Equal(
                 "The service type 'Jwc.Funz.ContainerTest+Bar' with the argument(s) " +
-                "'System.Object, System.Int32, System.String' was registered recursively.",
+                    "'System.Object, System.Int32, System.String' was registered recursively.",
                 e.Message);
         }
 
@@ -1173,7 +1170,7 @@ namespace Jwc.Funz
                 () => sut.ResolveKeyed<Bar, object, int, string>(key, arg1, arg2, arg3));
             Assert.Equal(
                 "The service type 'Jwc.Funz.ContainerTest+Bar' with the key 'System.Object' and the argument(s) " +
-                "'System.Object, System.Int32, System.String' was registered recursively.",
+                    "'System.Object, System.Int32, System.String' was registered recursively.",
                 e.Message);
         }
 

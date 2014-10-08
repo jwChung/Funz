@@ -1,10 +1,10 @@
-using System;
-using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
-using Ploeh.Albedo;
-
 namespace Jwc.Funz
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Diagnostics.CodeAnalysis;
+    using Ploeh.Albedo;
+
     [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1305:FieldNamesMustNotUseHungarianNotation", Justification = "Suppressing this rule is desirable.")]
     internal class ParameterPropertyMatcher : IEqualityComparer<IReflectionElement>
     {
@@ -12,7 +12,7 @@ namespace Jwc.Funz
         {
             return EqualsName(x, y) && EqualsType(x, y);
         }
-        
+
         public int GetHashCode(IReflectionElement obj)
         {
             return obj.GetHashCode();
