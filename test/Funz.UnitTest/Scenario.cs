@@ -349,7 +349,7 @@
         }
 
         [VersionTest(0, 2, 0)]
-        public void ContainerVisitorCanBeUsedToBatchRegistrations(
+        public void ContainerVisitorCanBatchRegistrations(
             Container container,
             BatchRegistration batch)
         {
@@ -366,7 +366,7 @@
         }
 
         [VersionTest(0, 2, 0)]
-        public void ContainerVisitorCanBeUsedToResolveService(
+        public void ContainerVisitorCanResolveService(
             Container container,
             BatchRegistration batch,
             FooBuilder builder)
@@ -383,7 +383,7 @@
         }
 
         [VersionTest(0, 2, 0)]
-        public void ContainerVisitorCanUsedToRegisterType(
+        public void ContainerVisitorCanRegisterType(
             Container container)
         {
             // Fixture setup
