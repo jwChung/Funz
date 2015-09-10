@@ -1,3 +1,4 @@
+[![Stories in Ready](https://badge.waffle.io/jwChung/Funz.png?label=ready&title=Ready)](https://waffle.io/jwChung/Funz)
 Overview
 --------
 Funz is a variation of [Funq] to provide some features as the following.
